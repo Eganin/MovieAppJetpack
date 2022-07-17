@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">MovieApp</string>
+    <string name="content_description_background_image">BackgroundImage</string>
+    <string name="forward_back_text_view_text">Back</string>
+    <string name="forward_back_text_view_path"><![CDATA[<]]></string>
+    <string name="first_star_rating">First Star Rating</string>
+    <string name="two_star_rating">Two Star Rating</string>
+    <string name="three_star_rating">Three Star Rating</string>
+    <string name="four_star_rating">Four Star Rating</string>
+    <string name="five_star_rating">Five Star Rating</string>
+    <string name="storyline_title">Storyline</string>
+    <string name="cast_title">Cast</string>
+    <string name="image_actor_description">Image Actor</string>
 </resources>
