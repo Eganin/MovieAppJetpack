@@ -11,4 +11,7 @@
     <string name="storyline_title">Storyline</string>
     <string name="cast_title">Cast</string>
     <string name="image_actor_description">Image Actor</string>
+    <string name="movies_list_label">Movies list</string>
+    <string name="poster_movie_description">Poster Movie</string>
+    <string name="like_description">like</string>
 </resources>
