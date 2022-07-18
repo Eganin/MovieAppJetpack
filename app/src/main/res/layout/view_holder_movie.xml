@@ -5,8 +5,9 @@
     android:layout_width="170dp"
     android:layout_height="296dp"
     android:layout_margin="14dp"
-    android:background="@color/background_color"
-    app:cardCornerRadius="@dimen/corner_card_view_movie_poster">
+    android:background="@drawable/rounded_adult_movie_poster"
+    app:cardCornerRadius="@dimen/corner_card_view_movie_poster"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
