@@ -1,10 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.screens
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentTransaction
 import com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesDetails
 import com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesList
@@ -13,7 +10,7 @@ import com.eganin.jetpack.thebest.movieapp.routing.Router
 import com.eganin.jetpack.thebest.movieapp.utils.getColumnCountUtils
 
 class MovieDetailsActivity : AppCompatActivity(), Router {
-    @RequiresApi(Build.VERSION_CODES.R)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
