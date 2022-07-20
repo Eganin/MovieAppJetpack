@@ -26,8 +26,8 @@ class MovieAdapter :
 
     override fun getItemCount() = movies.size
 
-    fun bindMovies(newMovies: List<Movie>) {
-        movies = newMovies.toMutableList()
+    fun bindMovies(movies: List<Movie>) {
+        this.movies = movies.toMutableList()
     }
 
     fun addMovies(newMovies: List<Movie>) {

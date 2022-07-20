@@ -29,9 +29,9 @@ object MoviesDataSource {
                 timeLime = 124,
                 imageMovie = "https://images-na.ssl-images-amazon.com/images/I/51Dt9zLrXfL._SX359_BO1,204,203,200_.jpg",
                 actors = listOf(
-                    Actor(id = 1, name = "Robert", image = ""),
-                    Actor(id = 2, name = "Robert", image = ""),
-                    Actor(id = 3, name = "Robert", image = ""),
+                    Actor(id = 1, name = "Robert", image = "https://i.pinimg.com/736x/1c/45/9d/1c459d38763b376d9f55f63289de22cb.jpg"),
+                    Actor(id = 2, name = "Robert", image = "https://i.pinimg.com/736x/1c/45/9d/1c459d38763b376d9f55f63289de22cb.jpg"),
+                    Actor(id = 3, name = "Robert", image = "https://i.pinimg.com/736x/1c/45/9d/1c459d38763b376d9f55f63289de22cb.jpg"),
                     Actor(id = 4, name = "Robert", image = ""),
                 )
             ),
@@ -44,7 +44,7 @@ object MoviesDataSource {
                 starRating = 4,
                 countReviews = 124,
                 timeLime = 120,
-                imageMovie = "",
+                imageMovie = "https://avatars.mds.yandex.net/get-kinopoisk-image/4774061/ab622db8-ec02-43aa-a83e-718e13f7bc1b/1920x",
                 actors = listOf(
                     Actor(id = 1, name = "Robert", image = "")
                 )

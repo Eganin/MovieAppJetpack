@@ -6,9 +6,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.data.models.Movie
+import com.eganin.jetpack.thebest.movieapp.utils.downloadImage
 
 class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?) :
     RecyclerView.ViewHolder(itemView) {
@@ -46,7 +48,7 @@ class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?) :
             tagLine.text = movie.tags.joinToString(separator = ",") { it }
             bindFavouriteMovie(isFavourite = isFavourite)
             bindStars(rating = starRating)
-            downloadPoster(link = imageMovie)
+            downloadImage(link = imageMovie, context = context, imageView = posterMovie)
         }
     }
 
@@ -75,14 +77,6 @@ class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?) :
                 )
             )
         }
-    }
-
-    private fun downloadPoster(link: String) {
-        with(Glide.with(context)) {
-            clear(posterMovie)
-            load(link).into(posterMovie)
-        }
-
     }
 
 }

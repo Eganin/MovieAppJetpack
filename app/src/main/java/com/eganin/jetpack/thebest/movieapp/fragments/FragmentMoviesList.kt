@@ -21,11 +21,10 @@ class FragmentMoviesList : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_movies_list, container, false)
-        .also { setupRecyclerView(view = it) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //setupRecyclerView(view = view)
+        setupRecyclerView(view = view)
     }
 
     override fun onAttach(context: Context) {
@@ -48,7 +47,7 @@ class FragmentMoviesList : Fragment() {
                 arguments?.getInt(COLUMN_COUNT_SAVE) ?: DEFAULT_COLUMN_COUNT
             )
             adapter = movieAdapter
-            movieAdapter.bindMovies(newMovies = MoviesDataSource.getMovies())
+            movieAdapter.bindMovies(movies = MoviesDataSource.getMovies())
         }
     }
 
