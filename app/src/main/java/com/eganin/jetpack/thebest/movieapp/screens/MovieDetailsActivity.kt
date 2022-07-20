@@ -6,17 +6,17 @@ import androidx.fragment.app.FragmentTransaction
 import com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesDetails
 import com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesList
 import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.routing.Router
 import com.eganin.jetpack.thebest.movieapp.utils.getColumnCountUtils
 
-class MovieDetailsActivity : AppCompatActivity(), Router {
+class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPoster {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             openMovieList()
-            //openMovieDetails()
         }
     }
 
@@ -46,4 +46,6 @@ class MovieDetailsActivity : AppCompatActivity(), Router {
             commit()
         }
     }
+
+    override fun clickPoster(position: Int) = openMovieDetails()
 }

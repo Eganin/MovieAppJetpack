@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
 
-class FragmentMoviesList : Fragment(), MovieAdapter.OnClickPoster {
+class FragmentMoviesList : Fragment() {
 
     private val movieAdapter = MovieAdapter(mutableListOf(1))
 
@@ -39,9 +39,6 @@ class FragmentMoviesList : Fragment(), MovieAdapter.OnClickPoster {
         movieAdapter.listener = null
     }
 
-    override fun click(position: Int) {
-        TODO("Not yet implemented")
-    }
 
     private fun setupRecyclerView(view: View) {
         view.findViewById<RecyclerView>(R.id.movies_recycler_view).apply {
