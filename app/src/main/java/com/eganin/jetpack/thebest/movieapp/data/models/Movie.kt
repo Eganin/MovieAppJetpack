@@ -10,6 +10,5 @@ data class Movie(
     val countReviews : Int ,
     val timeLime : Int,
     val imageMovie: String,
-    val genres : List<Genre>,
     val actors : List<Actor>
 )

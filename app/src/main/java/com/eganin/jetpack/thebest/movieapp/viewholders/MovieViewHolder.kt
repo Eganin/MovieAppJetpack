@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.data.models.Movie
@@ -43,8 +42,8 @@ class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?) :
             titlePoster.text = title
             timeLinePoster.text = "$timeLime MIN"
             countReviewsPoster.text = "$countReviews REVIEWS"
-            adultMovie.text = "$ageRating +"
-            tagLine.text = movie.genres.joinToString(separator = ",") { it.name }
+            adultMovie.text = ageRating
+            tagLine.text = movie.tags.joinToString(separator = ",") { it }
             bindFavouriteMovie(isFavourite = isFavourite)
             bindStars(rating = starRating)
             downloadPoster(link = imageMovie)

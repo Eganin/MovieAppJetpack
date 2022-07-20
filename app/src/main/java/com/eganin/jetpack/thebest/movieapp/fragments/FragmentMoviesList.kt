@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
+import com.eganin.jetpack.thebest.movieapp.data.models.MoviesDataSource
 
 class FragmentMoviesList : Fragment() {
 
-    private val movieAdapter = MovieAdapter(mutableListOf(1))
+    private val movieAdapter = MovieAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +48,7 @@ class FragmentMoviesList : Fragment() {
                 arguments?.getInt(COLUMN_COUNT_SAVE) ?: DEFAULT_COLUMN_COUNT
             )
             adapter = movieAdapter
+            movieAdapter.bindMovies(newMovies = MoviesDataSource.getMovies())
         }
     }
 

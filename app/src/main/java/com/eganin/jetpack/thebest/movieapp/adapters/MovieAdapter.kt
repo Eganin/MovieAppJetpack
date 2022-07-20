@@ -8,10 +8,12 @@ import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.data.models.Movie
 import com.eganin.jetpack.thebest.movieapp.viewholders.MovieViewHolder
 
-class MovieAdapter(private var movies: MutableList<Movie> = mutableListOf()) :
+class MovieAdapter :
     RecyclerView.Adapter<MovieViewHolder>() {
 
     var listener: OnClickPoster? = null
+
+    private var movies: MutableList<Movie> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MovieViewHolder(
         itemView = LayoutInflater.from(parent.context)
