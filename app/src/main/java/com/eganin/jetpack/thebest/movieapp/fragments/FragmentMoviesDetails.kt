@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.ActorAdapter
-import com.eganin.jetpack.thebest.movieapp.data.models.Actor
+import com.eganin.jetpack.thebest.movieapp.data.models.Movie
 
 class FragmentMoviesDetails : Fragment() {
+
+    private val movie: Movie by lazy { arguments?.get(SAVE_MOVIE_DATA_KEY) as Movie }
 
     private val actorsAdapter = ActorAdapter()
 
@@ -23,6 +25,10 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI()
+    }
+
+    private fun setupUI(view: View){
         setupRecyclerView(view = view)
     }
 
@@ -32,32 +38,18 @@ class FragmentMoviesDetails : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = actorsAdapter
             actorsAdapter.bindActors(
-                actors = listOf(
-                    Actor(
-                        id = 1,
-                        name = "Robert",
-                        image = "https://i.pinimg.com/736x/1c/45/9d/1c459d38763b376d9f55f63289de22cb.jpg"
-                    ),
-                    Actor(
-                        id = 2,
-                        name = "Robert",
-                        image = "https://i.pinimg.com/736x/1c/45/9d/1c459d38763b376d9f55f63289de22cb.jpg"
-                    ),
-                    Actor(
-                        id = 3,
-                        name = "Robert",
-                        image = "https://i.pinimg.com/736x/1c/45/9d/1c459d38763b376d9f55f63289de22cb.jpg"
-                    ),
-                    Actor(id = 4, name = "Robert", image = ""),
-                )
+                actors = listOf()
             )
         }
     }
 
     companion object {
-        fun newInstance(name: String = ""): FragmentMoviesDetails {
+
+        private const val SAVE_MOVIE_DATA_KEY = "SAVE_MOVIE_DATA_KEY"
+
+        fun newInstance(movieDetails: Movie): FragmentMoviesDetails {
             val args = Bundle()
-            args.putString("name", name)
+            args.putParcelable(SAVE_MOVIE_DATA_KEY,movieDetails)
             return FragmentMoviesDetails().also { it.arguments = args }
         }
     }

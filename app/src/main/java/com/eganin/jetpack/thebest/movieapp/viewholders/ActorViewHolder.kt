@@ -14,7 +14,7 @@ class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val nameActor: TextView = itemView.findViewById(R.id.name_cast)
 
     fun bind(actor: Actor) {
-        downloadImage(link = actor.image, context = context, imageView = imageActor)
+        downloadImage(link = actor.picture, context = context, imageView = imageActor)
         nameActor.text = actor.name
     }
 

@@ -7,6 +7,7 @@ import com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesDetails
 import com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesList
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
+import com.eganin.jetpack.thebest.movieapp.data.models.Movie
 import com.eganin.jetpack.thebest.movieapp.routing.Router
 import com.eganin.jetpack.thebest.movieapp.utils.getColumnCountUtils
 
@@ -29,9 +30,12 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         }
 
 
-    override fun openMovieDetails() =
+    override fun openMovieDetails(movieDetails: Movie) =
         openNewFragment {
-            add(R.id.main_container_fragment, FragmentMoviesDetails.newInstance())
+            add(
+                R.id.main_container_fragment,
+                FragmentMoviesDetails.newInstance(movieDetails = movieDetails)
+            )
         }
 
 
@@ -47,5 +51,5 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         }
     }
 
-    override fun clickPoster(position: Int) = openMovieDetails()
+    override fun clickPoster(movie: Movie) = openMovieDetails(movieDetails = movie)
 }

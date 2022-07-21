@@ -1,6 +1,8 @@
 package com.eganin.jetpack.thebest.movieapp.routing
 
+import com.eganin.jetpack.thebest.movieapp.data.models.Movie
+
 interface Router {
     fun openMovieList()
-    fun openMovieDetails()
+    fun openMovieDetails(movieDetails: Movie)
 }

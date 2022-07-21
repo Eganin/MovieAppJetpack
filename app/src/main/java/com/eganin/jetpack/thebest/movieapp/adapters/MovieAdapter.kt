@@ -18,7 +18,8 @@ class MovieAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MovieViewHolder(
         itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.view_holder_movie, parent, false),
-        listener = listener
+        listener = listener,
+        movies = movies
     )
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =
@@ -35,6 +36,6 @@ class MovieAdapter :
     }
 
     interface OnClickPoster {
-        fun clickPoster(position: Int)
+        fun clickPoster(movie: Movie)
     }
 }

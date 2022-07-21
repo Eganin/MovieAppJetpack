@@ -12,13 +12,13 @@ import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.data.models.Movie
 import com.eganin.jetpack.thebest.movieapp.utils.downloadImage
 
-class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?) :
+class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?, movies : List<Movie>) :
     RecyclerView.ViewHolder(itemView) {
 
     init {
         itemView.apply {
             setOnClickListener {
-                listener?.clickPoster(position = adapterPosition)
+                listener?.clickPoster(movie = movies[adapterPosition])
             }
         }
     }
@@ -42,13 +42,13 @@ class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?) :
     fun bind(movie: Movie) {
         with(movie) {
             titlePoster.text = title
-            timeLinePoster.text = "$timeLime MIN"
-            countReviewsPoster.text = "$countReviews REVIEWS"
-            adultMovie.text = ageRating
-            tagLine.text = movie.tags.joinToString(separator = ",") { it }
-            bindFavouriteMovie(isFavourite = isFavourite)
-            bindStars(rating = starRating)
-            downloadImage(link = imageMovie, context = context, imageView = posterMovie)
+            timeLinePoster.text = "$runtime MIN"
+            countReviewsPoster.text = "$numberOfRatings REVIEWS"
+            adultMovie.text = "$minimumAge+"
+            tagLine.text = movie.genres.joinToString(separator = ",") { it.name }
+            bindFavouriteMovie(isFavourite = true)
+            bindStars(rating = (ratings/2).toInt())
+            downloadImage(link = poster, context = context, imageView = posterMovie)
         }
     }
 
