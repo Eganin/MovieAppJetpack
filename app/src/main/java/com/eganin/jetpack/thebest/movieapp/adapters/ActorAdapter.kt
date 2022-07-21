@@ -9,6 +9,7 @@ import com.eganin.jetpack.thebest.movieapp.viewholders.ActorViewHolder
 
 class ActorAdapter : RecyclerView.Adapter<ActorViewHolder>() {
 
+
     private var actors: MutableList<Actor> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ActorViewHolder(

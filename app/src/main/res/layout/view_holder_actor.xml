@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:background="@color/background_color"
         >
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_cast"
             android:layout_width="@dimen/image_cast_w_h"
             android:layout_height="@dimen/image_cast_w_h"
@@ -23,7 +23,7 @@
             tools:src="@drawable/actor_test_image"
             android:contentDescription="@string/image_actor_description" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:fontFamily="@font/roboto_black"
             android:textColor="@color/actor_name_color"
             android:textSize="@dimen/actor_cast_size"

@@ -6,16 +6,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.data.models.Actor
+import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderActorBinding
 import com.eganin.jetpack.thebest.movieapp.utils.downloadImage
 
 class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val imageActor: ImageView = itemView.findViewById(R.id.image_cast)
-    private val nameActor: TextView = itemView.findViewById(R.id.name_cast)
+    private val binding = ViewHolderActorBinding.bind(itemView)
 
     fun bind(actor: Actor) {
-        downloadImage(link = actor.picture, context = context, imageView = imageActor)
-        nameActor.text = actor.name
+        with(binding) {
+            downloadImage(link = actor.picture, context = context, imageView = imageCast)
+            nameCast.text = actor.name
+        }
     }
 
 

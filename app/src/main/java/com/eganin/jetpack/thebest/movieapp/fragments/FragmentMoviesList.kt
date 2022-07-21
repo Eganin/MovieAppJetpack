@@ -12,6 +12,7 @@ import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.data.models.Movie
 import com.eganin.jetpack.thebest.movieapp.data.models.loadMovies
+import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,19 +20,25 @@ import kotlinx.coroutines.withContext
 
 class FragmentMoviesList : Fragment() {
 
+    private var _binding: FragmentMoviesListBinding? = null
+    private val binding get() = _binding!!
+
     private val movieAdapter = MovieAdapter()
     private val uiScope = CoroutineScope(Dispatchers.Main)
-    private var moviesData : List<Movie> = listOf()
+    private var moviesData: List<Movie> = listOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_movies_list, container, false)
+    ): View {
+        _binding = FragmentMoviesListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        downloadData(view = view)
+        downloadData()
     }
 
     override fun onAttach(context: Context) {
@@ -41,23 +48,28 @@ class FragmentMoviesList : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onDetach() {
         super.onDetach()
         movieAdapter.listener = null
     }
 
-    private fun downloadData(view:View){
+    private fun downloadData() {
         uiScope.launch {
             val differed = withContext(uiScope.coroutineContext) {
                 moviesData = loadMovies(requireContext())
             }
-            setupRecyclerView(view=view, dataMovies = moviesData)
+            setupRecyclerView(dataMovies = moviesData)
         }
     }
 
 
-    private fun setupRecyclerView(view: View,dataMovies : List<Movie>) {
-        view.findViewById<RecyclerView>(R.id.movies_recycler_view).apply {
+    private fun setupRecyclerView(dataMovies: List<Movie>) {
+        binding.moviesRecyclerView.apply {
             layoutManager = GridLayoutManager(
                 requireContext(),
                 arguments?.getInt(COLUMN_COUNT_SAVE) ?: DEFAULT_COLUMN_COUNT
