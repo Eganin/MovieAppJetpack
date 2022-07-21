@@ -40,6 +40,7 @@ class FragmentMoviesDetails : Fragment() {
 
     private fun setupUI(view: View) {
         setupRecyclerView(view = view)
+        setupListeners()
         with(binding) {
             with(movie){
                 downloadImage(
@@ -54,6 +55,15 @@ class FragmentMoviesDetails : Fragment() {
                 bindStars(rating = (ratings / 2).toInt())
                 storylineDescription.text = overview
             }
+        }
+    }
+
+    private fun setupListeners(){
+        binding.backBtb?.setOnClickListener {
+            activity?.onBackPressed()
+        }
+        binding.backBtbArrow?.setOnClickListener {
+            activity?.onBackPressed()
         }
     }
 
@@ -83,6 +93,7 @@ class FragmentMoviesDetails : Fragment() {
             )
         }
     }
+
 
     companion object {
 

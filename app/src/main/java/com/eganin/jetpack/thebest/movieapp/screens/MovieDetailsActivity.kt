@@ -23,7 +23,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
 
     override fun openMovieList() =
         openNewFragment {
-            add(
+            replace(
                 R.id.main_container_fragment,
                 FragmentMoviesList.newInstance(columnCount = getColumnCountUtils(display = windowManager.defaultDisplay))
             )
@@ -37,6 +37,8 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
                 FragmentMoviesDetails.newInstance(movieDetails = movieDetails)
             )
         }
+
+
 
 
     private fun openNewFragment(
