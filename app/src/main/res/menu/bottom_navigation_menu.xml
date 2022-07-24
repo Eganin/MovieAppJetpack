@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+    <item
+        android:id="@+id/page_1"
+        android:enabled="true"
+        android:icon="@drawable/ic_format_list_bulleted_square"
+        android:title="@string/popular_menu_label"/>
+    <item
+        android:id="@+id/page_2"
+        android:enabled="true"
+        android:icon="@drawable/ic_calendar_star_outline"
+        android:title="@string/top_rated_menu_label"/>
+
+    <item
+        android:id="@+id/page_3"
+        android:enabled="true"
+        android:icon="@drawable/ic_animation_play_outline"
+        android:title="@string/now_playong_menu_label"/>
+
+    <item
+        android:id="@+id/page_4"
+        android:enabled="true"
+        android:icon="@drawable/ic_timer_outline"
+        android:title="@string/up_coming_menu_label"/>
+
+    <item
+        android:id="@+id/page_5"
+        android:enabled="true"
+        android:icon="@drawable/ic_magnify_expand"
+        android:title="@string/search_menu_label"/>
+</menu>
