@@ -37,6 +37,6 @@ class MovieAdapter :
     }
 
     interface OnClickPoster {
-        fun clickPoster(movie: Movie,view:View)
+        fun clickPoster(movie: Movie)
     }
 }

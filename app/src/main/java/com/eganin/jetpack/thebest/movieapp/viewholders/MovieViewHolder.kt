@@ -16,7 +16,7 @@ class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?, mov
     init {
         itemView.apply {
             setOnClickListener {
-                listener?.clickPoster(movie = movies[adapterPosition], view = itemView)
+                listener?.clickPoster(movie = movies[adapterPosition])
             }
         }
     }

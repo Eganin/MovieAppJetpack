@@ -12,8 +12,7 @@
         tools:layout="@layout/fragment_movies_list">
         <action
             android:id="@+id/action_fragmentMoviesList_to_fragmentMoviesDetails"
-            app:destination="@id/fragmentMoviesDetails"
-            app:popUpTo="@+id/nav_home">
+            app:destination="@id/fragmentMoviesDetails">
             <argument
                 android:name="movieArg"
                 app:argType="com.eganin.jetpack.thebest.movieapp.data.models.Movie" />

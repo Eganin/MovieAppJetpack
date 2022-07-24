@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
@@ -20,10 +19,8 @@ import com.eganin.jetpack.thebest.movieapp.utils.downloadImage
 class FragmentMoviesDetails : Fragment() {
 
     private val movie: Movie by lazy { arguments?.get(SAVE_MOVIE_DATA_KEY) as Movie }
-
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding get() = _binding!!
-
     private val actorsAdapter = ActorAdapter()
 
     override fun onCreateView(
@@ -38,6 +35,11 @@ class FragmentMoviesDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI(view = view)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupUI(view: View) {
@@ -62,10 +64,10 @@ class FragmentMoviesDetails : Fragment() {
 
     private fun setupListeners() {
         binding.backBtb?.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.fragmentMoviesList)
+            activity?.onBackPressed()
         }
         binding.backBtbArrow?.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.fragmentMoviesList)
+            activity?.onBackPressed()
         }
     }
 

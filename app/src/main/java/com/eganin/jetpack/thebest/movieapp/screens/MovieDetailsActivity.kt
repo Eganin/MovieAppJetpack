@@ -22,15 +22,20 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState == null) {
-            openMovieList()
-        }
     }
 
     override fun openMovieList() =
         openNewFragment {
             navigate(R.id.fragmentMoviesList)
         }
+
+    override fun openMovieDetails(movieDetails: Movie) {
+        val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movieDetails)
+        openNewFragment {
+            navigate(R.id.fragmentMoviesDetails, bundle)
+        }
+
+    }
 
     private fun openNewFragment(
         transaction: NavController.() -> Unit,
@@ -41,12 +46,11 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         navController.apply(transaction)
     }
 
-    override fun clickPoster(movie: Movie, view: View) {
-        val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movie)
-        view.findNavController().navigate(R.id.fragmentMoviesDetails,bundle)
-    }
+    override fun clickPoster(movie: Movie) =
+        openMovieDetails(movieDetails = movie)
 
-    companion object{
+    companion object {
         const val SAVE_MOVIE_DATA_KEY = "SAVE_MOVIE_DATA_KEY"
     }
+
 }

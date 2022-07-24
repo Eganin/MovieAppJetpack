@@ -26,11 +26,9 @@ class FragmentMoviesList : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
-
     private val superExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "Failed", exception)
     }
-
     private val movieAdapter = MovieAdapter()
     private val uiScope = CoroutineScope(Dispatchers.Main + SupervisorJob() + superExceptionHandler)
     private var moviesData: List<Movie> = listOf()
@@ -58,11 +56,6 @@ class FragmentMoviesList : Fragment() {
 
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        downloadData()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -75,7 +68,7 @@ class FragmentMoviesList : Fragment() {
 
     private fun downloadData() {
         uiScope.launch {
-            val differed = withContext(uiScope.coroutineContext) {
+            withContext(uiScope.coroutineContext) {
                 moviesData = loadMovies(requireContext())
             }
             setupRecyclerView(dataMovies = moviesData)
@@ -116,7 +109,7 @@ class FragmentMoviesList : Fragment() {
         binding.moviesRecyclerView.apply {
             layoutManager = GridLayoutManager(
                 requireContext(),
-                getColumnCountUtils(display=display) ?: DEFAULT_COLUMN_COUNT
+                getColumnCountUtils(display=display)
             )
             adapter = movieAdapter
             movieAdapter.bindMovies(movies = dataMovies)
