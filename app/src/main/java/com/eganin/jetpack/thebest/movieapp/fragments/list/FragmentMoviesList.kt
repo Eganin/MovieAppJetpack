@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.fragments
+package com.eganin.jetpack.thebest.movieapp.fragments.list
 
 import android.content.Context
 import android.os.Bundle
@@ -6,33 +6,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
-import com.eganin.jetpack.thebest.movieapp.data.models.Actor
-import com.eganin.jetpack.thebest.movieapp.data.models.Genre
+import com.eganin.jetpack.thebest.movieapp.common.ViewModelFactory
 import com.eganin.jetpack.thebest.movieapp.data.models.Movie
 import com.eganin.jetpack.thebest.movieapp.data.models.loadMovies
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
 import com.eganin.jetpack.thebest.movieapp.utils.getColumnCountUtils
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
-import kotlinx.parcelize.RawValue
 
 class FragmentMoviesList : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
-    private val superExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Log.e(TAG, "Failed", exception)
-    }
     private val movieAdapter = MovieAdapter()
-    private val uiScope = CoroutineScope(Dispatchers.Main + SupervisorJob() + superExceptionHandler)
-    private var moviesData: List<Movie> = listOf()
-
+    private val viewModel: MoviesListViewModel by viewModels { ViewModelFactory(context = requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +38,9 @@ class FragmentMoviesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        downloadData()
+        setupRecyclerView()
+        observeData()
+        viewModel.downloadMoviesList()
     }
 
     override fun onAttach(context: Context) {
@@ -66,13 +60,35 @@ class FragmentMoviesList : Fragment() {
         movieAdapter.listener = null
     }
 
-    private fun downloadData() {
-        uiScope.launch {
-            withContext(uiScope.coroutineContext) {
-                moviesData = loadMovies(requireContext())
-            }
-            setupRecyclerView(dataMovies = moviesData)
+    private fun observeData() {
+        viewModel.moviesData.observe(this.viewLifecycleOwner) {
+            movieAdapter.bindMovies(movies = it)
         }
+
+        viewModel.stateData.observe(this.viewLifecycleOwner,this::setState)
+    }
+
+    private fun setState(state: MoviesListViewModel.State) {
+        when (state) {
+            MoviesListViewModel.State.Default -> setLoading(loading = true)
+            MoviesListViewModel.State.Error -> showSnackBar(
+                textMessage = getString(R.string.error_data_loading_snckbar_message)
+            )
+            MoviesListViewModel.State.Loading -> setLoading(loading = true)
+            MoviesListViewModel.State.Success -> setLoading(loading = false)
+        }
+    }
+
+    private fun setLoading(loading: Boolean) {
+        if (loading) {
+            binding.progressBarMoviesList.visibility = View.VISIBLE
+        } else {
+            binding.progressBarMoviesList.visibility = View.GONE
+        }
+    }
+
+    private fun showSnackBar(textMessage: String) {
+        view?.let { Snackbar.make(it, textMessage, Snackbar.LENGTH_LONG) }
     }
 
     //Plug
@@ -105,19 +121,13 @@ class FragmentMoviesList : Fragment() {
     }
 
 
-    private fun setupRecyclerView(dataMovies: List<Movie>) {
+    private fun setupRecyclerView() {
         binding.moviesRecyclerView.apply {
             layoutManager = GridLayoutManager(
                 requireContext(),
-                getColumnCountUtils(display=display)
+                2
             )
             adapter = movieAdapter
-            movieAdapter.bindMovies(movies = dataMovies)
         }
-    }
-
-    companion object {
-        private val TAG = "FRAGMENT_MOVIES_LIST"
-        private const val DEFAULT_COLUMN_COUNT = 2
     }
 }

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragmentMoviesList"
-        android:name="com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesList"
+        android:name="com.eganin.jetpack.thebest.movieapp.fragments.list.FragmentMoviesList"
         android:label="FragmentMoviesList"
         tools:layout="@layout/fragment_movies_list">
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentMoviesDetails"
-        android:name="com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesDetails"
+        android:name="com.eganin.jetpack.thebest.movieapp.fragments.details.FragmentMoviesDetails"
         android:label="FragmentMoviesDetails"
         tools:layout="@layout/fragment_movie_detail">
         <action

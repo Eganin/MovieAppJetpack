@@ -30,6 +30,7 @@ class MovieAdapter :
 
     fun bindMovies(movies: List<Movie>) {
         this.movies = movies.toMutableList()
+        notifyDataSetChanged()
     }
 
     fun addMovies(newMovies: List<Movie>) {

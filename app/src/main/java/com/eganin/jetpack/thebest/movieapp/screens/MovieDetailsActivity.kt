@@ -2,20 +2,13 @@ package com.eganin.jetpack.thebest.movieapp.screens
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesDetails
-import com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesList
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.data.models.Movie
-import com.eganin.jetpack.thebest.movieapp.fragments.FragmentMoviesListDirections
 import com.eganin.jetpack.thebest.movieapp.routing.Router
-import com.eganin.jetpack.thebest.movieapp.utils.getColumnCountUtils
 
 class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPoster {
 

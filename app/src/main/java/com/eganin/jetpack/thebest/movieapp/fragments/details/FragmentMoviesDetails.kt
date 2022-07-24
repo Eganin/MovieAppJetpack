@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.fragments
+package com.eganin.jetpack.thebest.movieapp.fragments.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
