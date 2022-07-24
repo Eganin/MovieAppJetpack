@@ -1,6 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
@@ -36,6 +37,6 @@ class MovieAdapter :
     }
 
     interface OnClickPoster {
-        fun clickPoster(movie: Movie)
+        fun clickPoster(movie: Movie,view:View)
     }
 }

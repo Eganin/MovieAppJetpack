@@ -17,6 +17,7 @@ import com.eganin.jetpack.thebest.movieapp.data.models.Genre
 import com.eganin.jetpack.thebest.movieapp.data.models.Movie
 import com.eganin.jetpack.thebest.movieapp.data.models.loadMovies
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
+import com.eganin.jetpack.thebest.movieapp.utils.getColumnCountUtils
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import kotlinx.parcelize.RawValue
@@ -55,6 +56,11 @@ class FragmentMoviesList : Fragment() {
         if (context is MovieAdapter.OnClickPoster)
             movieAdapter.listener = context
 
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        downloadData()
     }
 
     override fun onDestroyView() {
@@ -110,7 +116,7 @@ class FragmentMoviesList : Fragment() {
         binding.moviesRecyclerView.apply {
             layoutManager = GridLayoutManager(
                 requireContext(),
-                arguments?.getInt(COLUMN_COUNT_SAVE) ?: DEFAULT_COLUMN_COUNT
+                getColumnCountUtils(display=display) ?: DEFAULT_COLUMN_COUNT
             )
             adapter = movieAdapter
             movieAdapter.bindMovies(movies = dataMovies)
@@ -118,16 +124,7 @@ class FragmentMoviesList : Fragment() {
     }
 
     companion object {
-
         private val TAG = "FRAGMENT_MOVIES_LIST"
-
-        fun newInstance(columnCount: Int = DEFAULT_COLUMN_COUNT): FragmentMoviesList {
-            val args = Bundle()
-            args.putInt(COLUMN_COUNT_SAVE, columnCount)
-            return FragmentMoviesList().also { it.arguments = args }
-        }
-
-        private const val COLUMN_COUNT_SAVE = "countColumn"
         private const val DEFAULT_COLUMN_COUNT = 2
     }
 }

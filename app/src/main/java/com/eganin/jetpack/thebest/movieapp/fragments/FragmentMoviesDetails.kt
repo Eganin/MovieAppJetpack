@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.adapters.ActorAdapter
 import com.eganin.jetpack.thebest.movieapp.data.models.Movie
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMovieDetailBinding
+import com.eganin.jetpack.thebest.movieapp.screens.MovieDetailsActivity.Companion.SAVE_MOVIE_DATA_KEY
 import com.eganin.jetpack.thebest.movieapp.utils.downloadImage
 
 
@@ -42,7 +44,7 @@ class FragmentMoviesDetails : Fragment() {
         setupRecyclerView(view = view)
         setupListeners()
         with(binding) {
-            with(movie){
+            with(movie) {
                 downloadImage(
                     link = backdrop,
                     imageView = backgroundImage,
@@ -58,12 +60,12 @@ class FragmentMoviesDetails : Fragment() {
         }
     }
 
-    private fun setupListeners(){
+    private fun setupListeners() {
         binding.backBtb?.setOnClickListener {
-            activity?.onBackPressed()
+            view?.findNavController()?.navigate(R.id.fragmentMoviesList)
         }
         binding.backBtbArrow?.setOnClickListener {
-            activity?.onBackPressed()
+            view?.findNavController()?.navigate(R.id.fragmentMoviesList)
         }
     }
 
@@ -93,17 +95,4 @@ class FragmentMoviesDetails : Fragment() {
             )
         }
     }
-
-
-    companion object {
-
-        private const val SAVE_MOVIE_DATA_KEY = "SAVE_MOVIE_DATA_KEY"
-
-        fun newInstance(movieDetails: Movie): FragmentMoviesDetails {
-            val args = Bundle()
-            args.putParcelable(SAVE_MOVIE_DATA_KEY, movieDetails)
-            return FragmentMoviesDetails().also { it.arguments = args }
-        }
-    }
-
 }
