@@ -125,7 +125,7 @@ class FragmentMoviesList : Fragment() {
         binding.moviesRecyclerView.apply {
             layoutManager = GridLayoutManager(
                 requireContext(),
-                2
+                getColumnCountUtils(display = activity?.windowManager?.defaultDisplay)
             )
             adapter = movieAdapter
         }
