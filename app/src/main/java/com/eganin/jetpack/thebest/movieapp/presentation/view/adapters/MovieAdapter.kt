@@ -1,13 +1,11 @@
-package com.eganin.jetpack.thebest.movieapp.adapters
+package com.eganin.jetpack.thebest.movieapp.presentation.view.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.request.RequestOptions
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.data.models.Movie
-import com.eganin.jetpack.thebest.movieapp.viewholders.MovieViewHolder
+import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
+import com.eganin.jetpack.thebest.movieapp.presentation.view.viewholders.MovieViewHolder
 
 class MovieAdapter :
     RecyclerView.Adapter<MovieViewHolder>() {

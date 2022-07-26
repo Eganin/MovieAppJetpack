@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.screens
+package com.eganin.jetpack.thebest.movieapp.presentation.view.screens
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,9 +6,9 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
-import com.eganin.jetpack.thebest.movieapp.data.models.Movie
-import com.eganin.jetpack.thebest.movieapp.routing.Router
+import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.MovieAdapter
+import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
+import com.eganin.jetpack.thebest.movieapp.presentation.routing.Router
 
 class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPoster {
 

@@ -1,14 +1,14 @@
-package com.eganin.jetpack.thebest.movieapp.viewholders
+package com.eganin.jetpack.thebest.movieapp.presentation.view.viewholders
 
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
-import com.eganin.jetpack.thebest.movieapp.data.models.Movie
+import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.MovieAdapter
+import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderMovieBinding
-import com.eganin.jetpack.thebest.movieapp.utils.downloadImage
+import com.eganin.jetpack.thebest.movieapp.presentation.utils.downloadImage
 
 class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?, movies: List<Movie>) :
     RecyclerView.ViewHolder(itemView) {

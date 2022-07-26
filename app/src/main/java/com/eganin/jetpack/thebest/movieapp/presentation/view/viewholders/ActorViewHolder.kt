@@ -1,13 +1,10 @@
-package com.eganin.jetpack.thebest.movieapp.viewholders
+package com.eganin.jetpack.thebest.movieapp.presentation.view.viewholders
 
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.data.models.Actor
+import com.eganin.jetpack.thebest.movieapp.data.models.entities.Actor
 import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderActorBinding
-import com.eganin.jetpack.thebest.movieapp.utils.downloadImage
+import com.eganin.jetpack.thebest.movieapp.presentation.utils.downloadImage
 
 class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

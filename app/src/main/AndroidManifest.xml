@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieApp" >
         <activity
-            android:name=".screens.MovieDetailsActivity"
+            android:name="com.eganin.jetpack.thebest.movieapp.presentation.view.screens.MovieDetailsActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

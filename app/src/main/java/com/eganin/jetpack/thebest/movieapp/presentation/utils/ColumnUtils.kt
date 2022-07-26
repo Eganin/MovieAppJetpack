@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.utils
+package com.eganin.jetpack.thebest.movieapp.presentation.utils
 
 import android.util.DisplayMetrics
 import android.view.Display

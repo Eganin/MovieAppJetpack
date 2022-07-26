@@ -1,11 +1,11 @@
-package com.eganin.jetpack.thebest.movieapp.adapters
+package com.eganin.jetpack.thebest.movieapp.presentation.view.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.data.models.Actor
-import com.eganin.jetpack.thebest.movieapp.viewholders.ActorViewHolder
+import com.eganin.jetpack.thebest.movieapp.data.models.entities.Actor
+import com.eganin.jetpack.thebest.movieapp.presentation.view.viewholders.ActorViewHolder
 
 class ActorAdapter : RecyclerView.Adapter<ActorViewHolder>() {
 

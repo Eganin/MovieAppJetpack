@@ -1,8 +1,7 @@
-package com.eganin.jetpack.thebest.movieapp.fragments.list
+package com.eganin.jetpack.thebest.movieapp.presentation.view.fragments.list
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.adapters.MovieAdapter
+import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.common.ViewModelFactory
-import com.eganin.jetpack.thebest.movieapp.data.models.Movie
-import com.eganin.jetpack.thebest.movieapp.data.models.loadMovies
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
-import com.eganin.jetpack.thebest.movieapp.utils.getColumnCountUtils
+import com.eganin.jetpack.thebest.movieapp.presentation.utils.getColumnCountUtils
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.*
 
 class FragmentMoviesList : Fragment() {
 

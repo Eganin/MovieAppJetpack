@@ -1,10 +1,10 @@
-package com.eganin.jetpack.thebest.movieapp.fragments.list
+package com.eganin.jetpack.thebest.movieapp.presentation.view.fragments.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eganin.jetpack.thebest.movieapp.data.models.Movie
+import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
 import kotlinx.coroutines.*
 
 

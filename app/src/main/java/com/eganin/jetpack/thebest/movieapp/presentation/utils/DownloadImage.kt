@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.utils
+package com.eganin.jetpack.thebest.movieapp.presentation.utils
 
 import android.content.Context
 import android.widget.ImageView

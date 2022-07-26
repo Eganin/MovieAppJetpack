@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.data.models
+package com.eganin.jetpack.thebest.movieapp.data.models.entities
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

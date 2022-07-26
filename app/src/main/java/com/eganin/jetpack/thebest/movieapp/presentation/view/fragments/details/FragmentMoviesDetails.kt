@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.fragments.details
+package com.eganin.jetpack.thebest.movieapp.presentation.view.fragments.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,13 +10,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.adapters.ActorAdapter
+import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.ActorAdapter
 import com.eganin.jetpack.thebest.movieapp.common.ViewModelFactory
-import com.eganin.jetpack.thebest.movieapp.data.models.Movie
+import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMovieDetailBinding
-import com.eganin.jetpack.thebest.movieapp.fragments.list.MoviesListViewModel
-import com.eganin.jetpack.thebest.movieapp.screens.MovieDetailsActivity.Companion.SAVE_MOVIE_DATA_KEY
-import com.eganin.jetpack.thebest.movieapp.utils.downloadImage
+import com.eganin.jetpack.thebest.movieapp.presentation.view.screens.MovieDetailsActivity.Companion.SAVE_MOVIE_DATA_KEY
+import com.eganin.jetpack.thebest.movieapp.presentation.utils.downloadImage
 
 
 class FragmentMoviesDetails : Fragment() {

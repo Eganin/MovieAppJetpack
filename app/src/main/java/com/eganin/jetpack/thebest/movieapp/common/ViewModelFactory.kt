@@ -3,9 +3,9 @@ package com.eganin.jetpack.thebest.movieapp.common
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.eganin.jetpack.thebest.movieapp.fragments.details.MovieDetailsViewModel
-import com.eganin.jetpack.thebest.movieapp.fragments.list.MovieInteractor
-import com.eganin.jetpack.thebest.movieapp.fragments.list.MoviesListViewModel
+import com.eganin.jetpack.thebest.movieapp.presentation.view.fragments.details.MovieDetailsViewModel
+import com.eganin.jetpack.thebest.movieapp.presentation.view.fragments.list.MovieInteractor
+import com.eganin.jetpack.thebest.movieapp.presentation.view.fragments.list.MoviesListViewModel
 import kotlinx.coroutines.Dispatchers
 
 @Suppress("UNCHECKED_CAST")
