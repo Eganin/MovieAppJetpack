@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
+import com.eganin.jetpack.thebest.movieapp.data.models.network.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.presentation.view.viewholders.MovieViewHolder
 
 class MovieAdapter :
@@ -36,6 +36,6 @@ class MovieAdapter :
     }
 
     interface OnClickPoster {
-        fun clickPoster(movie: Movie)
+        fun clickPoster(idMovie: Int)
     }
 }

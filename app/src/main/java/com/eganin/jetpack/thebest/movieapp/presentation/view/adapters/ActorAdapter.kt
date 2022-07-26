@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.data.models.entities.Actor
+import com.eganin.jetpack.thebest.movieapp.data.models.network.entities.CastItem
 import com.eganin.jetpack.thebest.movieapp.presentation.view.viewholders.ActorViewHolder
 
 class ActorAdapter : RecyclerView.Adapter<ActorViewHolder>() {
 
 
-    private var actors: MutableList<Actor> = mutableListOf()
+    private var actors: MutableList<CastItem> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ActorViewHolder(
         itemView = LayoutInflater.from(parent.context).inflate(
@@ -23,11 +23,11 @@ class ActorAdapter : RecyclerView.Adapter<ActorViewHolder>() {
 
     override fun getItemCount()=actors.size
 
-    fun bindActors(actors: List<Actor>) {
+    fun bindActors(actors: List<CastItem>) {
         this.actors = actors.toMutableList()
     }
 
-    fun addActors(newActors: List<Actor>) {
+    fun addActors(newActors: List<CastItem>) {
         actors.addAll(newActors)
     }
 }

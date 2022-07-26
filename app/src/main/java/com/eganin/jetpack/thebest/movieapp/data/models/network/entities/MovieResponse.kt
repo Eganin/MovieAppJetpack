@@ -13,13 +13,13 @@ data class MovieResponse(
     val totalPages: Int,
 
     @SerialName("results")
-    val results: List<ResultsItem>,
+    val results: List<Movie>,
 
     @SerialName("total_results")
     val totalResults: Int
 )
 @Serializable
-data class ResultsItem(
+data class Movie(
 
     @SerialName("original_title")
     val originalTitle: String,

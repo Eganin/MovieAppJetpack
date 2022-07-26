@@ -12,15 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.ActorAdapter
 import com.eganin.jetpack.thebest.movieapp.common.ViewModelFactory
-import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMovieDetailBinding
 import com.eganin.jetpack.thebest.movieapp.presentation.view.screens.MovieDetailsActivity.Companion.SAVE_MOVIE_DATA_KEY
-import com.eganin.jetpack.thebest.movieapp.presentation.utils.downloadImage
 
 
 class FragmentMoviesDetails : Fragment() {
 
-    private val movie: Movie by lazy { arguments?.get(SAVE_MOVIE_DATA_KEY) as Movie }
+    private val idMovie: Int? by lazy { arguments?.getInt(SAVE_MOVIE_DATA_KEY) }
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding get() = _binding!!
     private val actorsAdapter = ActorAdapter()
@@ -37,7 +35,7 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupUI(view = view)
+        //setupUI(view = view)
     }
 
     override fun onDestroyView() {
@@ -45,6 +43,7 @@ class FragmentMoviesDetails : Fragment() {
         _binding = null
     }
 
+    /*
     private fun setupUI(view: View) {
         setupRecyclerView(view = view)
         setupListeners()
@@ -65,6 +64,8 @@ class FragmentMoviesDetails : Fragment() {
         }
     }
 
+     */
+
     private fun setupListeners() {
         binding.backBtb?.setOnClickListener {
             activity?.onBackPressed()
@@ -79,7 +80,7 @@ class FragmentMoviesDetails : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = actorsAdapter
-            actorsAdapter.bindActors(actors = movie.actors)
+            //actorsAdapter.bindActors(actors = )
         }
     }
 

@@ -58,7 +58,7 @@ class FragmentMoviesList : Fragment() {
 
     private fun observeData() {
         viewModel.moviesData.observe(this.viewLifecycleOwner) {
-            movieAdapter.bindMovies(movies = it)
+            movieAdapter.bindMovies(movies = it.results)
         }
 
         viewModel.stateData.observe(this.viewLifecycleOwner,this::setState)
@@ -92,30 +92,33 @@ class FragmentMoviesList : Fragment() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.page_1 -> {
+                    setListMovies(typeMovies = TypeMovies.POPULAR)
                     true
                 }
                 R.id.page_2 -> {
-
+                    setListMovies(typeMovies = TypeMovies.TOP_RATED)
                     true
                 }
                 R.id.page_3 -> {
-
+                    setListMovies(typeMovies = TypeMovies.NOW_PLAYING)
                     true
                 }
                 R.id.page_4 -> {
-
+                    setListMovies(typeMovies = TypeMovies.POPULAR)
                     true
                 }
                 R.id.page_5 -> {
-
+                    setListMovies(typeMovies = TypeMovies.SEARCH)
                     true
                 }
-
                 else -> false
             }
         }
     }
 
+    private fun setListMovies(typeMovies: TypeMovies){
+        binding.listType.text = typeMovies.value
+    }
 
     private fun setupRecyclerView() {
         binding.moviesRecyclerView.apply {

@@ -4,15 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
-import com.eganin.jetpack.thebest.movieapp.data.models.network.RetrofitModule
+import com.eganin.jetpack.thebest.movieapp.data.models.network.entities.MovieResponse
 import kotlinx.coroutines.*
 
 
 class MoviesListViewModel(private val interactor: MovieInteractor) : ViewModel() {
 
-    private val _moviesData = MutableLiveData<List<Movie>>()
-    val moviesData: LiveData<List<Movie>> = _moviesData
+    private val _moviesData = MutableLiveData<MovieResponse>()
+    val moviesData: LiveData<MovieResponse> = _moviesData
 
     private val _stateData = MutableLiveData<State>(State.Default)
     val stateData: LiveData<State> = _stateData
@@ -21,11 +20,7 @@ class MoviesListViewModel(private val interactor: MovieInteractor) : ViewModel()
         try {
             viewModelScope.launch {
                 _stateData.value = State.Loading
-                _moviesData.value = interactor.downloadMoviesList()
-                withContext(Dispatchers.IO){
-                    val res = RetrofitModule.api.getCreditsUsingId(movieId = 671039)
-                    println(res)
-                }
+                _moviesData.value = interactor.downloadMoviesPopular()
                 _stateData.value = State.Success
             }
         } catch (e: Exception) {

@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.MovieAdapter
-import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.presentation.routing.Router
 
 class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPoster {
@@ -22,8 +21,8 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
             navigate(R.id.fragmentMoviesList)
         }
 
-    override fun openMovieDetails(movieDetails: Movie) {
-        val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movieDetails)
+    override fun openMovieDetails(movieId : Int) {
+        val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movieId)
         openNewFragment {
             navigate(R.id.fragmentMoviesDetails, bundle)
         }
@@ -39,8 +38,8 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         navController.apply(transaction)
     }
 
-    override fun clickPoster(movie: Movie) =
-        openMovieDetails(movieDetails = movie)
+    override fun clickPoster(idMovie: Int) =
+        openMovieDetails(movieId = idMovie)
 
     companion object {
         const val SAVE_MOVIE_DATA_KEY = "SAVE_MOVIE_DATA_KEY"

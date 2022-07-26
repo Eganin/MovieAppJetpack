@@ -75,7 +75,7 @@ interface MoviesApi {
         private const val PAGE = "page"
         private const val QUERY = "query"
         private const val API_KEY_VALUE = "e3e1fa04065d06e42820f0ee5b375a0d"
-        private const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w300"
+        const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w300"
     }
 }
 

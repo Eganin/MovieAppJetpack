@@ -5,8 +5,9 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL
+import com.eganin.jetpack.thebest.movieapp.data.models.network.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.MovieAdapter
-import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderMovieBinding
 import com.eganin.jetpack.thebest.movieapp.presentation.utils.downloadImage
 
@@ -16,7 +17,7 @@ class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?, mov
     init {
         itemView.apply {
             setOnClickListener {
-                listener?.clickPoster(movie = movies[adapterPosition])
+                listener?.clickPoster(idMovie = movies[adapterPosition].id)
             }
         }
     }
@@ -37,13 +38,17 @@ class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?, mov
             with(binding) {
                 nameMoviePoster.text = title
                 timeMoviePoster
-                countReviewsMoviePoster.text = "$numberOfRatings REVIEWS"
-                adultTvMoviePoster.text = "$minimumAge+"
-                tagLineMoviePoster.text = movie.genres.joinToString(separator = ",") { it.name }
+                countReviewsMoviePoster.text = "$voteCount REVIEWS"
+                adultTvMoviePoster.text = if (adult) "18+" else "12+"
+                //tagLineMoviePoster.text = movie.genres.joinToString(separator = ",") { it.name }
 
                 bindFavouriteMovie(isFavourite = true)
-                bindStars(rating = (ratings / 2).toInt())
-                downloadImage(link = poster, context = context, imageView = movieImage)
+                bindStars(rating = (voteAverage / 2).toInt())
+                downloadImage(
+                    link = BASE_IMAGE_URL + posterPath,
+                    context = context,
+                    imageView = movieImage
+                )
             }
         }
     }
