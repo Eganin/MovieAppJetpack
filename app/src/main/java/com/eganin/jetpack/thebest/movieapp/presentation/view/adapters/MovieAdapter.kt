@@ -31,6 +31,11 @@ class MovieAdapter :
         notifyDataSetChanged()
     }
 
+    fun clearMovies(){
+        movies = mutableListOf()
+        notifyDataSetChanged()
+    }
+
     fun addMovies(newMovies: List<Movie>) {
         movies.addAll(newMovies)
     }

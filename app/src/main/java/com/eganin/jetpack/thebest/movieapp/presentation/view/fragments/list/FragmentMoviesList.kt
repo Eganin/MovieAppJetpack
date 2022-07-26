@@ -36,7 +36,7 @@ class FragmentMoviesList : Fragment() {
         setupUI()
         setupRecyclerView()
         observeData()
-        viewModel.downloadMoviesList()
+        viewModel.downloadMoviesList(typeMovies = TypeMovies.POPULAR)
     }
 
     override fun onAttach(context: Context) {
@@ -118,6 +118,8 @@ class FragmentMoviesList : Fragment() {
 
     private fun setListMovies(typeMovies: TypeMovies){
         binding.listType.text = typeMovies.value
+        movieAdapter.clearMovies()
+        viewModel.downloadMoviesList(typeMovies = typeMovies)
     }
 
     private fun setupRecyclerView() {

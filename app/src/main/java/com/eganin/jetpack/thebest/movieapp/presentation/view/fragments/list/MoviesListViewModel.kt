@@ -16,11 +16,11 @@ class MoviesListViewModel(private val interactor: MovieInteractor) : ViewModel()
     private val _stateData = MutableLiveData<State>(State.Default)
     val stateData: LiveData<State> = _stateData
 
-    fun downloadMoviesList() {
+    fun downloadMoviesList(typeMovies: TypeMovies) {
         try {
             viewModelScope.launch {
                 _stateData.value = State.Loading
-                _moviesData.value = interactor.downloadMoviesPopular()
+                _moviesData.value = interactor.downloadMovies(page = 1, typeMovies = typeMovies)
                 _stateData.value = State.Success
             }
         } catch (e: Exception) {
