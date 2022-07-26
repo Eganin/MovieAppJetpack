@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.MovieAdapter
-import com.eganin.jetpack.thebest.movieapp.common.ViewModelFactory
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
 import com.eganin.jetpack.thebest.movieapp.presentation.utils.getColumnCountUtils
 import com.google.android.material.snackbar.Snackbar
@@ -19,8 +18,8 @@ class FragmentMoviesList : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
-    private val movieAdapter = MovieAdapter()
-    private val viewModel: MoviesListViewModel by viewModels { ViewModelFactory(context = requireContext()) }
+    private var viewModel: MoviesListViewModel?=null
+    private  var movieAdapter: MovieAdapter?=null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,15 +33,15 @@ class FragmentMoviesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        setupRecyclerView()
-        observeData()
-        viewModel.downloadMoviesList(typeMovies = TypeMovies.POPULAR)
+
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        viewModel =
+            (requireActivity().application as MovieApp).myComponent.getMoviesViewModel(fragment = this)
         if (context is MovieAdapter.OnClickPoster)
-            movieAdapter.listener = context
+            movieAdapter?.listener = context
 
     }
 
@@ -53,15 +52,17 @@ class FragmentMoviesList : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
-        movieAdapter.listener = null
+        movieAdapter?.listener = null
     }
 
     private fun observeData() {
-        viewModel.moviesData.observe(this.viewLifecycleOwner) {
-            movieAdapter.bindMovies(movies = it.results)
+        viewModel?.moviesData?.observe(this.viewLifecycleOwner) {
+            movieAdapter?.bindMovies(movies = it.results)
         }
 
-        viewModel.stateData.observe(this.viewLifecycleOwner,this::setState)
+        viewModel?.stateData?.observe(this.viewLifecycleOwner, this::setState)
+
+        viewModel?.changeMovies?.observe(this.viewLifecycleOwner, this::setListMovies)
     }
 
     private fun setState(state: MoviesListViewModel.State) {
@@ -87,39 +88,19 @@ class FragmentMoviesList : Fragment() {
         view?.let { Snackbar.make(it, textMessage, Snackbar.LENGTH_LONG) }
     }
 
-    //Plug
     private fun setupUI() {
+        movieAdapter= MovieAdapter(moviesListViewModel = viewModel!!)
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.page_1 -> {
-                    setListMovies(typeMovies = TypeMovies.POPULAR)
-                    true
-                }
-                R.id.page_2 -> {
-                    setListMovies(typeMovies = TypeMovies.TOP_RATED)
-                    true
-                }
-                R.id.page_3 -> {
-                    setListMovies(typeMovies = TypeMovies.NOW_PLAYING)
-                    true
-                }
-                R.id.page_4 -> {
-                    setListMovies(typeMovies = TypeMovies.POPULAR)
-                    true
-                }
-                R.id.page_5 -> {
-                    setListMovies(typeMovies = TypeMovies.SEARCH)
-                    true
-                }
-                else -> false
-            }
+            viewModel?.changeMoviesList(idPage = item.itemId) ?: false
         }
+        setupRecyclerView()
+        observeData()
+        viewModel?.downloadMoviesList(typeMovies = DEFAULT_MOVIES)
     }
 
-    private fun setListMovies(typeMovies: TypeMovies){
-        binding.listType.text = typeMovies.value
-        movieAdapter.clearMovies()
-        viewModel.downloadMoviesList(typeMovies = typeMovies)
+    private fun setListMovies(value: String) {
+        movieAdapter?.clearMovies()
+        binding.listType.text = value
     }
 
     private fun setupRecyclerView() {
@@ -130,5 +111,9 @@ class FragmentMoviesList : Fragment() {
             )
             adapter = movieAdapter
         }
+    }
+
+    companion object {
+        private val DEFAULT_MOVIES = TypeMovies.POPULAR
     }
 }

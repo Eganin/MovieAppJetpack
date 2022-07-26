@@ -23,4 +23,5 @@
     <string name="up_coming_menu_label">Up Coming</string>
     <string name="search_menu_label">Search</string>
     <string name="error_data_loading_snckbar_message">Error Data Loading</string>
+    <string name="default_list_type_label">Popular</string>
 </resources>

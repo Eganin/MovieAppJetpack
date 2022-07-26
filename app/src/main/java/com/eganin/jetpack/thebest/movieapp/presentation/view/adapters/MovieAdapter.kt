@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.data.models.network.entities.Movie
+import com.eganin.jetpack.thebest.movieapp.presentation.view.fragments.list.MoviesListViewModel
 import com.eganin.jetpack.thebest.movieapp.presentation.view.viewholders.MovieViewHolder
 
-class MovieAdapter :
+class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
     RecyclerView.Adapter<MovieViewHolder>() {
 
     var listener: OnClickPoster? = null
@@ -18,7 +19,8 @@ class MovieAdapter :
         itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.view_holder_movie, parent, false),
         listener = listener,
-        movies = movies
+        movies = movies,
+        moviesListViewModel = moviesListViewModel
     )
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =

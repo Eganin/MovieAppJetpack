@@ -37,7 +37,7 @@
             android:layout_marginStart="@dimen/movies_list_label_margin_start"
             android:layout_marginTop="@dimen/top_menu_margin_top"
             android:fontFamily="@font/roboto_black"
-            tools:text="@string/movies_list_label"
+            android:text="@string/default_list_type_label"
             android:textColor="@color/white"
             android:textSize="@dimen/default_size"
             app:layout_constraintStart_toStartOf="parent"

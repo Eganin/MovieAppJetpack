@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.ActorAdapter
-import com.eganin.jetpack.thebest.movieapp.common.ViewModelFactory
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMovieDetailBinding
 import com.eganin.jetpack.thebest.movieapp.presentation.view.screens.MovieDetailsActivity.Companion.SAVE_MOVIE_DATA_KEY
 
@@ -22,7 +21,7 @@ class FragmentMoviesDetails : Fragment() {
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding get() = _binding!!
     private val actorsAdapter = ActorAdapter()
-    private val viewModel: MovieDetailsViewModel by viewModels { ViewModelFactory(context = requireContext()) }
+    //private val viewModel: MovieDetailsViewModel by viewModels { ViewModelFactory(context = requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

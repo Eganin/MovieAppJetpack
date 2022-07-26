@@ -10,8 +10,14 @@ import com.eganin.jetpack.thebest.movieapp.data.models.network.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.presentation.view.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderMovieBinding
 import com.eganin.jetpack.thebest.movieapp.presentation.utils.downloadImage
+import com.eganin.jetpack.thebest.movieapp.presentation.view.fragments.list.MoviesListViewModel
 
-class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?, movies: List<Movie>) :
+class MovieViewHolder(
+    itemView: View,
+    listener: MovieAdapter.OnClickPoster?,
+    movies: List<Movie>,
+    val moviesListViewModel: MoviesListViewModel
+) :
     RecyclerView.ViewHolder(itemView) {
 
     init {
@@ -40,8 +46,7 @@ class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?, mov
                 timeMoviePoster
                 countReviewsMoviePoster.text = "$voteCount REVIEWS"
                 adultTvMoviePoster.text = if (adult) "18+" else "12+"
-                //tagLineMoviePoster.text = movie.genres.joinToString(separator = ",") { it.name }
-
+                tagLineMoviePoster.text = getTagLine(genreIds = genreIds)
                 bindFavouriteMovie(isFavourite = true)
                 bindStars(rating = (voteAverage / 2).toInt())
                 downloadImage(
@@ -52,6 +57,10 @@ class MovieViewHolder(itemView: View, listener: MovieAdapter.OnClickPoster?, mov
             }
         }
     }
+
+    fun getTagLine(genreIds: List<Int>) =
+        moviesListViewModel.genresList?.filter { it.id in genreIds }?.joinToString { it.name }
+
 
     private fun bindFavouriteMovie(isFavourite: Boolean) {
         if (isFavourite)
