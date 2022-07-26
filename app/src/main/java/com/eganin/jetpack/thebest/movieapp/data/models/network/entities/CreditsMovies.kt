@@ -1,90 +1,92 @@
 package com.eganin.jetpack.thebest.movieapp.data.models.network.entities
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CreditsMovies(
 
-	@field:SerializedName("cast")
+	@SerialName("cast")
 	val cast: List<CastItem>,
 
-	@field:SerializedName("id")
+	@SerialName("id")
 	val id: Int,
 
-	@field:SerializedName("crew")
+	@SerialName("crew")
 	val crew: List<CrewItem>
 )
-
+@Serializable
 data class CastItem(
 
-	@field:SerializedName("cast_id")
+	@SerialName("cast_id")
 	val castId: Int,
 
-	@field:SerializedName("character")
+	@SerialName("character")
 	val character: String,
 
-	@field:SerializedName("gender")
+	@SerialName("gender")
 	val gender: Int,
 
-	@field:SerializedName("credit_id")
+	@SerialName("credit_id")
 	val creditId: String,
 
-	@field:SerializedName("known_for_department")
+	@SerialName("known_for_department")
 	val knownForDepartment: String,
 
-	@field:SerializedName("original_name")
+	@SerialName("original_name")
 	val originalName: String,
 
-	@field:SerializedName("popularity")
+	@SerialName("popularity")
 	val popularity: Double,
 
-	@field:SerializedName("name")
+	@SerialName("name")
 	val name: String,
 
-	@field:SerializedName("profile_path")
+	@SerialName("profile_path")
 	val profilePath: String,
 
-	@field:SerializedName("id")
+	@SerialName("id")
 	val id: Int,
 
-	@field:SerializedName("adult")
+	@SerialName("adult")
 	val adult: Boolean,
 
-	@field:SerializedName("order")
+	@SerialName("order")
 	val order: Int
 )
-
+@Serializable
 data class CrewItem(
 
-	@field:SerializedName("gender")
+	@SerialName("gender")
 	val gender: Int,
 
-	@field:SerializedName("credit_id")
+	@SerialName("credit_id")
 	val creditId: String,
 
-	@field:SerializedName("known_for_department")
+	@SerialName("known_for_department")
 	val knownForDepartment: String,
 
-	@field:SerializedName("original_name")
+	@SerialName("original_name")
 	val originalName: String,
 
-	@field:SerializedName("popularity")
+	@SerialName("popularity")
 	val popularity: Double,
 
-	@field:SerializedName("name")
+	@SerialName("name")
 	val name: String,
 
-	@field:SerializedName("profile_path")
-	val profilePath: String,
+	@SerialName("profile_path")
+	val profilePath: String?=null,
 
-	@field:SerializedName("id")
+	@SerialName("id")
 	val id: Int,
 
-	@field:SerializedName("adult")
+	@SerialName("adult")
 	val adult: Boolean,
 
-	@field:SerializedName("department")
+	@SerialName("department")
 	val department: String,
 
-	@field:SerializedName("job")
+	@SerialName("job")
 	val job: String
 )

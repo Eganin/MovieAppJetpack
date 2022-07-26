@@ -1,14 +1,16 @@
 package com.eganin.jetpack.thebest.movieapp.data.models.network.entities
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ConfigurationResponse(
     @SerialName("images")
     val images: Images,
     @SerialName("change_keys")
     val changeKeys: List<String>
 )
-
+@Serializable
 data class Images(
     @SerialName("poster_sizes")
     val posterSizes: List<String>,

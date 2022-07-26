@@ -1,18 +1,20 @@
 package com.eganin.jetpack.thebest.movieapp.data.models.network.entities
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class GenresResponse(
 
-	@field:SerializedName("genres")
+	@SerialName("genres")
 	val genres: List<GenresItem>
 )
-
+@Serializable
 data class GenresItem(
 
-	@field:SerializedName("name")
+	@SerialName("name")
 	val name: String,
 
-	@field:SerializedName("id")
+	@SerialName("id")
 	val id: Int
 )

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eganin.jetpack.thebest.movieapp.data.models.entities.Movie
+import com.eganin.jetpack.thebest.movieapp.data.models.network.RetrofitModule
 import kotlinx.coroutines.*
 
 
@@ -21,6 +22,10 @@ class MoviesListViewModel(private val interactor: MovieInteractor) : ViewModel()
             viewModelScope.launch {
                 _stateData.value = State.Loading
                 _moviesData.value = interactor.downloadMoviesList()
+                withContext(Dispatchers.IO){
+                    val res = RetrofitModule.api.getCreditsUsingId(movieId = 671039)
+                    println(res)
+                }
                 _stateData.value = State.Success
             }
         } catch (e: Exception) {
