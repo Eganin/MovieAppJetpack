@@ -83,12 +83,12 @@ class FragmentMoviesDetails : Fragment() {
                 imageView = backgroundImage,
                 context = requireContext()
             )
-            adultTv.text = if (response.adult) "13+" else "18+"
+            response.adult?.let { if (it) "13+" else "18+" }
             titleMovie.text = response.title
-            tagLine.text = response.genres.joinToString(separator = ",") { it.name }
-            countReviews.text="${response.voteCount} REVIEWS"
+            tagLine.text = response.genres?.joinToString(separator = ",") { it.name ?: "" }
+            countReviews.text = "${response.voteCount} REVIEWS"
             storylineDescription.text = response.overview
-            bindStars(rating = (response.voteAverage/2).toInt())
+            response.voteAverage?.let { bindStars(rating = (it / 2).toInt()) }
         }
     }
 
@@ -99,7 +99,12 @@ class FragmentMoviesDetails : Fragment() {
     private fun setState(state: MoviesListViewModel.State) {
         when (state) {
             MoviesListViewModel.State.Default -> setLoading(loading = true)
-            MoviesListViewModel.State.Error -> showSnackBar(message = getString(R.string.error_data_loading_snckbar_message))
+            MoviesListViewModel.State.Error -> {
+                showSnackBar(
+                    message = getString(R.string.error_data_loading_snckbar_message)
+                )
+                setLoading(loading = false)
+            }
             MoviesListViewModel.State.Loading -> setLoading(loading = true)
             MoviesListViewModel.State.Success -> setLoading(loading = false)
         }

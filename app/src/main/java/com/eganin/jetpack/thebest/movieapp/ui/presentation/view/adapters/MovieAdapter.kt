@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,7 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
     fun bindMovies(movies: List<Movie>) {
         this.movies = movies.toMutableList()
         notifyDataSetChanged()
+        Log.d("EEE",movies.toString())
     }
 
     fun clearMovies(){

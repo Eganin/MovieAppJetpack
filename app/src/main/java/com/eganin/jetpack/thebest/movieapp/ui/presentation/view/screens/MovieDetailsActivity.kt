@@ -3,11 +3,13 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.routing.Router
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.FragmentMoviesDetails
 
 class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPoster {
 
@@ -21,12 +23,11 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
             navigate(R.id.fragmentMoviesList)
         }
 
-    override fun openMovieDetails(movieId : Int) {
+    override fun openMovieDetails(movieId: Int) {
         val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movieId)
         openNewFragment {
             navigate(R.id.fragmentMoviesDetails, bundle)
         }
-
     }
 
     private fun openNewFragment(
@@ -39,7 +40,6 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
     }
 
     override fun clickPoster(idMovie: Int) {
-        println(idMovie)
         openMovieDetails(movieId = idMovie)
     }
 

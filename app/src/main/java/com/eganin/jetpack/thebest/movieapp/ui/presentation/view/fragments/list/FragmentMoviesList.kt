@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +19,8 @@ class FragmentMoviesList : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
-    private var viewModel: MoviesListViewModel?=null
-    private  var movieAdapter: MovieAdapter?=null
+    private var viewModel: MoviesListViewModel? = null
+    private var movieAdapter: MovieAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,17 +34,17 @@ class FragmentMoviesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        movieAdapter?.listener?.clickPoster(438148)
-        println(movieAdapter?.listener == null)
+
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is MovieAdapter.OnClickPoster)
-            movieAdapter?.listener = context
-
         viewModel =
             (requireActivity().application as MovieApp).myComponent.getMoviesViewModel(fragment = this)
+        movieAdapter = MovieAdapter(moviesListViewModel = viewModel!!)
+        if (context is MovieAdapter.OnClickPoster) {
+            movieAdapter?.listener = context
+        }
 
     }
 
@@ -54,13 +55,13 @@ class FragmentMoviesList : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
-        viewModel=null
+        viewModel = null
         movieAdapter?.listener = null
     }
 
     private fun observeData() {
-        viewModel?.moviesData?.observe(this.viewLifecycleOwner) {
-            movieAdapter?.bindMovies(movies = it.results)
+        viewModel?.contacts()?.observe(this.viewLifecycleOwner) {
+            movieAdapter?.bindMovies(movies = it)
         }
 
         viewModel?.stateData?.observe(this.viewLifecycleOwner, this::setState)
@@ -71,9 +72,12 @@ class FragmentMoviesList : Fragment() {
     private fun setState(state: MoviesListViewModel.State) {
         when (state) {
             MoviesListViewModel.State.Default -> setLoading(loading = true)
-            MoviesListViewModel.State.Error -> showSnackBar(
-                textMessage = getString(R.string.error_data_loading_snckbar_message)
-            )
+            MoviesListViewModel.State.Error -> {
+                showSnackBar(
+                    textMessage = getString(R.string.error_data_loading_snckbar_message)
+                )
+                setLoading(loading = false)
+            }
             MoviesListViewModel.State.Loading -> setLoading(loading = true)
             MoviesListViewModel.State.Success -> setLoading(loading = false)
         }
@@ -92,17 +96,14 @@ class FragmentMoviesList : Fragment() {
     }
 
     private fun setupUI() {
-        movieAdapter= MovieAdapter(moviesListViewModel = viewModel!!)
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             viewModel?.changeMoviesList(idPage = item.itemId) ?: false
         }
         setupRecyclerView()
         observeData()
-        viewModel?.downloadMoviesList(typeMovies = DEFAULT_MOVIES)
     }
 
     private fun setListMovies(value: String) {
-        movieAdapter?.clearMovies()
         binding.listType.text = value
     }
 
@@ -114,9 +115,5 @@ class FragmentMoviesList : Fragment() {
             )
             adapter = movieAdapter
         }
-    }
-
-    companion object {
-        private val DEFAULT_MOVIES = TypeMovies.POPULAR
     }
 }

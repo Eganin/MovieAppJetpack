@@ -7,44 +7,44 @@ import kotlinx.serialization.Serializable
 data class MovieResponse(
 
     @SerialName("page")
-    val page: Int,
+    val page: Int?=null,
 
     @SerialName("total_pages")
-    val totalPages: Int,
+    val totalPages: Int?=null,
 
     @SerialName("results")
-    val results: List<Movie>,
+    val results: List<Movie>?=null,
 
     @SerialName("total_results")
-    val totalResults: Int
+    val totalResults: Int?=null
 )
 @Serializable
 data class Movie(
 
     @SerialName("original_title")
-    val originalTitle: String,
+    val originalTitle: String?=null,
 
     @SerialName("title")
-    val title: String,
+    val title: String?=null,
 
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?=null,
 
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String?=null,
 
     @SerialName("backdrop_path")
     val backdropPath: String?=null,
 
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double?=null,
 
     @SerialName("id")
-    val id: Int,
+    val id: Int?=null,
 
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean?=null,
 
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int?=null
 )

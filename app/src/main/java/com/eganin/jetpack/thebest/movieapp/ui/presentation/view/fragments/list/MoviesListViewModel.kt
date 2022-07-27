@@ -4,12 +4,15 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieResponse
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.MovieRepository
 import kotlinx.coroutines.*
 
 
 class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+
+    private var typeMovies = TypeMovies.POPULAR
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.d(TAG, "CoroutineExceptionHandler got $exception")
@@ -18,22 +21,28 @@ class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewMo
 
     private val coroutineContext = exceptionHandler + SupervisorJob()
 
-    private val _moviesData = MutableLiveData<MovieResponse>()
-    val moviesData: LiveData<MovieResponse> = _moviesData
+    private val loadData by lazy {
+        val _moviesData = MutableLiveData<List<Movie>>()
+        downloadMoviesList(data=_moviesData)
+
+        return@lazy _moviesData
+    }
+    fun contacts(): LiveData<List<Movie>> = loadData
 
     private val _stateData = MutableLiveData<State>(State.Default)
     val stateData: LiveData<State> = _stateData
 
-    private val _changeMovies = MutableLiveData<String>()
+    private val _changeMovies = MutableLiveData(TypeMovies.POPULAR.value)
     val changeMovies: LiveData<String> = _changeMovies
 
     var genresList: List<GenresItem>? = null
 
-    fun downloadMoviesList(typeMovies: TypeMovies) {
+    private fun downloadMoviesList(data : MutableLiveData<List<Movie>>) {
         viewModelScope.launch(coroutineContext) {
             _stateData.value = State.Loading
             genresList = movieRepository.downloadGenres()
-            _moviesData.value = movieRepository.downloadMovies(page = 1, typeMovies = typeMovies)
+            data.value =
+                movieRepository.downloadMovies(page = 1, typeMovies = typeMovies).results
             _stateData.value = State.Success
         }
     }
@@ -66,7 +75,6 @@ class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewMo
 
     private fun changeMovies(typeMovies: TypeMovies) {
         _changeMovies.value = typeMovies.value
-        downloadMoviesList(typeMovies = typeMovies)
     }
 
     class Factory(private val repository: MovieRepository) :

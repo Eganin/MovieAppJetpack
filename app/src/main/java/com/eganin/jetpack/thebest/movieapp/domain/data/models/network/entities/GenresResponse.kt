@@ -7,14 +7,14 @@ import kotlinx.serialization.Serializable
 data class GenresResponse(
 
 	@SerialName("genres")
-	val genres: List<GenresItem>
+	val genres: List<GenresItem>?=null,
 )
 @Serializable
 data class GenresItem(
 
 	@SerialName("name")
-	val name: String,
+	val name: String?=null,
 
 	@SerialName("id")
-	val id: Int
+	val id: Int?=null,
 )

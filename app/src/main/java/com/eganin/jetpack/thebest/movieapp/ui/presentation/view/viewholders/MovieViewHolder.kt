@@ -25,7 +25,7 @@ class MovieViewHolder(
     init {
         itemView.apply {
             setOnClickListener {
-                listener?.clickPoster(idMovie = movies[adapterPosition].id)
+                movies[adapterPosition].id?.let { listener?.clickPoster(idMovie = it) }
             }
         }
 
@@ -48,10 +48,10 @@ class MovieViewHolder(
                 nameMoviePoster.text = title
                 timeMoviePoster
                 countReviewsMoviePoster.text = "$voteCount REVIEWS"
-                adultTvMoviePoster.text = if (adult) "18+" else "12+"
-                tagLineMoviePoster.text = getTagLine(genreIds = genreIds)
+                adult?.let { adultTvMoviePoster.text = if (it) "18+" else "12+" }
+                genreIds?.let { tagLineMoviePoster.text = getTagLine(genreIds = it) }
                 bindFavouriteMovie(isFavourite = true)
-                bindStars(rating = (voteAverage / 2).toInt())
+                voteAverage?.let { bindStars(rating = (it / 2).toInt()) }
                 downloadImage(
                     link = BASE_IMAGE_URL + posterPath,
                     context = context,
@@ -61,8 +61,8 @@ class MovieViewHolder(
         }
     }
 
-    fun getTagLine(genreIds: List<Int>) =
-        moviesListViewModel.genresList?.filter { it.id in genreIds }?.joinToString { it.name }
+    private fun getTagLine(genreIds: List<Int>) =
+        moviesListViewModel.genresList?.filter { it.id in genreIds }?.joinToString { it.name ?: "" }
 
 
     private fun bindFavouriteMovie(isFavourite: Boolean) {

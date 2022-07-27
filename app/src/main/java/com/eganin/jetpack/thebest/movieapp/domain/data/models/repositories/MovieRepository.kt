@@ -35,7 +35,7 @@ class MovieRepository(val language: String) {
             }
         }
 
-    suspend fun downloadGenres(): List<GenresItem> = withContext(defaultDispatcher){
+    suspend fun downloadGenres(): List<GenresItem>? = withContext(defaultDispatcher){
         RetrofitModule.api.getGenres().genres
     }
 

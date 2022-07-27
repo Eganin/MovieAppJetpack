@@ -1,9 +1,11 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.viewholders.ActorViewHolder
 
@@ -18,13 +20,15 @@ class ActorAdapter : RecyclerView.Adapter<ActorViewHolder>() {
         )
     )
 
-    override fun onBindViewHolder(holder: ActorViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ActorViewHolder, position: Int) {
         holder.bind(actor = actors[position])
+    }
 
     override fun getItemCount()=actors.size
 
     fun bindActors(actors: List<CastItem>) {
         this.actors = actors.toMutableList()
+        notifyDataSetChanged()
     }
 
     fun addActors(newActors: List<CastItem>) {
