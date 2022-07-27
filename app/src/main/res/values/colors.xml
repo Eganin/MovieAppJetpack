@@ -12,4 +12,5 @@
     <color name="tag_line_color">#FF3466</color>
     <color name="unable_star">#6D6D80</color>
     <color name="actor_name_color">#D8D8D8</color>
+    <color name="edit_text_color_hint">#94000000</color>
 </resources>

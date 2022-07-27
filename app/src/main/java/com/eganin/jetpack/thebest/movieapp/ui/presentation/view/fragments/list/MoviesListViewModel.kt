@@ -21,13 +21,8 @@ class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewMo
 
     private val coroutineContext = exceptionHandler + SupervisorJob()
 
-    private val loadData by lazy {
-        val _moviesData = MutableLiveData<List<Movie>>()
-        downloadMoviesList(data=_moviesData)
-
-        return@lazy _moviesData
-    }
-    fun contacts(): LiveData<List<Movie>> = loadData
+    private val _moviesData = MutableLiveData<List<Movie>>()
+    val moviesData: LiveData<List<Movie>> = _moviesData
 
     private val _stateData = MutableLiveData<State>(State.Default)
     val stateData: LiveData<State> = _stateData
@@ -37,11 +32,11 @@ class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewMo
 
     var genresList: List<GenresItem>? = null
 
-    private fun downloadMoviesList(data : MutableLiveData<List<Movie>>) {
+    fun downloadMoviesList() {
         viewModelScope.launch(coroutineContext) {
             _stateData.value = State.Loading
             genresList = movieRepository.downloadGenres()
-            data.value =
+            _moviesData.value =
                 movieRepository.downloadMovies(page = 1, typeMovies = typeMovies).results
             _stateData.value = State.Success
         }
@@ -65,16 +60,14 @@ class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewMo
                 changeMovies(typeMovies = TypeMovies.UP_COMING)
                 true
             }
-            R.id.page_5 -> {
-                changeMovies(typeMovies = TypeMovies.SEARCH)
-                true
-            }
             else -> false
         }
 
 
     private fun changeMovies(typeMovies: TypeMovies) {
         _changeMovies.value = typeMovies.value
+        this.typeMovies = typeMovies
+        _moviesData.value = emptyList()
     }
 
     class Factory(private val repository: MovieRepository) :

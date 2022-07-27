@@ -2,20 +2,53 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.view.menu.MenuView
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.databinding.ActivityMainBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.routing.Router
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.FragmentMoviesDetails
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 
 class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPoster {
 
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MoviesListViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        viewModel =
+            (this.application as MovieApp).myComponent.getMoviesViewModelForActivity(activity = this)
+        val view = binding.root
+        setContentView(view)
+        setupUI()
+    }
+
+    private fun setupUI() {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.page_5 -> {
+                    openSearch()
+                    true
+                }
+                else -> {
+                    if(binding.bottomNavigation.menu.findItem(R.id.page_5).isChecked){
+                        openNewFragment {
+                            popBackStack()
+                        }
+                    }
+                    viewModel.changeMoviesList(idPage = item.itemId)
+                }
+            }
+        }
     }
 
     override fun openMovieList() =
@@ -27,6 +60,12 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movieId)
         openNewFragment {
             navigate(R.id.fragmentMoviesDetails, bundle)
+        }
+    }
+
+    override fun openSearch() {
+        openNewFragment {
+            navigate(R.id.fragmentSearch)
         }
     }
 

@@ -20,23 +20,16 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
         itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.view_holder_movie, parent, false),
         listener = listener,
-        movies = movies,
         moviesListViewModel = moviesListViewModel
     )
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =
-        holder.bind(movie = movies[position])
+        holder.bind(movie = movies[position],movies=movies)
 
     override fun getItemCount() = movies.size
 
     fun bindMovies(movies: List<Movie>) {
         this.movies = movies.toMutableList()
-        notifyDataSetChanged()
-        Log.d("EEE",movies.toString())
-    }
-
-    fun clearMovies(){
-        movies = mutableListOf()
         notifyDataSetChanged()
     }
 

@@ -10,8 +10,6 @@ import retrofit2.Retrofit
 import retrofit2.create
 
 object RetrofitModule {
-    var countLaunch = 1
-    var changeMovie = false
     private const val BASE_URL = "https://api.themoviedb.org/3/"
     private val json = Json {
         ignoreUnknownKeys = true

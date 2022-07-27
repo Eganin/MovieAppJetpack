@@ -13,6 +13,7 @@ import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.getColumnCountUtils
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
 import com.google.android.material.snackbar.Snackbar
 
 class FragmentMoviesList : Fragment() {
@@ -40,12 +41,13 @@ class FragmentMoviesList : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel =
-            (requireActivity().application as MovieApp).myComponent.getMoviesViewModel(fragment = this)
+            (requireActivity().application as MovieApp).myComponent.getMoviesViewModelForActivity(
+                activity = requireActivity() as MovieDetailsActivity
+            )
         movieAdapter = MovieAdapter(moviesListViewModel = viewModel!!)
         if (context is MovieAdapter.OnClickPoster) {
             movieAdapter?.listener = context
         }
-
     }
 
     override fun onDestroyView() {
@@ -60,13 +62,11 @@ class FragmentMoviesList : Fragment() {
     }
 
     private fun observeData() {
-        viewModel?.contacts()?.observe(this.viewLifecycleOwner) {
+        viewModel?.stateData?.observe(this.viewLifecycleOwner, this::setState)
+        viewModel?.changeMovies?.observe(this.viewLifecycleOwner, this::setListMovies)
+        viewModel?.moviesData?.observe(this.viewLifecycleOwner) {
             movieAdapter?.bindMovies(movies = it)
         }
-
-        viewModel?.stateData?.observe(this.viewLifecycleOwner, this::setState)
-
-        viewModel?.changeMovies?.observe(this.viewLifecycleOwner, this::setListMovies)
     }
 
     private fun setState(state: MoviesListViewModel.State) {
@@ -96,15 +96,13 @@ class FragmentMoviesList : Fragment() {
     }
 
     private fun setupUI() {
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            viewModel?.changeMoviesList(idPage = item.itemId) ?: false
-        }
         setupRecyclerView()
         observeData()
     }
 
     private fun setListMovies(value: String) {
         binding.listType.text = value
+        viewModel?.downloadMoviesList()
     }
 
     private fun setupRecyclerView() {

@@ -3,33 +3,22 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.viewholders
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderMovieBinding
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.MovieAdapter
-import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderMovieBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 
 class MovieViewHolder(
     itemView: View,
-    listener: MovieAdapter.OnClickPoster?,
-    movies: List<Movie>,
+    val listener: MovieAdapter.OnClickPoster?,
     val moviesListViewModel: MoviesListViewModel
 ) :
     RecyclerView.ViewHolder(itemView) {
 
-    init {
-        itemView.apply {
-            setOnClickListener {
-                movies[adapterPosition].id?.let { listener?.clickPoster(idMovie = it) }
-            }
-        }
-
-    }
 
     private val binding = ViewHolderMovieBinding.bind(itemView)
 
@@ -42,7 +31,7 @@ class MovieViewHolder(
     )
 
 
-    fun bind(movie: Movie) {
+    fun bind(movie: Movie,movies:List<Movie>) {
         with(movie) {
             with(binding) {
                 nameMoviePoster.text = title
@@ -57,6 +46,11 @@ class MovieViewHolder(
                     context = context,
                     imageView = movieImage
                 )
+            }
+        }
+        itemView.apply {
+            setOnClickListener {
+                movies[adapterPosition].id?.let { listener?.clickPoster(idMovie = it) }
             }
         }
     }

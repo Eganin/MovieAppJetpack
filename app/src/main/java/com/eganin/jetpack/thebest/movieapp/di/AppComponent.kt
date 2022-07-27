@@ -6,6 +6,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.MovieRepository
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetailsViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
 import java.util.*
 
 
@@ -18,6 +19,12 @@ class AppComponent {
     fun getMoviesViewModel(fragment: Fragment): MoviesListViewModel {
         return ViewModelProvider(
             fragment,
+            MoviesListViewModel.Factory(movieRepository)
+        )[MoviesListViewModel::class.java]
+    }
+    fun getMoviesViewModelForActivity(activity: MovieDetailsActivity) : MoviesListViewModel{
+        return ViewModelProvider(
+            activity,
             MoviesListViewModel.Factory(movieRepository)
         )[MoviesListViewModel::class.java]
     }

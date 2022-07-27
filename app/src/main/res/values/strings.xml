@@ -24,4 +24,6 @@
     <string name="search_menu_label">Search</string>
     <string name="error_data_loading_snckbar_message">Error Data Loading</string>
     <string name="default_list_type_label">Popular</string>
+    <string name="enter_text_hint_label">Enter text</string>
+    <string name="start_typing_in_a_search_bar_to_find_a_movie">Start typing in a search bar to find a movie</string>
 </resources>

@@ -20,4 +20,10 @@
         tools:layout="@layout/fragment_movie_detail">
 
     </fragment>
+    <fragment
+        android:id="@+id/fragmentSearch"
+        android:name="com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.search.FragmentSearch"
+        android:label="FragmentSearch"
+        tools:layout="@layout/fragment_search"
+        />
 </navigation>
