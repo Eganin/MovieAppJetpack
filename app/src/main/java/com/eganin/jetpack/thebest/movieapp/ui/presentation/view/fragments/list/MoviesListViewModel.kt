@@ -42,6 +42,20 @@ class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewMo
         }
     }
 
+    fun downloadSearchMoviesList(query: String) {
+        viewModelScope.launch(coroutineContext) {
+            _stateData.value = State.Loading
+            genresList = movieRepository.downloadGenres()
+            _moviesData.value =
+                movieRepository.downloadSearchMovies(page = 1, query = query).results
+            _stateData.value = State.Success
+        }
+    }
+
+    fun clearData(){
+        _moviesData.value = emptyList()
+    }
+
     fun changeMoviesList(idPage: Int) =
         when (idPage) {
             R.id.page_1 -> {

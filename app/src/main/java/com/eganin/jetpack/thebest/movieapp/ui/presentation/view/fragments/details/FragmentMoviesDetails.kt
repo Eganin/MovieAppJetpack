@@ -17,12 +17,13 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity.Companion.SAVE_MOVIE_DATA_KEY
 import com.google.android.material.snackbar.Snackbar
 
 
-class FragmentMoviesDetails : Fragment() {
+class FragmentMoviesDetails : BaseFragment() {
 
     private val idMovie: Int? by lazy { arguments?.getInt(SAVE_MOVIE_DATA_KEY) }
     private var _binding: FragmentMovieDetailBinding? = null
@@ -73,7 +74,9 @@ class FragmentMoviesDetails : Fragment() {
     private fun observeData() {
         viewModel?.detailsData?.observe(this.viewLifecycleOwner, this::updateInfoMovie)
         viewModel?.castData?.observe(this.viewLifecycleOwner, this::updateAdapterActors)
-        viewModel?.stateData?.observe(this.viewLifecycleOwner, this::setState)
+        viewModel?.stateData?.observe(this.viewLifecycleOwner){
+            setState(state = it, progressBar = binding.progressBarDetails)
+        }
     }
 
     private fun updateInfoMovie(response: MovieDetailsResponse) {
@@ -83,7 +86,7 @@ class FragmentMoviesDetails : Fragment() {
                 imageView = backgroundImage,
                 context = requireContext()
             )
-            response.adult?.let { if (it) "13+" else "18+" }
+            response.adult?.let { if (it) "12+" else "18+" }
             titleMovie.text = response.title
             tagLine.text = response.genres?.joinToString(separator = ",") { it.name ?: "" }
             countReviews.text = "${response.voteCount} REVIEWS"
@@ -96,31 +99,6 @@ class FragmentMoviesDetails : Fragment() {
         actorsAdapter.bindActors(actors = listActors)
 
 
-    private fun setState(state: MoviesListViewModel.State) {
-        when (state) {
-            MoviesListViewModel.State.Default -> setLoading(loading = true)
-            MoviesListViewModel.State.Error -> {
-                showSnackBar(
-                    message = getString(R.string.error_data_loading_snckbar_message)
-                )
-                setLoading(loading = false)
-            }
-            MoviesListViewModel.State.Loading -> setLoading(loading = true)
-            MoviesListViewModel.State.Success -> setLoading(loading = false)
-        }
-    }
-
-    private fun setLoading(loading: Boolean) =
-        if (loading) {
-            binding.progressBarDetails.visibility = View.VISIBLE
-        } else {
-            binding.progressBarDetails.visibility = View.GONE
-        }
-
-
-    private fun showSnackBar(message: String) =
-        view?.let { Snackbar.make(it, message, Snackbar.LENGTH_LONG).show() }
-
 
     private fun setupListeners() {
         binding.backBtb?.setOnClickListener {
@@ -132,7 +110,7 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     private fun setupRecyclerView(view: View) {
-        view.findViewById<RecyclerView>(R.id.actors_recycler_view).apply {
+        binding.actorsRecyclerView.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = actorsAdapter

@@ -27,15 +27,19 @@ class MovieRepository(val language: String) {
                     page = page,
                     language = language
                 )
-                TypeMovies.UP_COMING -> RetrofitModule.api.getMoviesUpComing(
+                else -> RetrofitModule.api.getMoviesUpComing(
                     page = page,
                     language = language
                 )
-                TypeMovies.SEARCH -> TODO()
             }
         }
 
-    suspend fun downloadGenres(): List<GenresItem>? = withContext(defaultDispatcher){
+    suspend fun downloadSearchMovies(page: Int, query: String): MovieResponse =
+        withContext(defaultDispatcher) {
+            RetrofitModule.api.getSearchMovie(queryText = query, page = page)
+        }
+
+    suspend fun downloadGenres(): List<GenresItem>? = withContext(defaultDispatcher) {
         RetrofitModule.api.getGenres().genres
     }
 

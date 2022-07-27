@@ -37,6 +37,12 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
         movies.addAll(newMovies)
     }
 
+    fun clearMovies(){
+        movies= mutableListOf()
+        moviesListViewModel.clearData()
+        notifyDataSetChanged()
+    }
+
     interface OnClickPoster {
         fun clickPoster(idMovie: Int)
     }

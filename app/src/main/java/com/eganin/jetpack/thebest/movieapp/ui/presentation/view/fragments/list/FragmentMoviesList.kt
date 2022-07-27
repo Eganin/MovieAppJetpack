@@ -13,10 +13,11 @@ import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.getColumnCountUtils
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
 import com.google.android.material.snackbar.Snackbar
 
-class FragmentMoviesList : Fragment() {
+class FragmentMoviesList : BaseFragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
@@ -62,38 +63,15 @@ class FragmentMoviesList : Fragment() {
     }
 
     private fun observeData() {
-        viewModel?.stateData?.observe(this.viewLifecycleOwner, this::setState)
+        viewModel?.stateData?.observe(this.viewLifecycleOwner){
+            setState(state = it, progressBar = binding.progressBarMoviesList)
+        }
         viewModel?.changeMovies?.observe(this.viewLifecycleOwner, this::setListMovies)
         viewModel?.moviesData?.observe(this.viewLifecycleOwner) {
             movieAdapter?.bindMovies(movies = it)
         }
     }
 
-    private fun setState(state: MoviesListViewModel.State) {
-        when (state) {
-            MoviesListViewModel.State.Default -> setLoading(loading = true)
-            MoviesListViewModel.State.Error -> {
-                showSnackBar(
-                    textMessage = getString(R.string.error_data_loading_snckbar_message)
-                )
-                setLoading(loading = false)
-            }
-            MoviesListViewModel.State.Loading -> setLoading(loading = true)
-            MoviesListViewModel.State.Success -> setLoading(loading = false)
-        }
-    }
-
-    private fun setLoading(loading: Boolean) {
-        if (loading) {
-            binding.progressBarMoviesList.visibility = View.VISIBLE
-        } else {
-            binding.progressBarMoviesList.visibility = View.GONE
-        }
-    }
-
-    private fun showSnackBar(textMessage: String) {
-        view?.let { Snackbar.make(it, textMessage, Snackbar.LENGTH_LONG) }
-    }
 
     private fun setupUI() {
         setupRecyclerView()
