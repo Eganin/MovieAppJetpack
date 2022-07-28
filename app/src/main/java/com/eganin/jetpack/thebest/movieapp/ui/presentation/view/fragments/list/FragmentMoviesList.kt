@@ -2,20 +2,15 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.getColumnCountUtils
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
-import com.google.android.material.snackbar.Snackbar
 
 class FragmentMoviesList : BaseFragment() {
 
@@ -36,7 +31,6 @@ class FragmentMoviesList : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-
     }
 
     override fun onAttach(context: Context) {
@@ -74,6 +68,7 @@ class FragmentMoviesList : BaseFragment() {
 
 
     private fun setupUI() {
+        viewModel?.isQueryRequest=false
         setupRecyclerView()
         observeData()
     }

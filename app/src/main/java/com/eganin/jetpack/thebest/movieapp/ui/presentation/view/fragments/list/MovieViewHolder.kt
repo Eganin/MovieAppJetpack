@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.viewholders
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
 import android.view.View
 import android.widget.ImageView
@@ -9,7 +9,7 @@ import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderMovieBinding
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.MovieAdapter
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 
 class MovieViewHolder(

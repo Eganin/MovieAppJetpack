@@ -1,13 +1,10 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.viewholders.MovieViewHolder
 
 class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
     RecyclerView.Adapter<MovieViewHolder>() {
@@ -24,7 +21,11 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
     )
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =
-        holder.bind(movie = movies[position],movies=movies)
+        holder.bind(movie = movies[position], movies = movies).also {
+            if (position >= movies.size.minus(4) && movies.size >= 20) {
+                moviesListViewModel.downloadMoviesList()
+            }
+        }
 
     override fun getItemCount() = movies.size
 
@@ -37,11 +38,6 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
         movies.addAll(newMovies)
     }
 
-    fun clearMovies(){
-        movies= mutableListOf()
-        moviesListViewModel.clearData()
-        notifyDataSetChanged()
-    }
 
     interface OnClickPoster {
         fun clickPoster(idMovie: Int)

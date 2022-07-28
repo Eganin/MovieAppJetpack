@@ -6,21 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.ActorAdapter
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMovieDetailBinding
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity.Companion.SAVE_MOVIE_DATA_KEY
-import com.google.android.material.snackbar.Snackbar
 
 
 class FragmentMoviesDetails : BaseFragment() {
@@ -65,7 +60,7 @@ class FragmentMoviesDetails : BaseFragment() {
 
 
     private fun setupUI(view: View) {
-        setupRecyclerView(view = view)
+        setupRecyclerView()
         setupListeners()
         observeData()
         idMovie?.let { viewModel?.downloadDetailsData(id = it) }
@@ -109,7 +104,7 @@ class FragmentMoviesDetails : BaseFragment() {
         }
     }
 
-    private fun setupRecyclerView(view: View) {
+    private fun setupRecyclerView() {
         binding.actorsRecyclerView.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

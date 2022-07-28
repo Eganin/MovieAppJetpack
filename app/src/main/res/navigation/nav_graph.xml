@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentSearch"
-        android:name="com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.search.FragmentSearch"
+        android:name="com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.search.FragmentSearch"
         android:label="FragmentSearch"
         tools:layout="@layout/fragment_search"
         />

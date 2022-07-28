@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.viewholders
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

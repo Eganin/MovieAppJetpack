@@ -1,7 +1,8 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.search
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.search
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentSearchBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.getColumnCountUtils
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.adapters.MovieAdapter
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
@@ -53,6 +54,9 @@ class FragmentSearch : BaseFragment() {
     }
 
     private fun setupUI() {
+        if (viewModel?.moviesSearchData?.value?.isEmpty() == false) {
+            binding.placeholder.visibility = View.INVISIBLE
+        }
         setupRecyclerView()
         observeData()
         binding.btnSearch.setOnClickListener {
@@ -65,13 +69,12 @@ class FragmentSearch : BaseFragment() {
         viewModel?.stateData?.observe(this.viewLifecycleOwner) {
             setState(state = it, progressBar = binding.searchProgressBar)
         }
-        viewModel?.moviesData?.observe(this.viewLifecycleOwner) {
+        viewModel?.moviesSearchData?.observe(this.viewLifecycleOwner) {
             movieAdapter?.bindMovies(movies = it)
         }
     }
 
     private fun setupRecyclerView() {
-        movieAdapter?.clearMovies()
         binding.recyclerViewSearchMovies.apply {
             layoutManager =
                 GridLayoutManager(
