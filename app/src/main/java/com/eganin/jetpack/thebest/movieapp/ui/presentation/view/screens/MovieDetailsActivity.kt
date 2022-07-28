@@ -36,7 +36,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
                     true
                 }
                 else -> {
-                    if(binding.bottomNavigation.menu.findItem(R.id.page_5).isChecked){
+                    if (binding.bottomNavigation.menu.findItem(R.id.page_5).isChecked) {
                         openNewFragment {
                             popBackStack()
                         }
@@ -53,6 +53,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         }
 
     override fun openMovieDetails(movieId: Int) {
+        viewModel.firstLaunch = false
         val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movieId)
         openNewFragment {
             navigate(R.id.fragmentMoviesDetails, bundle)

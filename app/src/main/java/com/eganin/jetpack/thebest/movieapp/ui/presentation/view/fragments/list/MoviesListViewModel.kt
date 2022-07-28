@@ -13,6 +13,7 @@ import kotlinx.coroutines.*
 class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewModel() {
 
     var isQueryRequest = false
+    var firstLaunch = true
     private var queryText = ""
     private var page = 1
 
@@ -39,36 +40,44 @@ class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewMo
 
     var genresList: List<GenresItem>? = null
 
-    fun downloadMoviesList() {
+    fun downloadMoviesList(isAdapter: Boolean = false) {
+        if (isAdapter) page++
+        Log.d("EEE", isAdapter.toString())
         if (isQueryRequest) {
             downloadSearchMoviesList(query = queryText)
         } else {
             viewModelScope.launch(coroutineContext) {
-                isQueryRequest = false
-                startLoading()
-                genresList = movieRepository.downloadGenres()
-                val data = movieRepository.downloadMovies(page = page, typeMovies = typeMovies).results
-                val newList = mutableListOf<Movie>()
-                _moviesData.value?.let { newList.addAll(it) }
-                data?.let { newList.addAll(it) }
-                _moviesData.value=newList
-                stopLoading()
+                coroutineScope {
+                    isQueryRequest = false
+                    startLoading()
+                    genresList = movieRepository.downloadGenres()
+                    val data =
+                        movieRepository.downloadMovies(page = page, typeMovies = typeMovies).results
+                    val newList = mutableListOf<Movie>()
+                    _moviesData.value?.let { newList.addAll(it) }
+                    data?.let { newList.addAll(it) }
+                    _moviesData.value = newList
+                    stopLoading()
+                }
             }
         }
     }
 
     fun downloadSearchMoviesList(query: String) {
         viewModelScope.launch(coroutineContext) {
-            isQueryRequest = true
-            queryText = query
-            startLoading()
-            genresList = movieRepository.downloadGenres()
-            val data = movieRepository.downloadSearchMovies(page=page,query=queryText).results
-            val newList = mutableListOf<Movie>()
-            _moviesSearchData.value?.let { newList.addAll(it) }
-            data?.let { newList.addAll(it) }
-            _moviesSearchData.value=newList
-            stopLoading()
+            coroutineScope {
+                isQueryRequest = true
+                queryText = query
+                startLoading()
+                genresList = movieRepository.downloadGenres()
+                val data =
+                    movieRepository.downloadSearchMovies(page = page, query = queryText).results
+                val newList = mutableListOf<Movie>()
+                _moviesSearchData.value?.let { newList.addAll(it) }
+                data?.let { newList.addAll(it) }
+                _moviesSearchData.value = newList
+                stopLoading()
+            }
         }
     }
 
@@ -111,6 +120,8 @@ class MoviesListViewModel(private val movieRepository: MovieRepository) : ViewMo
 
 
     private fun changeMovies(typeMovies: TypeMovies) {
+        firstLaunch=true
+        page = 1
         _changeMovies.value = typeMovies.value
         this.typeMovies = typeMovies
         _moviesData.value = emptyList()

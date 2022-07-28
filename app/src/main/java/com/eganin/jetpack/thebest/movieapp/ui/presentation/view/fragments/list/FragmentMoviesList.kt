@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +58,7 @@ class FragmentMoviesList : BaseFragment() {
     }
 
     private fun observeData() {
-        viewModel?.stateData?.observe(this.viewLifecycleOwner){
+        viewModel?.stateData?.observe(this.viewLifecycleOwner) {
             setState(state = it, progressBar = binding.progressBarMoviesList)
         }
         viewModel?.changeMovies?.observe(this.viewLifecycleOwner, this::setListMovies)
@@ -68,14 +69,16 @@ class FragmentMoviesList : BaseFragment() {
 
 
     private fun setupUI() {
-        viewModel?.isQueryRequest=false
+        viewModel?.isQueryRequest = false
         setupRecyclerView()
         observeData()
     }
 
     private fun setListMovies(value: String) {
         binding.listType.text = value
-        viewModel?.downloadMoviesList()
+        if (viewModel?.firstLaunch == true) {
+            viewModel?.downloadMoviesList()
+        }
     }
 
     private fun setupRecyclerView() {
