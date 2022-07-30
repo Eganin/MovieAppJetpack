@@ -14,7 +14,7 @@ data class MovieEntity(
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_ID)
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    val id: Int,
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_ORIGINAL_TITLE)
     val originalTitle: String? = null,

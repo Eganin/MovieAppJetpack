@@ -5,5 +5,5 @@ import com.eganin.jetpack.thebest.movieapp.di.AppComponent
 
 class MovieApp : Application() {
 
-    val myComponent : AppComponent by lazy { AppComponent() }
+    val myComponent : AppComponent by lazy { AppComponent(this) }
 }

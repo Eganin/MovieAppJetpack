@@ -6,53 +6,44 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.G
 
 @Entity(
     tableName = Contract.MovieDetails.TABLE_NAME,
-    indices = [Index(Contract.Movies.COLUMN_NAME_ID)]
+    indices = [Index(Contract.MovieDetails.COLUMN_NAME_ID)]
 )
-class MovieDetailsEntity(
+data class MovieDetailsEntity(
 
-    @ColumnInfo(name = Contract.Movies.COLUMN_NAME_ID)
+    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_ID)
     @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
+    val id: Int,
 
-    @ColumnInfo(name = Contract.Movies.COLUMN_NAME_TITLE)
+    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_TITLE)
     val title: String? = null,
 
-    @ColumnInfo(name = Contract.Movies.COLUMN_NAME_BACKDROP_PATH)
+    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_BACKDROP_PATH)
     val backdropPath: String? = null,
 
-    @Embedded
-    @ColumnInfo(name = Contract.Movies.COLUMN_NAME_GENRES_LIST)
+    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_GENRES_LIST)
     val genres: List<GenresItemDetails>? = null,
 
     @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_POPULARITY)
     val popularity: Double? = null,
 
-    @ColumnInfo(name = Contract.Movies.COLUMN_NAME_VOTE_COUNT)
+    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_VOTE_COUNT)
     val voteCount: Int? = null,
 
     @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_OVERVIEW)
     val overview: String? = null,
 
-    @ColumnInfo(name = Contract.Movies.COLUMN_NAME_ORIGINAL_TITLE)
+    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_ORIGINAL_TITLE)
     val originalTitle: String? = null,
 
     @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_RUNTIME)
     val runtime: Int? = null,
 
-    @ColumnInfo(name = Contract.Movies.COLUMN_NAME_POSTER_PATH)
+    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_POSTER_PATH)
     val posterPath: String? = null,
 
-    @ColumnInfo(name = Contract.Movies.COLUMN_NAME_VOTE_AVERAGE)
+    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_VOTE_AVERAGE)
     val voteAverage: Double? = null,
 
-    @ColumnInfo(name = Contract.Movies.COLUMN_NAME_ADULT)
+    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_ADULT)
     val adult: Boolean? = null,
-)
-
-data class GenresItemDetails(
-    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_NAME_GENRE)
-    val name: String? = null,
-
-    @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_ID_GENRE)
-    val id: Int? = null
 )

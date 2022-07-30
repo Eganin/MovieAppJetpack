@@ -38,7 +38,7 @@ class FragmentMoviesList : BaseFragment() {
         super.onAttach(context)
         viewModel =
             (requireActivity().application as MovieApp).myComponent.getMoviesViewModelForActivity(
-                activity = requireActivity() as MovieDetailsActivity
+                activity = requireActivity() as MovieDetailsActivity,
             )
         movieAdapter = MovieAdapter(moviesListViewModel = viewModel!!)
         if (context is MovieAdapter.OnClickPoster) {

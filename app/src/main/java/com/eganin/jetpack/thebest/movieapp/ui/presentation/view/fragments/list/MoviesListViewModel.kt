@@ -1,21 +1,26 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepositoryImpl
 import kotlinx.coroutines.*
 
 
-class MoviesListViewModel(private val movieRepository: MovieRepositoryImpl) : ViewModel() {
+class MoviesListViewModel(
+    private val movieRepository: MovieRepositoryImpl,
+) : ViewModel() {
+
 
     var isQueryRequest = false
     var firstLaunch = true
     private var queryText = ""
     private var page = 1
-
     private var typeMovies = TypeMovies.POPULAR
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -119,17 +124,21 @@ class MoviesListViewModel(private val movieRepository: MovieRepositoryImpl) : Vi
 
 
     private fun changeMovies(typeMovies: TypeMovies) {
-        firstLaunch=true
+        firstLaunch = true
         page = 1
         _changeMovies.value = typeMovies.value
         this.typeMovies = typeMovies
         _moviesData.value = emptyList()
     }
 
-    class Factory(private val repository: MovieRepositoryImpl) :
+    class Factory(
+        private val repository: MovieRepositoryImpl
+    ) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MoviesListViewModel(movieRepository = repository) as T
+            return MoviesListViewModel(
+                movieRepository = repository
+            ) as T
         }
     }
 
