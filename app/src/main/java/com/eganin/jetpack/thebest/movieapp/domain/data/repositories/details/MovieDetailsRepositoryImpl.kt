@@ -1,9 +1,8 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.details
+package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details
 
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.RetrofitModule
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CreditsMovies
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.details.MovieDetailsRepository
 import kotlinx.coroutines.withContext
 
 class MovieDetailsRepositoryImpl(val language: String) : MovieDetailsRepository {

@@ -1,11 +1,9 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.list
+package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list
 
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.RetrofitModule
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.TypeMovies
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 

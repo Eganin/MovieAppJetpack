@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.details.MovieDetailsRepositoryImpl
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 import kotlinx.coroutines.*
 

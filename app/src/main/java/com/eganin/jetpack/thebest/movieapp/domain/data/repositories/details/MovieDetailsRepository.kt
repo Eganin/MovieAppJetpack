@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.details
+package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details
 
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CreditsMovies
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse

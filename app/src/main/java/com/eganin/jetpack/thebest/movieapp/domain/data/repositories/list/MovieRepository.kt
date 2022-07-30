@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.list
+package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list
 
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieResponse

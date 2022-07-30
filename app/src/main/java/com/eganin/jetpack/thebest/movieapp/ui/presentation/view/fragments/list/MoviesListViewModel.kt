@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.list.MovieRepositoryImpl
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepositoryImpl
 import kotlinx.coroutines.*
 
 
@@ -41,7 +41,7 @@ class MoviesListViewModel(private val movieRepository: MovieRepositoryImpl) : Vi
 
     fun downloadMoviesList(isAdapter: Boolean = false) {
         if (isAdapter) page++
-        Log.d("EEE", isAdapter.toString())
+
         if (isQueryRequest) {
             downloadSearchMoviesList(query = queryText)
         } else {
