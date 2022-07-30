@@ -1,21 +1,19 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories
+package com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.details
 
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.RetrofitModule
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CreditsMovies
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
-import kotlinx.coroutines.Dispatchers
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.details.MovieDetailsRepository
 import kotlinx.coroutines.withContext
 
-class MovieDetailsRepository(val language: String) {
+class MovieDetailsRepositoryImpl(val language: String) : MovieDetailsRepository {
 
-    private val defaultDispatcher = Dispatchers.IO
-
-    suspend fun downloadDetailsInfoForMovie(movieId: Int): MovieDetailsResponse =
+    override suspend fun downloadDetailsInfoForMovie(movieId: Int): MovieDetailsResponse =
         withContext(defaultDispatcher) {
             RetrofitModule.api.getMovieDetailsUsingId(movieId = movieId, language = language)
         }
 
-    suspend fun downloadCredits(movieId: Int): CreditsMovies = withContext(defaultDispatcher) {
+    override suspend fun downloadCredits(movieId: Int): CreditsMovies = withContext(defaultDispatcher) {
         RetrofitModule.api.getCreditsUsingId(movieId = movieId, language = language)
     }
 }

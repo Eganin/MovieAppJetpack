@@ -1,18 +1,17 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories
+package com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.list
 
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.RetrofitModule
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.TypeMovies
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 
-class MovieRepository(val language: String) {
+class MovieRepositoryImpl(val language: String) : MovieRepository {
 
-    private val defaultDispatcher = Dispatchers.IO
-
-    suspend fun downloadMovies(page: Int, typeMovies: TypeMovies): MovieResponse =
+    override suspend fun downloadMovies(page: Int, typeMovies: TypeMovies): MovieResponse =
         withContext(defaultDispatcher) {
             when (typeMovies) {
                 TypeMovies.TOP_RATED -> RetrofitModule.api.getMoviesTopRated(
@@ -34,12 +33,12 @@ class MovieRepository(val language: String) {
             }
         }
 
-    suspend fun downloadSearchMovies(page: Int, query: String): MovieResponse =
+    override suspend fun downloadSearchMovies(page: Int, query: String): MovieResponse =
         withContext(defaultDispatcher) {
             RetrofitModule.api.getSearchMovie(queryText = query, page = page)
         }
 
-    suspend fun downloadGenres(): List<GenresItem>? = withContext(defaultDispatcher) {
+    override suspend fun downloadGenres(): List<GenresItem>? = withContext(defaultDispatcher) {
         RetrofitModule.api.getGenres().genres
     }
 

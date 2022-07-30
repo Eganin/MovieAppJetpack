@@ -17,7 +17,7 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
         itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.view_holder_movie, parent, false),
         listener = listener,
-        moviesListViewModel = moviesListViewModel
+        genres = moviesListViewModel.genresList
     )
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =

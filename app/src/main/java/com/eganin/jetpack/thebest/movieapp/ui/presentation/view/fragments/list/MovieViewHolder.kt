@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderMovieBinding
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
@@ -15,7 +16,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.M
 class MovieViewHolder(
     itemView: View,
     val listener: MovieAdapter.OnClickPoster?,
-    val moviesListViewModel: MoviesListViewModel
+    val genres: List<GenresItem>?,
 ) :
     RecyclerView.ViewHolder(itemView) {
 
@@ -31,7 +32,7 @@ class MovieViewHolder(
     )
 
 
-    fun bind(movie: Movie,movies:List<Movie>) {
+    fun bind(movie: Movie, movies: List<Movie>) {
         with(movie) {
             with(binding) {
                 nameMoviePoster.text = title
@@ -56,7 +57,7 @@ class MovieViewHolder(
     }
 
     private fun getTagLine(genreIds: List<Int>) =
-        moviesListViewModel.genresList?.filter { it.id in genreIds }?.joinToString { it.name ?: "" }
+        genres?.filter { it.id in genreIds }?.joinToString { it.name ?: "" }
 
 
     private fun bindFavouriteMovie(isFavourite: Boolean) {

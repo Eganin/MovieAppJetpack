@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.MovieDetailsRepository
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.details.MovieDetailsRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 import kotlinx.coroutines.*
 
-class MovieDetailsViewModel(val repository: MovieDetailsRepository) : ViewModel() {
+class MovieDetailsViewModel(val repository: MovieDetailsRepositoryImpl) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.d(TAG, "CoroutineExceptionHandler got $exception")
@@ -36,7 +36,7 @@ class MovieDetailsViewModel(val repository: MovieDetailsRepository) : ViewModel(
     }
 
 
-    class Factory(private val repository: MovieDetailsRepository) :
+    class Factory(private val repository: MovieDetailsRepositoryImpl) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MovieDetailsViewModel(repository = repository) as T

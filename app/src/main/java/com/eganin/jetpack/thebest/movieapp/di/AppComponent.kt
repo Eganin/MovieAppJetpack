@@ -2,8 +2,8 @@ package com.eganin.jetpack.thebest.movieapp.di
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.MovieDetailsRepository
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.MovieRepository
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.details.MovieDetailsRepositoryImpl
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.repositories.list.MovieRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetailsViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
@@ -13,8 +13,8 @@ import java.util.*
 class AppComponent {
 
     private val defaultLanguage = Locale.getDefault().language
-    private val movieRepository = MovieRepository(language = defaultLanguage)
-    private val movieDetailsRepository = MovieDetailsRepository(language = defaultLanguage)
+    private val movieRepository = MovieRepositoryImpl(language = defaultLanguage)
+    private val movieDetailsRepository = MovieDetailsRepositoryImpl(language = defaultLanguage)
 
     fun getMoviesViewModel(fragment: Fragment): MoviesListViewModel {
         return ViewModelProvider(
