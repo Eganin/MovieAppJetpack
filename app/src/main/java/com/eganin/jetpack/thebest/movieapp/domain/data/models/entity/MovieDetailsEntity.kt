@@ -2,7 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.domain.data.models.entity
 
 import androidx.room.*
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.Contract
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItemDetails
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 
 @Entity(
     tableName = Contract.MovieDetails.TABLE_NAME,
@@ -21,7 +21,7 @@ data class MovieDetailsEntity(
     val backdropPath: String? = null,
 
     @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_GENRES_LIST)
-    val genres: List<GenresItemDetails>? = null,
+    val genres: List<GenresItem>? = null,
 
     @ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_POPULARITY)
     val popularity: Double? = null,

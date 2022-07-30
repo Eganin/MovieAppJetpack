@@ -23,7 +23,7 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =
         holder.bind(movie = movies[position], movies = movies).also {
             if (position >= movies.size.minus(4)) {
-                moviesListViewModel.downloadMoviesList(isAdapter = true)
+                moviesListViewModel.downloadMovies(isAdapter = true)
             }
         }
 

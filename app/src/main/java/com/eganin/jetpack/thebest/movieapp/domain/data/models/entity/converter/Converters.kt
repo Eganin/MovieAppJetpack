@@ -1,7 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.converter
 
 import androidx.room.TypeConverter
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItemDetails
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 
 class Converters {
     @TypeConverter
@@ -15,17 +15,17 @@ class Converters {
     }
 
     @TypeConverter
-    fun genreListToString(genres: List<GenresItemDetails>): String {
+    fun  genreListToString(genres: List<GenresItem>): String {
         return genres.joinToString(separator = ",") { it.id.toString() + ":" + it.name }
     }
 
     @TypeConverter
-    fun stringToGenreList(str: String): List<GenresItemDetails> {
+    fun stringToGenreList(str: String): List<GenresItem> {
         val lst = str.split(",")
-        val listGenres = mutableListOf<GenresItemDetails>()
+        val listGenres = mutableListOf<GenresItem>()
         for (genre in lst!!) {
             val pair = genre.split(":")
-            val result = GenresItemDetails(id = pair[0].toInt(), name = pair[1])
+            val result = GenresItem(id = pair[0].toInt(), name = pair[1])
             listGenres.add(result)
         }
         return listGenres

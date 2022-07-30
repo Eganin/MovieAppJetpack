@@ -1,7 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list
 
-import android.content.Context
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.RetrofitModule
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
@@ -10,9 +9,9 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.T
 import kotlinx.coroutines.withContext
 
 
-class MovieRepositoryImpl(val language: String, applicationContext: Context) : MovieRepository {
+class MovieRepositoryImpl(val language: String, database: MovieDatabase) : MovieRepository {
 
-    private val movieDao = (applicationContext as MovieApp).myComponent.database.movieDao
+    private val movieDao = database.movieDao
 
     override suspend fun downloadMovies(page: Int, typeMovies: TypeMovies): MovieResponse =
         withContext(defaultDispatcher) {

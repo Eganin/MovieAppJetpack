@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.Contract
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 
 @Entity(
     tableName = Contract.Movies.TABLE_NAME,
@@ -41,5 +42,5 @@ data class MovieEntity(
     val voteCount: Int? = null,
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_GENRES_LIST)
-    val genres :String? = null
+    val genres: List<GenresItem>? = null
 )

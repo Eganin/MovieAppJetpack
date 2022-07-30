@@ -40,7 +40,7 @@ data class Movie(
     val voteAverage: Double?=null,
 
     @SerialName("id")
-    val id: Int?=null,
+    val id: Int,
 
     @SerialName("adult")
     val adult: Boolean?=null,

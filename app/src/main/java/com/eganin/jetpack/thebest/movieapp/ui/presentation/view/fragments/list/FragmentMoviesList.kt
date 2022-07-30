@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.getColumnCountUtils
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.isConnection
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
 
@@ -49,6 +50,7 @@ class FragmentMoviesList : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        viewModel?.firstLaunch = false
     }
 
     override fun onDetach() {
@@ -65,8 +67,12 @@ class FragmentMoviesList : BaseFragment() {
         viewModel?.moviesData?.observe(this.viewLifecycleOwner) {
             movieAdapter?.bindMovies(movies = it)
         }
-    }
 
+        viewModel?.cacheMoviesData?.observe(this.viewLifecycleOwner) {
+            if (!isConnection(context = requireContext())) movieAdapter?.bindMovies(movies = it)
+        }
+
+    }
 
     private fun setupUI() {
         viewModel?.isQueryRequest = false
@@ -77,7 +83,7 @@ class FragmentMoviesList : BaseFragment() {
     private fun setListMovies(value: String) {
         binding.listType.text = value
         if (viewModel?.firstLaunch == true) {
-            viewModel?.downloadMoviesList()
+            viewModel?.downloadMovies()
         }
     }
 

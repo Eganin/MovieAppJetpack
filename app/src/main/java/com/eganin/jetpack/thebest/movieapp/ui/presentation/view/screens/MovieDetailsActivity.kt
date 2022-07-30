@@ -33,7 +33,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
                 R.id.page_5 -> {
                     viewModel.clearData()
                     openSearch()
-                    true
+                    viewModel.changeMoviesList(idPage = item.itemId)
                 }
                 else -> {
                     if (binding.bottomNavigation.menu.findItem(R.id.page_5).isChecked) {
