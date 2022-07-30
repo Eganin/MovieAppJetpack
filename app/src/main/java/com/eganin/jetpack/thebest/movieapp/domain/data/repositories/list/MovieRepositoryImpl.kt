@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list
 
 import android.content.Context
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.RetrofitModule
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieResponse
@@ -9,9 +10,9 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.T
 import kotlinx.coroutines.withContext
 
 
-class MovieRepositoryImpl(val language: String,applicationContext : Context) : MovieRepository {
+class MovieRepositoryImpl(val language: String, applicationContext: Context) : MovieRepository {
 
-    private val database = (applicationContext as MovieApp).myComponent.database
+    private val movieDao = (applicationContext as MovieApp).myComponent.database.movieDao
 
     override suspend fun downloadMovies(page: Int, typeMovies: TypeMovies): MovieResponse =
         withContext(defaultDispatcher) {
@@ -42,6 +43,18 @@ class MovieRepositoryImpl(val language: String,applicationContext : Context) : M
 
     override suspend fun downloadGenres(): List<GenresItem>? = withContext(defaultDispatcher) {
         RetrofitModule.api.getGenres().genres
+    }
+
+    override suspend fun getAllMovies(): List<MovieEntity> = withContext(defaultDispatcher) {
+        movieDao.getAllMovies()
+    }
+
+    override suspend fun insertMovies(movies: List<MovieEntity>) = withContext(defaultDispatcher) {
+        movieDao.insertMovies(movies = movies)
+    }
+
+    override suspend fun deleteAllMovies() = withContext(defaultDispatcher) {
+        movieDao.deleteAllMovies()
     }
 
 }
