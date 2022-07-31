@@ -5,14 +5,12 @@ import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepositoryImpl
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.isConnection
 import kotlinx.coroutines.*
-import kotlinx.coroutines.internal.synchronized
-import kotlinx.coroutines.sync.Mutex
 
 
 class MoviesListViewModel(
@@ -183,6 +181,28 @@ class MoviesListViewModel(
         firstLaunch = false
         _changeMovies.value =
             sharedPreferences.getString(TOKEN_CHOICE_MOVIE, TypeMovies.POPULAR.value)
+    }
+
+    fun usingDBFavouriteMovie(movie: Movie, condition: Boolean) {
+        Log.d("EEE","-----------------------")
+        Log.d("EEE",condition.toString())
+        viewModelScope.launch(coroutineContext) {
+            if (condition) {
+                movieRepository.insertFavouriteMovie(
+                    favouriteMovie = FavouriteEntity(
+                        idMovie = movie.id,
+                        title = movie.title ?: "",
+                    )
+                )
+            } else {
+                movieRepository.deleteFavouriteMovieUsingID(id = movie.id)
+            }
+
+        }
+    }
+
+    suspend fun existsMovie(id: Int): Boolean = withContext(Dispatchers.IO){
+        movieRepository.getFavouriteMovieUsingID(id = id) != null
     }
 
     private fun Movie.toMovieEntity(genres: List<GenresItem>?): MovieEntity {

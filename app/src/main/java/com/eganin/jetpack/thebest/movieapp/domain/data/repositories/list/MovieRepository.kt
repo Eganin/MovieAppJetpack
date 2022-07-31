@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list
 
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieResponse
@@ -23,4 +24,12 @@ interface MovieRepository {
     suspend fun insertMovies(movies: List<MovieEntity>)
 
     suspend fun deleteAllMovies()
+
+    suspend fun getFavouriteMovieUsingID(id: Int): FavouriteEntity
+
+    suspend fun insertFavouriteMovie(favouriteMovie: FavouriteEntity)
+
+    suspend fun deleteAllFavouriteMovie()
+
+    suspend fun deleteFavouriteMovieUsingID(id: Int)
 }

@@ -1,11 +1,13 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
     RecyclerView.Adapter<MovieViewHolder>() {
@@ -14,11 +16,17 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
 
     private var movies: MutableList<Movie> = mutableListOf()
 
+    private val usingDBFavourite: (Movie, Boolean) -> Unit = { movie, condition ->
+        moviesListViewModel.usingDBFavouriteMovie(movie = movie, condition = condition)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MovieViewHolder(
         itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.view_holder_movie, parent, false),
         listener = listener,
-        genres = moviesListViewModel.genresList
+        genres = moviesListViewModel.genresList,
+        usingDB = usingDBFavourite,
+        viewModel = moviesListViewModel,
     )
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =

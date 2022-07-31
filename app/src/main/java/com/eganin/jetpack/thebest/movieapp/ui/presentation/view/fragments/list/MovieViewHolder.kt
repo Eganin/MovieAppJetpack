@@ -12,14 +12,22 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.M
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class MovieViewHolder(
     itemView: View,
-    val listener: MovieAdapter.OnClickPoster?,
-    val genres: List<GenresItem>?,
+    private val listener: MovieAdapter.OnClickPoster?,
+    private val genres: List<GenresItem>?,
+    private val usingDB: (Movie, Boolean) -> Unit,
+    private val viewModel: MoviesListViewModel,
 ) :
     RecyclerView.ViewHolder(itemView) {
 
+    private val scope = CoroutineScope(Dispatchers.IO)
+    private val uiScope = CoroutineScope(Dispatchers.Main)
 
     private val binding = ViewHolderMovieBinding.bind(itemView)
 
@@ -40,8 +48,8 @@ class MovieViewHolder(
                 countReviewsMoviePoster.text = "$voteCount REVIEWS"
                 adult?.let { adultTvMoviePoster.text = if (it) "18+" else "12+" }
                 genreIds?.let { tagLineMoviePoster.text = getTagLine(genreIds = it) }
-                bindFavouriteMovie(isFavourite = true)
                 voteAverage?.let { bindStars(rating = (it / 2).toInt()) }
+                bindLike(id = movie.id)
                 downloadImage(
                     link = BASE_IMAGE_URL + posterPath,
                     context = context,
@@ -49,10 +57,14 @@ class MovieViewHolder(
                 )
             }
         }
-        itemView.apply {
-            setOnClickListener {
-                movies[adapterPosition].id?.let { listener?.clickPoster(idMovie = it) }
-            }
+        itemView.setOnClickListener {
+            listener?.clickPoster(idMovie = movies[adapterPosition].id)
+        }
+
+
+        binding.like.setOnClickListener {
+            val answer = bindClickableFavouriteMovie()
+            usingDB(movie, answer)
         }
     }
 
@@ -60,20 +72,41 @@ class MovieViewHolder(
         genres?.filter { it.id in genreIds }?.joinToString { it.name ?: "" }
 
 
-    private fun bindFavouriteMovie(isFavourite: Boolean) {
-        if (isFavourite)
+    private fun bindClickableFavouriteMovie(): Boolean {
+        val condition =
+            binding.like.drawable != ContextCompat.getDrawable(context, R.drawable.ic_like_unable)
+        paintingLike(condition = condition)
+        return condition
+
+    }
+
+    private fun bindLike(id: Int) {
+        scope.launch {
+            coroutineScope {
+                val exists = viewModel.existsMovie(id = id)
+                uiScope.launch {
+                    paintingLike(condition = exists)
+                }
+            }
+        }
+    }
+
+    private fun paintingLike(condition: Boolean) {
+        if (condition) {
             binding.like.setImageDrawable(
                 ContextCompat.getDrawable(
                     context,
                     R.drawable.ic_like
                 )
             )
-        else binding.like.setImageDrawable(
-            ContextCompat.getDrawable(
-                context,
-                R.drawable.ic_like_unable
+        } else {
+            binding.like.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context,
+                    R.drawable.ic_like_unable
+                )
             )
-        )
+        }
     }
 
     private fun bindStars(rating: Int) {

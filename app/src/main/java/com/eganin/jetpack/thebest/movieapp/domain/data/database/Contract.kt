@@ -49,4 +49,11 @@ object Contract {
         const val COLUMN_CHARACTER ="character"
         const val COLUMN_ID_BY_MOVIE ="id_movie"
     }
+
+    object Favourite{
+        const val TABLE_NAME = "favourites"
+        const val COLUMN_NAME_ID =BaseColumns._ID
+        const val COLUMN_NAME_ID_MOVIE ="id_movie"
+        const val COLUMN_NAME_TITLE="title"
+    }
 }
