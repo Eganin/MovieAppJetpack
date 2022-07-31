@@ -1,6 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.di
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
@@ -17,6 +18,8 @@ class AppComponent(applicationContext: Context) {
 
     private val defaultLanguage = Locale.getDefault().language
     val database = MovieDatabase.create(applicationContext)
+    private val sharedPreferences =
+        applicationContext.getSharedPreferences(SHARED_PREFERENCES_TAG, MODE_PRIVATE)
 
     private val movieRepository =
         MovieRepositoryImpl(language = defaultLanguage, database = database)
@@ -30,14 +33,22 @@ class AppComponent(applicationContext: Context) {
     fun getMoviesViewModel(fragment: Fragment): MoviesListViewModel {
         return ViewModelProvider(
             fragment,
-            MoviesListViewModel.Factory(movieRepository, connection)
+            MoviesListViewModel.Factory(
+                repository = movieRepository,
+                isConnection = connection,
+                sharedPreferences = sharedPreferences
+            )
         )[MoviesListViewModel::class.java]
     }
 
     fun getMoviesViewModelForActivity(activity: MovieDetailsActivity): MoviesListViewModel {
         return ViewModelProvider(
             activity,
-            MoviesListViewModel.Factory(movieRepository, connection)
+            MoviesListViewModel.Factory(
+                repository = movieRepository,
+                isConnection = connection,
+                sharedPreferences = sharedPreferences
+            )
         )[MoviesListViewModel::class.java]
     }
 
@@ -46,6 +57,10 @@ class AppComponent(applicationContext: Context) {
             fragment,
             MovieDetailsViewModel.Factory(movieDetailsRepository)
         )[MovieDetailsViewModel::class.java]
+    }
+
+    companion object {
+        private const val SHARED_PREFERENCES_TAG = "MOVIE_CHOICE"
     }
 
 }

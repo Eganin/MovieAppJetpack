@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -22,8 +23,11 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =
         holder.bind(movie = movies[position], movies = movies).also {
-            if (position >= movies.size.minus(4)) {
-                moviesListViewModel.downloadMovies(isAdapter = true)
+            if (position >= movies.size.minus(6) && movies.size >= 20) {
+                Log.d("EEE", moviesListViewModel.isActiveDownload.toString())
+                if (!moviesListViewModel.isActiveDownload) moviesListViewModel.downloadMovies(
+                    isAdapter = true
+                )
             }
         }
 

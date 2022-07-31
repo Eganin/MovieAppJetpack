@@ -1,6 +1,8 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
+import android.content.SharedPreferences
 import android.util.Log
+import androidx.core.content.edit
 import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
@@ -8,20 +10,20 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.G
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.isConnection
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.internal.synchronized
+import kotlinx.coroutines.sync.Mutex
 
 
 class MoviesListViewModel(
     private val movieRepository: MovieRepositoryImpl,
     private val isConnection: Boolean,
+    private val sharedPreferences: SharedPreferences,
 ) : ViewModel() {
     var isQueryRequest = false
     var firstLaunch = true
     private var queryText = ""
-    private var page = 1
+    var page = 1
     private var typeMovies = TypeMovies.POPULAR
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -48,21 +50,29 @@ class MoviesListViewModel(
 
     var genresList: List<GenresItem>? = null
 
+    var isActiveDownload = false
+
     fun downloadMovies(isAdapter: Boolean = false) {
+
         viewModelScope.launch(coroutineContext) {
             coroutineScope {
+                isActiveDownload = true
                 startLoading()
-                if (!isConnection) downloadDataFromDB()
+                if (!isConnection) {
+                    downloadDataFromDB()
+                    getChoiceMovie()
+                }
                 if (isAdapter) page++
-
                 if (isQueryRequest) {
                     downloadSearchMoviesList(query = queryText)
                 } else {
                     downloadMovieList()
                 }
                 stopLoading()
+                isActiveDownload = false
             }
         }
+
     }
 
     fun downloadSearchMoviesList(query: String) {
@@ -96,7 +106,6 @@ class MoviesListViewModel(
         val result = movieRepository.getAllMovies()
         _cacheMoviesData.value = result.map { it.toMovie() }
         genresList = result[0].genres
-        Log.d("EEE", cacheMoviesData.value.toString())
     }
 
     private suspend fun saveDataDB(movies: List<Movie>) {
@@ -132,6 +141,7 @@ class MoviesListViewModel(
         firstLaunch = true
         page = 1
         _changeMovies.value = typeMovies.value
+        saveChoiceMovie()
         this.typeMovies = typeMovies
         _moviesData.value = emptyList()
     }
@@ -162,6 +172,18 @@ class MoviesListViewModel(
             }
             else -> false
         }
+
+    private fun saveChoiceMovie() {
+        sharedPreferences.edit {
+            putString(TOKEN_CHOICE_MOVIE, _changeMovies.value)
+        }
+    }
+
+    private fun getChoiceMovie() {
+        firstLaunch = false
+        _changeMovies.value =
+            sharedPreferences.getString(TOKEN_CHOICE_MOVIE, TypeMovies.POPULAR.value)
+    }
 
     private fun Movie.toMovieEntity(genres: List<GenresItem>?): MovieEntity {
         return MovieEntity(
@@ -195,12 +217,14 @@ class MoviesListViewModel(
     class Factory(
         private val repository: MovieRepositoryImpl,
         private val isConnection: Boolean,
+        private val sharedPreferences: SharedPreferences,
     ) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MoviesListViewModel(
                 movieRepository = repository,
                 isConnection = isConnection,
+                sharedPreferences = sharedPreferences,
             ) as T
         }
     }
@@ -215,5 +239,6 @@ class MoviesListViewModel(
 
     companion object {
         private const val TAG = "MoviesListViewModel"
+        private const val TOKEN_CHOICE_MOVIE = "TOKEN_CHOICE_MOVIE"
     }
 }
