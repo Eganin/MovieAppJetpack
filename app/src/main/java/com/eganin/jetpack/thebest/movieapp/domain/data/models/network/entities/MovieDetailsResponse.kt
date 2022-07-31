@@ -21,7 +21,7 @@ data class MovieDetailsResponse(
     val popularity: Double? = null,
 
     @SerialName("id")
-    val id: Int? = null,
+    val id: Int,
 
     @SerialName("vote_count")
     val voteCount: Int? = null,

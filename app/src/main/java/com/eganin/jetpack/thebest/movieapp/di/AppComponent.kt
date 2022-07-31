@@ -55,7 +55,10 @@ class AppComponent(applicationContext: Context) {
     fun getMoviesDetailsRepository(fragment: Fragment): MovieDetailsViewModel {
         return ViewModelProvider(
             fragment,
-            MovieDetailsViewModel.Factory(movieDetailsRepository)
+            MovieDetailsViewModel.Factory(
+                repository = movieDetailsRepository,
+                isConnection = connection
+            )
         )[MovieDetailsViewModel::class.java]
     }
 

@@ -1,6 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details
 
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieDetailsEntity
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CreditsMovies
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,9 +15,19 @@ interface MovieDetailsRepository {
 
     suspend fun downloadCredits(movieId: Int): CreditsMovies
 
-    suspend fun getAllInfoMovie(id:Long): MovieDetailsEntity
+    suspend fun getAllInfoMovie(id: Int): MovieDetailsEntity
 
     suspend fun insertMovieDetails(movie: MovieDetailsEntity)
 
     suspend fun deleteAllInfoMovie()
+
+    suspend fun deleteInfoMovieById(id: Int)
+
+    suspend fun getAllCredits(id: Int): CastItem
+
+    suspend fun insertCredits(credits: CastItem)
+
+    suspend fun deleteAlCredits()
+
+    suspend fun deleteCreditsById(id: Int)
 }

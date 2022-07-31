@@ -38,4 +38,14 @@ object Contract {
         const val COLUMN_NAME_VOTE_AVERAGE = "vote_average"
         const val COLUMN_NAME_ADULT = "adult"
     }
+
+    object Credits{
+        const val TABLE_NAME = "credits"
+
+        const val COLUMN_NAME_ID =BaseColumns._ID
+        const val COLUMN_PROFILE_PATH ="profile_path"
+        const val COLUMN_NAME ="name"
+        const val COLUMN_ORIGINAL_NAME ="original_name"
+        const val COLUMN_CHARACTER ="character"
+    }
 }
