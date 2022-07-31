@@ -127,7 +127,7 @@
                 android:layout_height="@dimen/height_star_icon"
                 android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginTop="@dimen/icon_star_margin_top"
-                android:src="@drawable/ic_star_icon"
+                android:src="@drawable/ic_star_unable_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tag_line"
                 android:contentDescription="@string/first_star_rating" />
@@ -138,7 +138,7 @@
                 android:layout_height="@dimen/height_star_icon"
                 android:layout_marginStart="@dimen/icon_star_margin_star"
                 android:layout_marginTop="@dimen/icon_star_margin_top"
-                android:src="@drawable/ic_star_icon"
+                android:src="@drawable/ic_star_unable_icon"
                 app:layout_constraintStart_toEndOf="@id/one_star"
                 app:layout_constraintTop_toBottomOf="@id/tag_line"
                 android:contentDescription="@string/two_star_rating" />
@@ -149,7 +149,7 @@
                 android:layout_height="@dimen/height_star_icon"
                 android:layout_marginStart="@dimen/icon_star_margin_star"
                 android:layout_marginTop="@dimen/icon_star_margin_top"
-                android:src="@drawable/ic_star_icon"
+                android:src="@drawable/ic_star_unable_icon"
                 app:layout_constraintStart_toEndOf="@id/two_star"
                 app:layout_constraintTop_toBottomOf="@id/tag_line"
                 android:contentDescription="@string/three_star_rating" />
@@ -160,7 +160,7 @@
                 android:layout_height="@dimen/height_star_icon"
                 android:layout_marginStart="@dimen/icon_star_margin_star"
                 android:layout_marginTop="@dimen/icon_star_margin_top"
-                android:src="@drawable/ic_star_icon"
+                android:src="@drawable/ic_star_unable_icon"
                 app:layout_constraintStart_toEndOf="@id/three_star"
                 app:layout_constraintTop_toBottomOf="@id/tag_line"
                 android:contentDescription="@string/four_star_rating" />

@@ -9,11 +9,11 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.C
 @Dao
 interface CreditsDao {
 
-    @Query("SELECT * FROM credits WHERE _id == :id LIMIT 1")
-    fun getAllCredits(id: Int) : CastItem
+    @Query("SELECT * FROM credits WHERE id_movie == :id ")
+    fun getAllCredits(id: Int) : List<CastItem>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCredits(credits: CastItem)
+    fun insertCredits(credits: List<CastItem>)
 
     @Query("DELETE FROM credits")
     fun deleteAllCredits()

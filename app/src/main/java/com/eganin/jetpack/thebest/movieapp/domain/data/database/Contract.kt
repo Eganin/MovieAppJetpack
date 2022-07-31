@@ -47,5 +47,6 @@ object Contract {
         const val COLUMN_NAME ="name"
         const val COLUMN_ORIGINAL_NAME ="original_name"
         const val COLUMN_CHARACTER ="character"
+        const val COLUMN_ID_BY_MOVIE ="id_movie"
     }
 }

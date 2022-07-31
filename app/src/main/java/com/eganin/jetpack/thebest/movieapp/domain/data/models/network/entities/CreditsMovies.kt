@@ -46,4 +46,6 @@ data class CastItem(
     @SerialName("id")
     val id: Int,
 
+    @ColumnInfo(name = Contract.Credits.COLUMN_ID_BY_MOVIE)
+    var movieId : Int?=null,
     )

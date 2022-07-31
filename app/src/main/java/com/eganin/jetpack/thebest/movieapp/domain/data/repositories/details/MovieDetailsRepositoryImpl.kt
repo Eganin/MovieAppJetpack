@@ -47,7 +47,7 @@ class MovieDetailsRepositoryImpl(val language: String, database: MovieDatabase) 
         creditsDao.getAllCredits(id = id)
     }
 
-    override suspend fun insertCredits(credits: CastItem) = withContext(defaultDispatcher) {
+    override suspend fun insertCredits(credits: List<CastItem>) = withContext(defaultDispatcher) {
         creditsDao.insertCredits(credits = credits)
     }
 
