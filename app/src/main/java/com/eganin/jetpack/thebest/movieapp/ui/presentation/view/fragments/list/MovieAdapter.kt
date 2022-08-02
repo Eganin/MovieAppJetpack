@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
+class MovieAdapter(private val moviesListViewModel: MoviesListViewModel) :
     RecyclerView.Adapter<MovieViewHolder>() {
 
     var listener: OnClickPoster? = null
@@ -26,8 +26,7 @@ class MovieAdapter(val moviesListViewModel: MoviesListViewModel) :
         listener = listener,
         genres = moviesListViewModel.genresList,
         usingDB = usingDBFavourite,
-        viewModel = moviesListViewModel,
-    )
+    ) { moviesListViewModel.existsMovie(it) }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) =
         holder.bind(movie = movies[position], movies = movies).also {

@@ -1,5 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -12,22 +14,19 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.M
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MovieViewHolder(
     itemView: View,
     private val listener: MovieAdapter.OnClickPoster?,
     private val genres: List<GenresItem>?,
     private val usingDB: (Movie, Boolean) -> Unit,
-    private val viewModel: MoviesListViewModel,
+    private val listenerExists: suspend (Int) -> Boolean,
 ) :
     RecyclerView.ViewHolder(itemView) {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-    private val uiScope = CoroutineScope(Dispatchers.Main)
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private val uiScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private val binding = ViewHolderMovieBinding.bind(itemView)
 
@@ -63,8 +62,11 @@ class MovieViewHolder(
 
 
         binding.like.setOnClickListener {
-            val answer = bindClickableFavouriteMovie()
-            usingDB(movie, answer)
+            uiScope.launch {
+                val answer = !bindClickableFavouriteMovie(id = movie.id)
+                paintingLike(condition = answer)
+                usingDB(movie, answer)
+            }
         }
     }
 
@@ -72,18 +74,15 @@ class MovieViewHolder(
         genres?.filter { it.id in genreIds }?.joinToString { it.name ?: "" }
 
 
-    private fun bindClickableFavouriteMovie(): Boolean {
-        val condition =
-            binding.like.drawable != ContextCompat.getDrawable(context, R.drawable.ic_like_unable)
-        paintingLike(condition = condition)
-        return condition
-
+    private suspend fun bindClickableFavouriteMovie(id: Int): Boolean {
+        return listenerExists(id)
     }
 
     private fun bindLike(id: Int) {
         scope.launch {
             coroutineScope {
-                val exists = viewModel.existsMovie(id = id)
+                val exists = listenerExists(id)
+
                 uiScope.launch {
                     paintingLike(condition = exists)
                 }

@@ -60,4 +60,5 @@
     <dimen name="edit_text_padding_start">32dp</dimen>
     <dimen name="edit_text_padding_end">48dp</dimen>
     <dimen name="btn_search_margin_end">15dp</dimen>
+    <dimen name="item_dist">14dp</dimen>
 </resources>

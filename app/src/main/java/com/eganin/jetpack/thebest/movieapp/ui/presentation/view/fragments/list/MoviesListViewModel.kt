@@ -184,8 +184,6 @@ class MoviesListViewModel(
     }
 
     fun usingDBFavouriteMovie(movie: Movie, condition: Boolean) {
-        Log.d("EEE","-----------------------")
-        Log.d("EEE",condition.toString())
         viewModelScope.launch(coroutineContext) {
             if (condition) {
                 movieRepository.insertFavouriteMovie(
@@ -197,7 +195,6 @@ class MoviesListViewModel(
             } else {
                 movieRepository.deleteFavouriteMovieUsingID(id = movie.id)
             }
-
         }
     }
 

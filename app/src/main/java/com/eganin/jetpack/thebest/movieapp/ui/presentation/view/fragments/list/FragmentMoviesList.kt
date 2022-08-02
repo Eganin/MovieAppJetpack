@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
+import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMoviesListBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.getColumnCountUtils
@@ -89,11 +90,21 @@ class FragmentMoviesList : BaseFragment() {
 
     private fun setupRecyclerView() {
         binding.moviesRecyclerView.apply {
+            val spanCount = getColumnCountUtils(display = activity?.windowManager?.defaultDisplay)
             layoutManager = GridLayoutManager(
                 requireContext(),
-                getColumnCountUtils(display = activity?.windowManager?.defaultDisplay)
+                spanCount
             )
             adapter = movieAdapter
+            addItemDecoration(
+                GridSpacingItemDecoration(
+                    spanCount = spanCount,
+                    spacing = resources.getDimension(
+                        R.dimen.item_dist
+                    ).toInt(),
+                    includeEdge = true,
+                )
+            )
         }
     }
 }
