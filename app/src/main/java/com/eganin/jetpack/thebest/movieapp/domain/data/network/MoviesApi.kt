@@ -1,6 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.models.network
 
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.*
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -76,6 +76,7 @@ interface MoviesApi {
         private const val QUERY = "query"
         private const val API_KEY_VALUE = "e3e1fa04065d06e42820f0ee5b375a0d"
         const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w300"
+        const val BASE_IMAGE_URL_BACKDROP = "https://image.tmdb.org/t/p/w500"
     }
 }
 

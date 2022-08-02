@@ -21,7 +21,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         viewModel =
-            (this.application as MovieApp).myComponent.getMoviesViewModelForActivity(activity = this)
+            (this.application as MovieApp).myComponent.getMoviesViewModel(activity = this)!!
         val view = binding.root
         setContentView(view)
         setupUI()
@@ -31,7 +31,6 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.page_5 -> {
-                    viewModel.clearData()
                     openSearch()
                     viewModel.changeMoviesList(idPage = item.itemId)
                 }

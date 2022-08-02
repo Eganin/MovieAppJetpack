@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderActorBinding
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
 
 class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.Contract
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 
 @Entity(
     tableName = Contract.Movies.TABLE_NAME,

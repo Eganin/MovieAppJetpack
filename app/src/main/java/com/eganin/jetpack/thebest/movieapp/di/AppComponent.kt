@@ -5,7 +5,9 @@ import android.content.Context.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepositoryImpl
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.isConnection
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetailsViewModel
@@ -21,35 +23,41 @@ class AppComponent(applicationContext: Context) {
     private val sharedPreferences =
         applicationContext.getSharedPreferences(SHARED_PREFERENCES_TAG, MODE_PRIVATE)
 
-    private val movieRepository =
+    private val movieRepository: MovieRepository =
         MovieRepositoryImpl(language = defaultLanguage, database = database)
-    private val movieDetailsRepository = MovieDetailsRepositoryImpl(
+    private val movieDetailsRepository: MovieDetailsRepository = MovieDetailsRepositoryImpl(
         language = defaultLanguage,
         database = database
     )
 
     private val connection = isConnection(context = applicationContext)
 
-    fun getMoviesViewModel(fragment: Fragment): MoviesListViewModel {
-        return ViewModelProvider(
-            fragment,
-            MoviesListViewModel.Factory(
-                repository = movieRepository,
-                isConnection = connection,
-                sharedPreferences = sharedPreferences
-            )
-        )[MoviesListViewModel::class.java]
-    }
+    fun getMoviesViewModel(
+        activity: MovieDetailsActivity? = null,
+        fragment: Fragment? = null
+    ): MoviesListViewModel? {
+        activity?.let {
+            return ViewModelProvider(
+                activity,
+                MoviesListViewModel.Factory(
+                    repository = movieRepository,
+                    isConnection = connection,
+                    sharedPreferences = sharedPreferences
+                )
+            )[MoviesListViewModel::class.java]
+        }
+        fragment?.let {
+            return ViewModelProvider(
+                fragment,
+                MoviesListViewModel.Factory(
+                    repository = movieRepository,
+                    isConnection = connection,
+                    sharedPreferences = sharedPreferences
+                )
+            )[MoviesListViewModel::class.java]
+        }
+        return null
 
-    fun getMoviesViewModelForActivity(activity: MovieDetailsActivity): MoviesListViewModel {
-        return ViewModelProvider(
-            activity,
-            MoviesListViewModel.Factory(
-                repository = movieRepository,
-                isConnection = connection,
-                sharedPreferences = sharedPreferences
-            )
-        )[MoviesListViewModel::class.java]
     }
 
     fun getMoviesDetailsRepository(fragment: Fragment): MovieDetailsViewModel {

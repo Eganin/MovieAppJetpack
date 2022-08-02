@@ -3,9 +3,9 @@ package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.RetrofitModule
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieResponse
+import com.eganin.jetpack.thebest.movieapp.domain.data.network.RetrofitModule
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.TypeMovies
 import kotlinx.coroutines.withContext
 

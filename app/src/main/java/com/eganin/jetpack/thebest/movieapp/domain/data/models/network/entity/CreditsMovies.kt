@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities
+package com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

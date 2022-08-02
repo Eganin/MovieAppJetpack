@@ -39,7 +39,7 @@ class FragmentMoviesList : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel =
-            (requireActivity().application as MovieApp).myComponent.getMoviesViewModelForActivity(
+            (requireActivity().application as MovieApp).myComponent.getMoviesViewModel(
                 activity = requireActivity() as MovieDetailsActivity,
             )
         movieAdapter = MovieAdapter(moviesListViewModel = viewModel!!)

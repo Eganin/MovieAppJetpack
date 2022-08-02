@@ -1,7 +1,5 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities
+package com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity
 
-import androidx.room.ColumnInfo
-import com.eganin.jetpack.thebest.movieapp.domain.data.database.Contract
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -42,7 +40,7 @@ data class MovieDetailsResponse(
     val voteAverage: Double? = null,
 
     @SerialName("adult")
-    val adult: Boolean? = null,
+    val adult: Boolean?=null,
 
     )
 

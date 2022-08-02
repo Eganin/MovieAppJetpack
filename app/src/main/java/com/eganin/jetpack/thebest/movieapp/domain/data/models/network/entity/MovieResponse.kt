@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities
+package com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

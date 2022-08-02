@@ -2,24 +2,23 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.detai
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieDetailsEntity
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
-import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepositoryImpl
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.isConnection
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovieDetailsEntity
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 import kotlinx.coroutines.*
 
 class MovieDetailsViewModel(
-    private val repository: MovieDetailsRepositoryImpl,
+    private val repository: MovieDetailsRepository,
     private val isConnection: Boolean
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Log.d(TAG, "CoroutineExceptionHandler got $exception")
+        Log.e(TAG, "CoroutineExceptionHandler got $exception")
         _stateData.value = MoviesListViewModel.State.Error
-    }
-    private val coroutineContext = exceptionHandler + SupervisorJob()
+    }+ SupervisorJob()
 
     private val _stateData =
         MutableLiveData<MoviesListViewModel.State>(MoviesListViewModel.State.Default)
@@ -32,7 +31,7 @@ class MovieDetailsViewModel(
     val castData: LiveData<List<CastItem>> = _castData
 
     fun downloadDetailsData(id: Int) {
-        viewModelScope.launch(coroutineContext) {
+        viewModelScope.launch(exceptionHandler) {
             _stateData.value = MoviesListViewModel.State.Loading
             if (!isConnection) downloadDataFromDB(id = id)
             download(id = id)
@@ -61,43 +60,8 @@ class MovieDetailsViewModel(
         repository.insertCredits(credits = credits)
     }
 
-    private fun MovieDetailsResponse.toMovieDetailsEntity(): MovieDetailsEntity {
-        return MovieDetailsEntity(
-            id = this.id,
-            title = this.title,
-            backdropPath = this.backdropPath,
-            genres = this.genres,
-            popularity = this.popularity,
-            voteCount = this.voteCount,
-            overview = this.overview,
-            originalTitle = this.originalTitle,
-            runtime = this.runtime,
-            posterPath = this.posterPath,
-            voteAverage = this.voteAverage,
-            adult = this.adult,
-        )
-    }
-
-    private fun MovieDetailsEntity.toMovieDetailsResponse(): MovieDetailsResponse {
-        return MovieDetailsResponse(
-            title,
-            backdropPath,
-            genres,
-            popularity,
-            id,
-            voteCount,
-            overview,
-            originalTitle,
-            runtime,
-            posterPath,
-            voteAverage,
-            adult,
-        )
-    }
-
-
     class Factory(
-        private val repository: MovieDetailsRepositoryImpl,
+        private val repository: MovieDetailsRepository,
         private val isConnection: Boolean
     ) :
         ViewModelProvider.NewInstanceFactory() {

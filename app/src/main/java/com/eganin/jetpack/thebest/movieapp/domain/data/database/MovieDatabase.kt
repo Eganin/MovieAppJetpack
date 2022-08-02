@@ -9,7 +9,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEn
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieDetailsEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.converter.Converters
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
 
 @Database(
     entities = [MovieEntity::class, MovieDetailsEntity::class, CastItem::class, FavouriteEntity::class],

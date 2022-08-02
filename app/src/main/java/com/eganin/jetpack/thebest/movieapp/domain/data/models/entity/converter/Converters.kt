@@ -1,7 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.converter
 
 import androidx.room.TypeConverter
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 
 class Converters {
     @TypeConverter

@@ -4,10 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 
 class MovieAdapter(private val moviesListViewModel: MoviesListViewModel) :
     RecyclerView.Adapter<MovieViewHolder>() {
@@ -43,11 +40,6 @@ class MovieAdapter(private val moviesListViewModel: MoviesListViewModel) :
         this.movies = movies.toMutableList()
         notifyDataSetChanged()
     }
-
-    fun addMovies(newMovies: List<Movie>) {
-        movies.addAll(newMovies)
-    }
-
 
     interface OnClickPoster {
         fun clickPoster(idMovie: Int)

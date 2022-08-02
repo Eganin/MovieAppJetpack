@@ -6,14 +6,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentSearchBinding
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.afterTextChanged
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.getColumnCountUtils
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.GridSpacingItemDecoration
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.launch
 
 class FragmentSearch : BaseFragment() {
 
@@ -34,7 +41,7 @@ class FragmentSearch : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel =
-            (requireActivity().application as MovieApp).myComponent.getMoviesViewModelForActivity(
+            (requireActivity().application as MovieApp).myComponent.getMoviesViewModel(
                 activity = (requireActivity() as MovieDetailsActivity)
             )
         movieAdapter = MovieAdapter(viewModel!!)
@@ -53,15 +60,22 @@ class FragmentSearch : BaseFragment() {
         setupUI()
     }
 
+    @OptIn(ObsoleteCoroutinesApi::class)
     private fun setupUI() {
-        if (viewModel?.moviesSearchData?.value?.isEmpty() == false) {
-            binding.placeholder.visibility = View.INVISIBLE
+        if (viewModel?.moviesSearchData?.value?.isNotEmpty()!!) {
+            binding.placeholder.isVisible = false
         }
         setupRecyclerView()
         observeData()
         binding.btnSearch.setOnClickListener {
             viewModel?.downloadSearchMoviesList(query = binding.searchInput.text.toString())
-            binding.placeholder.visibility = View.INVISIBLE
+            binding.placeholder.isVisible = false
+        }
+
+        binding.searchInput.afterTextChanged {
+            lifecycleScope.launch {
+                viewModel?.queryChannel?.send(it)
+            }
         }
     }
 
@@ -76,12 +90,22 @@ class FragmentSearch : BaseFragment() {
 
     private fun setupRecyclerView() {
         binding.recyclerViewSearchMovies.apply {
+            val spanCount = getColumnCountUtils(display = activity?.windowManager?.defaultDisplay)
             layoutManager =
                 GridLayoutManager(
                     requireContext(),
-                    getColumnCountUtils(display = activity?.windowManager?.defaultDisplay)
+                    spanCount
                 )
             adapter = movieAdapter
+            addItemDecoration(
+                GridSpacingItemDecoration(
+                    spanCount = spanCount,
+                    spacing = resources.getDimension(
+                        R.dimen.item_dist
+                    ).toInt(),
+                    includeEdge = true,
+                )
+            )
         }
     }
 

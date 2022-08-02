@@ -1,9 +1,9 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details
 
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieDetailsEntity
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CreditsMovies
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CreditsMovies
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

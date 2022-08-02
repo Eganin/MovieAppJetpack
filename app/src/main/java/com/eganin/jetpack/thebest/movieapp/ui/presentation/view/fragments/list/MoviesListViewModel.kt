@@ -6,30 +6,36 @@ import androidx.core.content.edit
 import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
-import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepositoryImpl
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovie
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovieEntity
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
 
 
 class MoviesListViewModel(
-    private val movieRepository: MovieRepositoryImpl,
+    private val movieRepository: MovieRepository,
     private val isConnection: Boolean,
     private val sharedPreferences: SharedPreferences,
 ) : ViewModel() {
+
     var isQueryRequest = false
     var firstLaunch = true
     private var queryText = ""
     var page = 1
     private var typeMovies = TypeMovies.POPULAR
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Log.d(TAG, "CoroutineExceptionHandler got $exception")
-        errorLoading()
-    }
+    @OptIn(ObsoleteCoroutinesApi::class)
+    val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
 
-    private val coroutineContext = exceptionHandler + SupervisorJob()
+    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Log.e(TAG, "CoroutineExceptionHandler got $exception")
+        errorLoading()
+    } + SupervisorJob()
+
 
     private val _moviesData = MutableLiveData<List<Movie>>(emptyList())
     val moviesData: LiveData<List<Movie>> = _moviesData
@@ -51,30 +57,28 @@ class MoviesListViewModel(
     var isActiveDownload = false
 
     fun downloadMovies(isAdapter: Boolean = false) {
-
-        viewModelScope.launch(coroutineContext) {
-            coroutineScope {
-                isActiveDownload = true
-                startLoading()
-                if (!isConnection) {
-                    downloadDataFromDB()
-                    getChoiceMovie()
-                }
-                if (isAdapter) page++
-                if (isQueryRequest) {
-                    downloadSearchMoviesList(query = queryText)
-                } else {
-                    downloadMovieList()
-                }
-                stopLoading()
-                isActiveDownload = false
+        viewModelScope.launch(exceptionHandler) {
+            isActiveDownload = true
+            startLoading()
+            if (!isConnection) {
+                downloadDataFromDB()
+                getChoiceMovie()
             }
+            if (isAdapter) page++
+            if (isQueryRequest) {
+                downloadSearchMoviesList(query = queryText)
+            } else {
+                downloadMovieList()
+            }
+            stopLoading()
+            isActiveDownload = false
+
         }
 
     }
 
     fun downloadSearchMoviesList(query: String) {
-        viewModelScope.launch(coroutineContext) {
+        viewModelScope.launch(exceptionHandler) {
             isQueryRequest = true
             queryText = query
             genresList = movieRepository.downloadGenres()
@@ -114,7 +118,7 @@ class MoviesListViewModel(
         movieRepository.deleteAllMovies()
     }
 
-    fun clearData() {
+    private fun clearData() {
         _moviesData.value = emptyList()
     }
 
@@ -132,7 +136,7 @@ class MoviesListViewModel(
 
     private fun changeMovies(typeMovies: TypeMovies) {
         if (isConnection) {
-            viewModelScope.launch(coroutineContext) {
+            viewModelScope.launch(exceptionHandler) {
                 deleteAllDataDB()
             }
         }
@@ -163,8 +167,11 @@ class MoviesListViewModel(
                 true
             }
             R.id.page_5 -> {
-                viewModelScope.launch(coroutineContext) {
-                    deleteAllDataDB()
+                clearData()
+                if (!isConnection) {
+                    viewModelScope.launch(exceptionHandler) {
+                        deleteAllDataDB()
+                    }
                 }
                 true
             }
@@ -184,7 +191,7 @@ class MoviesListViewModel(
     }
 
     fun usingDBFavouriteMovie(movie: Movie, condition: Boolean) {
-        viewModelScope.launch(coroutineContext) {
+        viewModelScope.launch(exceptionHandler) {
             if (condition) {
                 movieRepository.insertFavouriteMovie(
                     favouriteMovie = FavouriteEntity(
@@ -198,41 +205,12 @@ class MoviesListViewModel(
         }
     }
 
-    suspend fun existsMovie(id: Int): Boolean = withContext(Dispatchers.IO){
+    suspend fun existsMovie(id: Int): Boolean = withContext(Dispatchers.IO) {
         movieRepository.getFavouriteMovieUsingID(id = id) != null
     }
 
-    private fun Movie.toMovieEntity(genres: List<GenresItem>?): MovieEntity {
-        return MovieEntity(
-            id = this.id,
-            originalTitle = this.originalTitle,
-            title = this.title,
-            genreIds = this.genreIds,
-            posterPath = this.posterPath,
-            backdropPath = this.backdropPath,
-            voteAverage = this.voteAverage,
-            adult = this.adult,
-            voteCount = this.voteCount,
-            genres = genres,
-        )
-    }
-
-    private fun MovieEntity.toMovie(): Movie {
-        return Movie(
-            id = this.id,
-            originalTitle = this.originalTitle,
-            title = this.title,
-            genreIds = this.genreIds,
-            posterPath = this.posterPath,
-            backdropPath = this.backdropPath,
-            voteCount = this.voteCount,
-            voteAverage = this.voteAverage,
-            adult = this.adult,
-        )
-    }
-
     class Factory(
-        private val repository: MovieRepositoryImpl,
+        private val repository: MovieRepository,
         private val isConnection: Boolean,
         private val sharedPreferences: SharedPreferences,
     ) :

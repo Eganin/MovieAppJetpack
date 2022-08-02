@@ -2,7 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.domain.data.models.entity
 
 import androidx.room.*
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.Contract
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 
 @Entity(
     tableName = Contract.MovieDetails.TABLE_NAME,

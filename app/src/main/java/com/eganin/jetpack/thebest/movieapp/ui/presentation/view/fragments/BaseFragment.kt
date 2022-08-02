@@ -1,7 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments
 
-import android.view.View
 import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
@@ -37,10 +37,6 @@ open class BaseFragment : Fragment() {
     }
 
     private fun setLoading(loading: Boolean, progressBar: ProgressBar) {
-        if (loading) {
-            progressBar.visibility = View.VISIBLE
-        } else {
-            progressBar.visibility = View.GONE
-        }
+        progressBar.isVisible = loading
     }
 }

@@ -1,7 +1,5 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -9,11 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.databinding.ViewHolderMovieBinding
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.GenresItem
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.Movie
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 import kotlinx.coroutines.*
 
 class MovieViewHolder(
@@ -63,7 +59,7 @@ class MovieViewHolder(
 
         binding.like.setOnClickListener {
             uiScope.launch {
-                val answer = !bindClickableFavouriteMovie(id = movie.id)
+                val answer = !listenerExists(movie.id)
                 paintingLike(condition = answer)
                 usingDB(movie, answer)
             }
@@ -72,11 +68,6 @@ class MovieViewHolder(
 
     private fun getTagLine(genreIds: List<Int>) =
         genres?.filter { it.id in genreIds }?.joinToString { it.name ?: "" }
-
-
-    private suspend fun bindClickableFavouriteMovie(id: Int): Boolean {
-        return listenerExists(id)
-    }
 
     private fun bindLike(id: Int) {
         scope.launch {

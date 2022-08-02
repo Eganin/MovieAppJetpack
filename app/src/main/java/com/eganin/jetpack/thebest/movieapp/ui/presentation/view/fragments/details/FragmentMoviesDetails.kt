@@ -11,8 +11,9 @@ import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMovieDetailBinding
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.CastItem
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entities.MovieDetailsResponse
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL_BACKDROP
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity.Companion.SAVE_MOVIE_DATA_KEY
@@ -77,11 +78,11 @@ class FragmentMoviesDetails : BaseFragment() {
     private fun updateInfoMovie(response: MovieDetailsResponse) {
         with(binding) {
             downloadImage(
-                link = BASE_IMAGE_URL + response.backdropPath,
+                link = BASE_IMAGE_URL_BACKDROP + response.backdropPath,
                 imageView = backgroundImage,
                 context = requireContext()
             )
-            response.adult?.let { if (it) "12+" else "18+" }
+            adultTv.text = if (response.adult == true) "18+" else "12+"
             titleMovie.text = response.title
             tagLine.text = response.genres?.joinToString(separator = ",") { it.name ?: "" }
             countReviews.text = "${response.voteCount} REVIEWS"
@@ -92,8 +93,6 @@ class FragmentMoviesDetails : BaseFragment() {
 
     private fun updateAdapterActors(listActors: List<CastItem>) =
         actorsAdapter.bindActors(actors = listActors)
-
-
 
     private fun setupListeners() {
         binding.backBtb?.setOnClickListener {
