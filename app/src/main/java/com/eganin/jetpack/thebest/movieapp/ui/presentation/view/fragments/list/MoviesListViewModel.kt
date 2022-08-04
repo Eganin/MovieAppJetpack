@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.di.AppComponent.Companion.TOKEN_CHOICE_MOVIE
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
@@ -68,6 +69,7 @@ class MoviesListViewModel(
             if (isQueryRequest) {
                 downloadSearchMoviesList(query = queryText)
             } else {
+                if(firstLaunch) downloadUpdateDataFromDB()
                 downloadMovieList()
             }
             stopLoading()
@@ -110,6 +112,11 @@ class MoviesListViewModel(
         genresList = result[0].genres
     }
 
+    private suspend fun downloadUpdateDataFromDB() {
+        val result = movieRepository.getAllMovies().map { it.toMovie() }
+        _moviesData.value = result
+    }
+
     private suspend fun saveDataDB(movies: List<Movie>) {
         movieRepository.insertMovies(movies = movies.map { it.toMovieEntity(genres = genresList) })
     }
@@ -140,7 +147,7 @@ class MoviesListViewModel(
                 deleteAllDataDB()
             }
         }
-        firstLaunch = true
+        //firstLaunch = true
         page = 1
         _changeMovies.value = typeMovies.value
         saveChoiceMovie()
@@ -234,6 +241,5 @@ class MoviesListViewModel(
 
     companion object {
         private const val TAG = "MoviesListViewModel"
-        private const val TOKEN_CHOICE_MOVIE = "TOKEN_CHOICE_MOVIE"
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.work.WorkManager
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.ActivityMainBinding
@@ -25,6 +26,12 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         val view = binding.root
         setContentView(view)
         setupUI()
+        startWorker()
+    }
+
+    private fun startWorker(){
+        val repository = (applicationContext as MovieApp).myComponent.getWorkerRepository()
+        WorkManager.getInstance(this).enqueue(repository.request)
     }
 
     private fun setupUI() {

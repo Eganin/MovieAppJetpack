@@ -9,6 +9,8 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.Movi
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepositoryImpl
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepository
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.isConnection
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetailsViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
@@ -29,6 +31,7 @@ class AppComponent(applicationContext: Context) {
         language = defaultLanguage,
         database = database
     )
+    private val workerRepository : WorkerRepository = WorkerRepositoryImpl()
 
     private val connection = isConnection(context = applicationContext)
 
@@ -70,8 +73,15 @@ class AppComponent(applicationContext: Context) {
         )[MovieDetailsViewModel::class.java]
     }
 
+    fun getMovieRepository() = movieRepository
+
+    fun getSharedPreferences() = sharedPreferences
+
+    fun getWorkerRepository() = workerRepository
+
     companion object {
         private const val SHARED_PREFERENCES_TAG = "MOVIE_CHOICE"
+        const val TOKEN_CHOICE_MOVIE = "TOKEN_CHOICE_MOVIE"
     }
 
 }
