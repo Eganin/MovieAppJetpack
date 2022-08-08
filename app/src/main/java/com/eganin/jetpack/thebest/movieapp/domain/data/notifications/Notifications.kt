@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.notifications
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -22,55 +23,80 @@ interface Notifications {
 
 class MovieNotificationsManager(private val context: Context) : Notifications {
 
-    private val notificationManagerCompat = NotificationManagerCompat.from(context)
+    private val notificationManager = NotificationManagerCompat.from(context)
 
     override fun init() {
-        if (notificationManagerCompat.getNotificationChannel(CHANNEL_NEW_NOTIFICATIONS) == null) {
+        if (notificationManager.getNotificationChannel(CHANNEL_MOVIES) == null) {
             val channel =
-                NotificationChannelCompat.Builder(CHANNEL_NEW_NOTIFICATIONS, IMPORTANCE_HIGH)
+                NotificationChannelCompat.Builder(CHANNEL_MOVIES, IMPORTANCE_HIGH)
                     .setName(context.getString(R.string.name_channel_notifications))
                     .setDescription(context.getString(R.string.channel_description_notification))
                     .build()
 
-            notificationManagerCompat.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     @WorkerThread
     override fun showNotification(movie: Movie) {
-        Log.d("EEE","NOTIFICATION")
         val uri = "https://android.movieapp/movies/${movie.id}".toUri()
-        val intent = Intent(context, MovieDetailsActivity::class.java)
-            .setAction(Intent.ACTION_VIEW)
-            .setData(uri)
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            REQUEST_CONTENT,
-            intent,
-            PendingIntent.FLAG_CANCEL_CURRENT
-        )
 
-        val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_NEW_NOTIFICATIONS)
+        val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_MOVIES)
             .setContentTitle(movie.title)
             .setContentText(movie.originalTitle)
             .setSmallIcon(R.drawable.ic_baseline_movie_24)
-            .setPriority(IMPORTANCE_HIGH)
-            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    context,
+                    REQUEST_CONTENT_MOVIES,
+                    Intent(context, MovieDetailsActivity::class.java)
+                        .setAction(Intent.ACTION_VIEW)
+                        .setData(uri),
+                    PendingIntent.FLAG_CANCEL_CURRENT
+                )
+            )
             .setWhen(System.currentTimeMillis())
 
-
-        notificationManagerCompat.notify(
-            TAG,
+        notificationManager.notify(
+            MOVIE_TAG,
             movie.id,
             notificationBuilder.build()
         )
     }
 
-    override fun dismissNotification(id: Int) = notificationManagerCompat.cancel(TAG, id)
+    fun showTestNotification(){
+        val uri = "https://android.movieapp/movies/616037".toUri()
+        val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_MOVIES)
+            .setContentTitle("movie.title")
+            .setContentText("movie.originalTitle")
+            .setSmallIcon(R.drawable.ic_baseline_movie_24)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    context,
+                    REQUEST_CONTENT_MOVIES,
+                    Intent(context, MovieDetailsActivity::class.java)
+                        .setAction(Intent.ACTION_VIEW)
+                        .setData(uri),
+                    PendingIntent.FLAG_MUTABLE
+                )
+            )
+            .setWhen(System.currentTimeMillis())
+
+        notificationManager.notify(
+            MOVIE_TAG,
+            616037,
+            notificationBuilder.build()
+        )
+    }
+
+    override fun dismissNotification(id: Int) = notificationManager.cancel(MOVIE_TAG, id)
 
     companion object {
-        private const val CHANNEL_NEW_NOTIFICATIONS = "new_notifications"
-        private const val REQUEST_CONTENT = 80
-        private const val TAG = "movie_notification"
+        private const val CHANNEL_MOVIES = "channel_movies"
+        private const val REQUEST_CONTENT_MOVIES = 80
+        private const val MOVIE_TAG = "movies"
     }
 }

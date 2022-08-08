@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMovieDetailBinding
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL_BACKDROP
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
@@ -42,6 +42,7 @@ class FragmentMoviesDetails : BaseFragment() {
     private var viewModel: MovieDetailsViewModel? = null
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private var isRationalShown = false
+    private lateinit var responseMovie: MovieDetailsResponse
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,9 +68,7 @@ class FragmentMoviesDetails : BaseFragment() {
         requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
-            if (isGranted) {
-                //onCalendarPermissionGranted()
-            } else {
+            if (!isGranted) {
                 onCalendarPermissionNotGranted()
             }
         }
@@ -102,9 +101,13 @@ class FragmentMoviesDetails : BaseFragment() {
         viewModel?.stateData?.observe(this.viewLifecycleOwner) {
             setState(state = it, progressBar = binding.progressBarDetails)
         }
+        viewModel?.dataCalendar?.observe(this.viewLifecycleOwner, this::startActivityCalendar)
     }
 
+    private fun startActivityCalendar(intent: Intent) = startActivity(intent)
+
     private fun updateInfoMovie(response: MovieDetailsResponse) {
+        responseMovie = response
         with(binding) {
             downloadImage(
                 link = BASE_IMAGE_URL_BACKDROP + response.backdropPath,
@@ -141,9 +144,9 @@ class FragmentMoviesDetails : BaseFragment() {
             when {
                 ContextCompat.checkSelfPermission(
                     it,
-                    Manifest.permission.READ_CALENDAR
-                ) == PackageManager.PERMISSION_GRANTED  -> onCalendarPermissionGranted(view = view)
-                shouldShowRequestPermissionRationale(Manifest.permission.READ_CALENDAR) -> showDialog(
+                    Manifest.permission.WRITE_CALENDAR
+                ) == PackageManager.PERMISSION_GRANTED -> onCalendarPermissionGranted(view = view)
+                shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR) -> showDialog(
                     message = getString(R.string.message_permission_dialog),
                     action = {
                         isRationalShown = true
@@ -159,7 +162,7 @@ class FragmentMoviesDetails : BaseFragment() {
                             )
                         )
                     })
-                else -> requestCalendarPermission().also { Log.d("EEE","TEST") }
+                else -> requestCalendarPermission()
             }
         }
     }
@@ -199,7 +202,6 @@ class FragmentMoviesDetails : BaseFragment() {
             )
         }
         showDatePicker(view = view)
-        showTimePicker(view = view)
     }
 
     private fun onCalendarPermissionNotGranted() =
@@ -226,25 +228,34 @@ class FragmentMoviesDetails : BaseFragment() {
 
     private fun requestCalendarPermission() {
         context?.let {
-            requestPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
             requestPermissionLauncher.launch(Manifest.permission.WRITE_CALENDAR)
         }
     }
 
-    private fun showTimePicker(view: View) {
+    private fun showTimePicker(view: View, year: Int, month: Int, date: Int) {
         val c = Calendar.getInstance()
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
 
         val timePickerDialog = TimePickerDialog(
             requireContext(),
-            { p0, p1, p2 ->
+            { p0, hourOfDay, minute ->
+
                 Snackbar.make(
                     view,
-                    "you choosed $p1:$p2",
-                    Snackbar.LENGTH_SHORT
+                    "you choosed $hourOfDay:$minute",
+                    Snackbar.LENGTH_LONG
                 )
                     .show()
+
+                viewModel?.writeDataCalendar(
+                    year = year,
+                    month = month,
+                    date = date,
+                    hourOfDay = hourOfDay,
+                    minute = minute,
+                    movie = responseMovie
+                )
             },
             hour,
             minute,
@@ -262,13 +273,14 @@ class FragmentMoviesDetails : BaseFragment() {
 
         val datePickerDialog = DatePickerDialog(
             requireContext(),
-            { p0, p1, p2, p3 ->
+            { p0, year, month, date ->
                 Snackbar.make(
                     view,
-                    "you choosed $p3/$p2/$p1",
-                    Snackbar.LENGTH_SHORT
+                    "you choosed $year/$month/$date",
+                    Snackbar.LENGTH_LONG
                 )
                     .show()
+                showTimePicker(view = view, year = year, month = month, date = date)
             },
             year,
             month,
@@ -276,6 +288,7 @@ class FragmentMoviesDetails : BaseFragment() {
         )
 
         datePickerDialog.show()
+
     }
 
     private fun savePreferencesData() {

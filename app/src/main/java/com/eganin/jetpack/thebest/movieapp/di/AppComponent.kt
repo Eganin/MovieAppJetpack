@@ -40,7 +40,7 @@ class AppComponent(applicationContext: Context) {
 
     private val connection = isConnection(context = applicationContext)
 
-    val notificationManager = MovieNotificationsManager(context = applicationContext)
+    private val notificationManager = MovieNotificationsManager(context = applicationContext)
 
     fun getMoviesViewModel(
         activity: MovieDetailsActivity? = null,
@@ -73,7 +73,7 @@ class AppComponent(applicationContext: Context) {
             fragment,
             MovieDetailsViewModel.Factory(
                 repository = movieDetailsRepository,
-                isConnection = connection
+                isConnection = connection,
             )
         )[MovieDetailsViewModel::class.java]
     }
@@ -81,9 +81,12 @@ class AppComponent(applicationContext: Context) {
     fun getMovieRepository() = movieRepository
 
     fun getSharedPreferencesMovieType() = sharedPreferencesMovieType
+
     fun getSharedPreferencesRationalShown() = sharedPreferencesRationalShown
 
     fun getWorkerRepository() = workerRepository
+
+    fun getNotificationManager()= notificationManager
 
     companion object {
         private const val SHARED_PREFERENCES_TAG_MOVIE = "MOVIE_CHOICE"

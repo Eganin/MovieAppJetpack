@@ -26,7 +26,7 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
         val typeMovieString = componentDi.getSharedPreferencesMovieType()
             .getString(AppComponent.TOKEN_CHOICE_MOVIE, TypeMovies.POPULAR.value)
 
-        val notificationsManager = componentDi.notificationManager
+        val notificationsManager = componentDi.getNotificationManager()
 
         return try {
             coroutineScope.launch {
