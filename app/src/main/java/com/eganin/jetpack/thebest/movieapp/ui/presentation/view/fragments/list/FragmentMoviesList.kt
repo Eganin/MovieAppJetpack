@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,7 +51,6 @@ class FragmentMoviesList : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        viewModel?.firstLaunch = false
     }
 
     override fun onDetach() {

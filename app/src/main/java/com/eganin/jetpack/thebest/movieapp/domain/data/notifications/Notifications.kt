@@ -54,7 +54,7 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
                     Intent(context, MovieDetailsActivity::class.java)
                         .setAction(Intent.ACTION_VIEW)
                         .setData(uri),
-                    PendingIntent.FLAG_CANCEL_CURRENT
+                    PendingIntent.FLAG_UPDATE_CURRENT
                 )
             )
             .setWhen(System.currentTimeMillis())
@@ -66,31 +66,6 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
         )
     }
 
-    fun showTestNotification(){
-        val uri = "https://android.movieapp/movies/616037".toUri()
-        val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_MOVIES)
-            .setContentTitle("movie.title")
-            .setContentText("movie.originalTitle")
-            .setSmallIcon(R.drawable.ic_baseline_movie_24)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(
-                PendingIntent.getActivity(
-                    context,
-                    REQUEST_CONTENT_MOVIES,
-                    Intent(context, MovieDetailsActivity::class.java)
-                        .setAction(Intent.ACTION_VIEW)
-                        .setData(uri),
-                    PendingIntent.FLAG_MUTABLE
-                )
-            )
-            .setWhen(System.currentTimeMillis())
-
-        notificationManager.notify(
-            MOVIE_TAG,
-            616037,
-            notificationBuilder.build()
-        )
-    }
 
     override fun dismissNotification(id: Int) = notificationManager.cancel(MOVIE_TAG, id)
 

@@ -75,7 +75,6 @@ class MoviesListViewModel(
             if (isQueryRequest) {
                 downloadSearchMoviesList(query = queryText)
             } else {
-                //if(firstLaunch) downloadUpdateDataFromDB()
                 downloadMovieList()
             }
             stopLoading()
@@ -153,7 +152,7 @@ class MoviesListViewModel(
                 deleteAllDataDB()
             }
         }
-        //firstLaunch = true
+        firstLaunch = true
         page = 1
         _changeMovies.value = typeMovies.value
         saveChoiceMovie()

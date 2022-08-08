@@ -30,7 +30,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         setContentView(view)
         setupUI()
         startWorker()
-        handleIntent(intent=intent)
+        if(savedInstanceState == null) handleIntent(intent=intent)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -43,8 +43,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
             Intent.ACTION_VIEW -> {
                 val id = intent.data?.lastPathSegment?.toIntOrNull()
                 id?.let {
-                    Log.d("EEE",id.toString())
-                    openMovieDetails(movieId = it)
+                    openMovieDetails(movieId = it,isNotification = true)
                 }
             }
         }
@@ -80,8 +79,8 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
             navigate(R.id.fragmentMoviesList)
         }
 
-    override fun openMovieDetails(movieId: Int) {
-        viewModel.firstLaunch = false
+    override fun openMovieDetails(movieId: Int,isNotification: Boolean) {
+        viewModel.firstLaunch = isNotification
         val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movieId)
         openNewFragment {
             navigate(R.id.fragmentMoviesDetails, bundle)
