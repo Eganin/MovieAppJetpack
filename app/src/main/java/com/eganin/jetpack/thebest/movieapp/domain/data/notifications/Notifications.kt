@@ -3,7 +3,8 @@ package com.eganin.jetpack.thebest.movieapp.domain.data.notifications
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import android.util.Log
+import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -35,8 +36,10 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
         }
     }
 
+    @WorkerThread
     override fun showNotification(movie: Movie) {
-        val uri: Uri = "https://android.movieapp/movies/${movie.id}".toUri()
+        Log.d("EEE","NOTIFICATION")
+        val uri = "https://android.movieapp/movies/${movie.id}".toUri()
         val intent = Intent(context, MovieDetailsActivity::class.java)
             .setAction(Intent.ACTION_VIEW)
             .setData(uri)
@@ -44,7 +47,7 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
             context,
             REQUEST_CONTENT,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_CANCEL_CURRENT
         )
 
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_NEW_NOTIFICATIONS)
@@ -53,6 +56,8 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
             .setSmallIcon(R.drawable.ic_baseline_movie_24)
             .setPriority(IMPORTANCE_HIGH)
             .setContentIntent(pendingIntent)
+            .setWhen(System.currentTimeMillis())
+
 
         notificationManagerCompat.notify(
             TAG,
@@ -65,7 +70,7 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
 
     companion object {
         private const val CHANNEL_NEW_NOTIFICATIONS = "new_notifications"
-        private const val REQUEST_CONTENT = 1
+        private const val REQUEST_CONTENT = 80
         private const val TAG = "movie_notification"
     }
 }

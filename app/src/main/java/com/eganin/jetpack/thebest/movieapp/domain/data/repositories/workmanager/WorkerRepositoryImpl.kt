@@ -15,8 +15,8 @@ class WorkerRepositoryImpl : WorkerRepository {
 
     override val request: WorkRequest = PeriodicWorkRequest.Builder(
         MyWorkerMovie::class.java,
-        8,
-        TimeUnit.HOURS
+        16,
+        TimeUnit.MINUTES
     ).setConstraints(constrains)
         .build()
 }

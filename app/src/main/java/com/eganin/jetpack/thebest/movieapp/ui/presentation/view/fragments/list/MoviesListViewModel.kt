@@ -9,6 +9,7 @@ import com.eganin.jetpack.thebest.movieapp.di.AppComponent.Companion.TOKEN_CHOIC
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
+import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovie
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovieEntity
@@ -21,6 +22,7 @@ class MoviesListViewModel(
     private val movieRepository: MovieRepository,
     private val isConnection: Boolean,
     private val sharedPreferences: SharedPreferences,
+    val notificationsManager: MovieNotificationsManager,
 ) : ViewModel() {
 
     var isQueryRequest = false
@@ -57,6 +59,10 @@ class MoviesListViewModel(
 
     var isActiveDownload = false
 
+    init {
+        notificationsManager.init()
+    }
+
     fun downloadMovies(isAdapter: Boolean = false) {
         viewModelScope.launch(exceptionHandler) {
             isActiveDownload = true
@@ -69,7 +75,7 @@ class MoviesListViewModel(
             if (isQueryRequest) {
                 downloadSearchMoviesList(query = queryText)
             } else {
-                if(firstLaunch) downloadUpdateDataFromDB()
+                //if(firstLaunch) downloadUpdateDataFromDB()
                 downloadMovieList()
             }
             stopLoading()
@@ -220,6 +226,7 @@ class MoviesListViewModel(
         private val repository: MovieRepository,
         private val isConnection: Boolean,
         private val sharedPreferences: SharedPreferences,
+        private val notificationsManager: MovieNotificationsManager,
     ) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -227,6 +234,7 @@ class MoviesListViewModel(
                 movieRepository = repository,
                 isConnection = isConnection,
                 sharedPreferences = sharedPreferences,
+                notificationsManager=notificationsManager
             ) as T
         }
     }

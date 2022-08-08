@@ -6,6 +6,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.di.AppComponent
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovieEntity
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.TypeMovies
 import kotlinx.coroutines.*
@@ -24,6 +25,8 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
         val typeMovieString = componentDi.getSharedPreferences()
             .getString(AppComponent.TOKEN_CHOICE_MOVIE, TypeMovies.POPULAR.value)
 
+        val notificationsManager = componentDi.notificationManager
+
         return try {
             coroutineScope.launch {
                 val responseMovies = repository.downloadMovies(
@@ -34,12 +37,16 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
                 val genres = repository.downloadGenres() ?: emptyList()
                 repository.deleteAllMovies()
                 repository.insertMovies(movies = responseMovies.map { it.toMovieEntity(genres = genres) })
+                notificationsManager.showNotification(movie = getTorRatedMovie(listMovie = responseMovies))
             }
             Result.success()
         } catch (e: Exception) {
             Result.failure()
         }
     }
+
+    private fun getTorRatedMovie(listMovie: List<Movie>) = listMovie.maxBy { it.voteAverage!! }
+
 
     private fun getTypeMovie(value: String) = when (value) {
         "Top Rated" -> TypeMovies.TOP_RATED

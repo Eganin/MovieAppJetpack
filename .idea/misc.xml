@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_animation_play_outline.xml" value="0.1845" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_baseline_cloud_download_24.xml" value="0.4645" />
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_baseline_movie_24.xml" value="0.1845" />
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1845" />
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_baseline_sms_failed_24.xml" value="0.1845" />
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_calendar_star_outline.xml" value="0.1845" />
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_combined_shape.xml" value="0.1845" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_like.xml" value="0.1245" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_like_unable.xml" value="0.1245" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_mask.xml" value="0.1765" />

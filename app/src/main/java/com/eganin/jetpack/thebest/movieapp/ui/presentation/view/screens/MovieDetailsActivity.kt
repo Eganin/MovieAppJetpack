@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.os.bundleOf
@@ -29,7 +30,24 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         startWorker()
     }
 
-    private fun startWorker(){
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.let { handleIntent(it) }
+    }
+
+    private fun handleIntent(intent: Intent) {
+        when (intent.action) {
+            Intent.ACTION_VIEW -> {
+                val id = intent.data?.lastPathSegment?.toIntOrNull()
+                id?.let {
+                    openMovieDetails(movieId = it)
+                }
+            }
+        }
+    }
+
+
+    private fun startWorker() {
         val repository = (applicationContext as MovieApp).myComponent.getWorkerRepository()
         WorkManager.getInstance(this).enqueue(repository.request)
     }

@@ -5,6 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
+import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
@@ -35,28 +36,28 @@ class AppComponent(applicationContext: Context) {
 
     private val connection = isConnection(context = applicationContext)
 
+    val notificationManager = MovieNotificationsManager(context = applicationContext)
+
     fun getMoviesViewModel(
         activity: MovieDetailsActivity? = null,
         fragment: Fragment? = null
     ): MoviesListViewModel? {
+        val viewModelFactory = MoviesListViewModel.Factory(
+            repository = movieRepository,
+            isConnection = connection,
+            sharedPreferences = sharedPreferences,
+            notificationsManager=notificationManager,
+        )
         activity?.let {
             return ViewModelProvider(
                 activity,
-                MoviesListViewModel.Factory(
-                    repository = movieRepository,
-                    isConnection = connection,
-                    sharedPreferences = sharedPreferences
-                )
+                viewModelFactory
             )[MoviesListViewModel::class.java]
         }
         fragment?.let {
             return ViewModelProvider(
                 fragment,
-                MoviesListViewModel.Factory(
-                    repository = movieRepository,
-                    isConnection = connection,
-                    sharedPreferences = sharedPreferences
-                )
+                viewModelFactory
             )[MoviesListViewModel::class.java]
         }
         return null
