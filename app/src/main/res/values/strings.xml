@@ -28,4 +28,10 @@
     <string name="start_typing_in_a_search_bar_to_find_a_movie">Start typing in a search bar to find a movie</string>
     <string name="name_channel_notifications">movies</string>
     <string name="channel_description_notification">shows the film with the highest rating</string>
+    <string name="calendar_permission_granted_label">Calendar permission granted</string>
+    <string name="calendar_permission_not_granted_label">Calendar permission not granted</string>
+    <string name="message_permission_dialog">To continue please grant access to calendar</string>
+    <string name="positive_button_label">OK</string>
+    <string name="negative_button_label">Cancel</string>
+    <string name="message_denied_permission">This feature is not available without calendar permissions. Open app settings?</string>
 </resources>

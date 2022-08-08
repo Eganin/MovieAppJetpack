@@ -23,8 +23,12 @@ class AppComponent(applicationContext: Context) {
 
     private val defaultLanguage = Locale.getDefault().language
     val database = MovieDatabase.create(applicationContext)
-    private val sharedPreferences =
-        applicationContext.getSharedPreferences(SHARED_PREFERENCES_TAG, MODE_PRIVATE)
+    private val sharedPreferencesMovieType =
+        applicationContext.getSharedPreferences(SHARED_PREFERENCES_TAG_MOVIE, MODE_PRIVATE)
+
+    private val sharedPreferencesRationalShown = applicationContext.getSharedPreferences(
+        SHARED_PREFERENCES_TAG_RATIONAL_SHOWN, MODE_PRIVATE
+    )
 
     private val movieRepository: MovieRepository =
         MovieRepositoryImpl(language = defaultLanguage, database = database)
@@ -32,7 +36,7 @@ class AppComponent(applicationContext: Context) {
         language = defaultLanguage,
         database = database
     )
-    private val workerRepository : WorkerRepository = WorkerRepositoryImpl()
+    private val workerRepository: WorkerRepository = WorkerRepositoryImpl()
 
     private val connection = isConnection(context = applicationContext)
 
@@ -45,8 +49,8 @@ class AppComponent(applicationContext: Context) {
         val viewModelFactory = MoviesListViewModel.Factory(
             repository = movieRepository,
             isConnection = connection,
-            sharedPreferences = sharedPreferences,
-            notificationsManager=notificationManager,
+            sharedPreferences = sharedPreferencesMovieType,
+            notificationsManager = notificationManager,
         )
         activity?.let {
             return ViewModelProvider(
@@ -76,12 +80,14 @@ class AppComponent(applicationContext: Context) {
 
     fun getMovieRepository() = movieRepository
 
-    fun getSharedPreferences() = sharedPreferences
+    fun getSharedPreferencesMovieType() = sharedPreferencesMovieType
+    fun getSharedPreferencesRationalShown() = sharedPreferencesRationalShown
 
     fun getWorkerRepository() = workerRepository
 
     companion object {
-        private const val SHARED_PREFERENCES_TAG = "MOVIE_CHOICE"
+        private const val SHARED_PREFERENCES_TAG_MOVIE = "MOVIE_CHOICE"
+        private const val SHARED_PREFERENCES_TAG_RATIONAL_SHOWN = "MOVIE_CHOICE"
         const val TOKEN_CHOICE_MOVIE = "TOKEN_CHOICE_MOVIE"
     }
 

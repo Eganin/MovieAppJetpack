@@ -20,9 +20,10 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
         })
 
     override fun doWork(): Result {
+        Log.d("EEE","WORKER")
         val componentDi = (context.applicationContext as MovieApp).myComponent
         val repository = componentDi.getMovieRepository()
-        val typeMovieString = componentDi.getSharedPreferences()
+        val typeMovieString = componentDi.getSharedPreferencesMovieType()
             .getString(AppComponent.TOKEN_CHOICE_MOVIE, TypeMovies.POPULAR.value)
 
         val notificationsManager = componentDi.notificationManager

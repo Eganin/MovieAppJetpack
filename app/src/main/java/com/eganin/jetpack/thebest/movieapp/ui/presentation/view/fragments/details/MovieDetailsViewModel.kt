@@ -60,6 +60,10 @@ class MovieDetailsViewModel(
         repository.insertCredits(credits = credits)
     }
 
+    fun writeDataCalendar(){
+
+    }
+
     class Factory(
         private val repository: MovieDetailsRepository,
         private val isConnection: Boolean
