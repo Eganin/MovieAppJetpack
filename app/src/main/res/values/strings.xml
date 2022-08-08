@@ -26,4 +26,6 @@
     <string name="default_list_type_label">Popular</string>
     <string name="enter_text_hint_label">Enter text</string>
     <string name="start_typing_in_a_search_bar_to_find_a_movie">Start typing in a search bar to find a movie</string>
+    <string name="name_channel_notifications">movies</string>
+    <string name="channel_description_notification">shows the film with the highest rating</string>
 </resources>

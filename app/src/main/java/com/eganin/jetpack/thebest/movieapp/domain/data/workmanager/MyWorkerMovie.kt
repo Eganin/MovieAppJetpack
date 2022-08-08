@@ -32,7 +32,6 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
                 ).results ?: emptyList()
 
                 val genres = repository.downloadGenres() ?: emptyList()
-                Log.d("EEE","END WORK MANAGER $responseMovies")
                 repository.deleteAllMovies()
                 repository.insertMovies(movies = responseMovies.map { it.toMovieEntity(genres = genres) })
             }
