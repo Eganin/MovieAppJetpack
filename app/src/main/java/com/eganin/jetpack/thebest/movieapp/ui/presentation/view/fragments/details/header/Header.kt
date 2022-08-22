@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header
 
+import android.Manifest
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -16,23 +18,47 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import coil.compose.AsyncImage
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.isPermanentlyDenied
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.AdultColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.TopMenuColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.White
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun Header(adult: Boolean, imagePath: String) {
+    val permissionsState =
+        rememberMultiplePermissionsState(permissions = listOf(Manifest.permission.WRITE_CALENDAR))
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(key1 = lifecycleOwner, effect = {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                permissionsState.launchMultiplePermissionRequest()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    })
+
     Box {
         AsyncImage(
-            model = (MoviesApi.BASE_IMAGE_URL_BACKDROP+ imagePath),
+            model = (MoviesApi.BASE_IMAGE_URL_BACKDROP + imagePath),
             contentScale = ContentScale.Crop,
             placeholder = painterResource(R.drawable.ic_baseline_cloud_download_24),
             fallback = painterResource(R.drawable.ic_baseline_sms_failed_24),
@@ -72,7 +98,7 @@ fun Header(adult: Boolean, imagePath: String) {
                 .padding(start = 16.dp, bottom = 26.dp)
         ) {
             Text(
-                text = if(adult) "18+" else "12+",
+                text = if (adult) "18+" else "12+",
                 modifier = Modifier
                     .background(AdultColor)
                     .padding(5.dp),
@@ -86,6 +112,7 @@ fun Header(adult: Boolean, imagePath: String) {
                 .align(Alignment.BottomStart)
                 .padding(start = 65.dp, bottom = 23.dp)
         ) {
+
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_calendar_month_24),
                 contentDescription = "Calendar for scheduled viewing",
@@ -93,9 +120,30 @@ fun Header(adult: Boolean, imagePath: String) {
                     .align(Alignment.BottomStart)
                     .background(AdultColor)
                     .padding(5.dp)
-                    .clickable { },
+                    .clickable {
+                        permissionsState.permissions.forEach { perm ->
+                            when (perm.permission) {
+                                Manifest.permission.WRITE_CALENDAR -> {
+                                    when {
+                                        perm.hasPermission -> {
+
+                                        }
+                                        perm.shouldShowRationale -> {
+
+                                        }
+                                        perm.isPermanentlyDenied() -> {
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
             )
         }
 
     }
 }
+
+
+
