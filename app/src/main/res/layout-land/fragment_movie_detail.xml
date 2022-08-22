@@ -249,19 +249,17 @@
                 android:layout_height="wrap_content"/>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:orientation="horizontal"
-                android:id="@+id/actors_recycler_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/compose_actors"
                 android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginTop="@dimen/actors_recycler_view_margin_top"
                 android:layout_marginEnd="@dimen/default_margin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cast_title"
-                tools:listitem="@layout/view_holder_actor"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

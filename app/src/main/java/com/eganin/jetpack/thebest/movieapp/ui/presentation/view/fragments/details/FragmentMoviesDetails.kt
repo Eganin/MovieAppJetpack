@@ -17,19 +17,38 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.compose.AsyncImage
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.FragmentMovieDetailBinding
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi.Companion.BASE_IMAGE_URL_BACKDROP
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.downloadImage
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.BaseFragment
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.Greeting
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity.Companion.SAVE_MOVIE_DATA_KEY
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.MovieAppTheme
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
@@ -39,7 +58,6 @@ class FragmentMoviesDetails : BaseFragment() {
     private val idMovie: Int? by lazy { arguments?.getInt(SAVE_MOVIE_DATA_KEY) }
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding get() = _binding!!
-    private val actorsAdapter = ActorAdapter()
     private var viewModel: MovieDetailsViewModel? = null
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private var isRationalShown = false
@@ -90,15 +108,53 @@ class FragmentMoviesDetails : BaseFragment() {
 
 
     private fun setupUI(view: View) {
-        setupRecyclerView()
+        binding.composeActors.setContent {
+            ComposeListActors()
+        }
         setupListeners(view)
         observeData()
         idMovie?.let { viewModel?.downloadDetailsData(id = it) }
     }
 
+    @Composable
+    private fun ComposeListActors(listActors: List<CastItem> = emptyList()) {
+        LazyRow {
+            listActors.map { actorInfo ->
+                item {
+                    ActorCell(info = actorInfo)
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun ActorCell(info: CastItem) {
+        Card(
+            shape = RoundedCornerShape(4.dp),
+            backgroundColor = Color(0xFF191926),
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Column {
+                AsyncImage(
+                    modifier = Modifier.size(80.dp),
+                    model = (MoviesApi.BASE_IMAGE_URL + info.profilePath),
+                    contentDescription = stringResource(id = R.string.image_actor_description),
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.ic_baseline_cloud_download_24),
+                    fallback = painterResource(R.drawable.ic_baseline_sms_failed_24)
+                )
+                Text(text = info.name ?: "", color = Color.White, modifier = Modifier.width(80.dp))
+            }
+        }
+    }
+
     private fun observeData() {
         viewModel?.detailsData?.observe(this.viewLifecycleOwner, this::updateInfoMovie)
-        viewModel?.castData?.observe(this.viewLifecycleOwner, this::updateAdapterActors)
+        viewModel?.castData?.observe(this.viewLifecycleOwner) {
+            binding.composeActors.setContent {
+                ComposeListActors(listActors = it)
+            }
+        }
         viewModel?.stateData?.observe(this.viewLifecycleOwner) {
             setState(state = it, progressBar = binding.progressBarDetails)
         }
@@ -124,8 +180,6 @@ class FragmentMoviesDetails : BaseFragment() {
         }
     }
 
-    private fun updateAdapterActors(listActors: List<CastItem>) =
-        actorsAdapter.bindActors(actors = listActors)
 
     private fun setupListeners(view: View) {
         binding.backBtb?.setOnClickListener {
@@ -165,14 +219,6 @@ class FragmentMoviesDetails : BaseFragment() {
                     })
                 else -> requestCalendarPermission()
             }
-        }
-    }
-
-    private fun setupRecyclerView() {
-        binding.actorsRecyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = actorsAdapter
         }
     }
 
@@ -314,7 +360,7 @@ class FragmentMoviesDetails : BaseFragment() {
     }
 
     companion object {
-        private const val KEY_LOCATION_PERMISSION_RATIONAL_SHOWN =
+        const val KEY_LOCATION_PERMISSION_RATIONAL_SHOWN =
             "KEY_LOCATION_PERMISSION_RATIONAL_SHOWN"
     }
 

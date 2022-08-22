@@ -35,4 +35,5 @@
     <string name="negative_button_label">Cancel</string>
     <string name="message_denied_permission">This feature is not available without calendar permissions. Open app settings?</string>
     <string name="watch_movie_label_calendar">Watching movie</string>
+    <string name="title_activity_main_compose">MainActivityCompose</string>
 </resources>

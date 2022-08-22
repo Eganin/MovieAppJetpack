@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_CALENDAR"/>
-    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:name=".application.MovieApp"
@@ -17,7 +17,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieApp">
         <activity
-            android:name="com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity"
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.MovieApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.presentation.view.screens.MovieDetailsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +37,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -36,6 +48,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

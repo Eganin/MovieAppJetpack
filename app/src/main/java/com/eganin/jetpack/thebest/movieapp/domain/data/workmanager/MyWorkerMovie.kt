@@ -38,7 +38,7 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
                 val genres = repository.downloadGenres() ?: emptyList()
                 repository.deleteAllMovies()
                 repository.insertMovies(movies = responseMovies.map { it.toMovieEntity(genres = genres) })
-                notificationsManager.showNotification(movie = getTorRatedMovie(listMovie = responseMovies))
+                notificationsManager.showNotification(movie = getTorRatedMovie(listMovie = responseMovies)!!)
             }
             Result.success()
         } catch (e: Exception) {
@@ -46,7 +46,7 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
         }
     }
 
-    private fun getTorRatedMovie(listMovie: List<Movie>) = listMovie.maxBy { it.voteAverage!! }
+    private fun getTorRatedMovie(listMovie: List<Movie>) = listMovie.maxByOrNull { it.voteAverage!! }
 
 
     private fun getTypeMovie(value: String) = when (value) {

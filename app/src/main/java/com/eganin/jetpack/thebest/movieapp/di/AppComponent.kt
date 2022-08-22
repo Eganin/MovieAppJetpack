@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
@@ -32,13 +33,13 @@ class AppComponent(applicationContext: Context) {
 
     private val movieRepository: MovieRepository =
         MovieRepositoryImpl(language = defaultLanguage, database = database)
-    private val movieDetailsRepository: MovieDetailsRepository = MovieDetailsRepositoryImpl(
+    val movieDetailsRepository: MovieDetailsRepository = MovieDetailsRepositoryImpl(
         language = defaultLanguage,
         database = database
     )
     private val workerRepository: WorkerRepository = WorkerRepositoryImpl()
 
-    private val connection = isConnection(context = applicationContext)
+    val connection = isConnection(context = applicationContext)
 
     private val notificationManager = MovieNotificationsManager(context = applicationContext)
 
@@ -77,6 +78,7 @@ class AppComponent(applicationContext: Context) {
             )
         )[MovieDetailsViewModel::class.java]
     }
+
 
     fun getMovieRepository() = movieRepository
 
