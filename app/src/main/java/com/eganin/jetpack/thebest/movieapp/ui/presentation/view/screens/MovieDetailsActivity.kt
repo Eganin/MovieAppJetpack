@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -14,6 +15,7 @@ import com.eganin.jetpack.thebest.movieapp.databinding.ActivityMainBinding
 import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.routing.Router
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetails
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 
 class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPoster {
@@ -103,7 +105,10 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
     }
 
     override fun clickPoster(idMovie: Int) {
-        openMovieDetails(movieId = idMovie)
+        setContent {
+            MovieDetails()
+        }
+        //openMovieDetails(movieId = idMovie)
     }
 
     companion object {
