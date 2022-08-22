@@ -360,7 +360,7 @@ class FragmentMoviesDetails : BaseFragment() {
     }
 
     companion object {
-        private const val KEY_LOCATION_PERMISSION_RATIONAL_SHOWN =
+        const val KEY_LOCATION_PERMISSION_RATIONAL_SHOWN =
             "KEY_LOCATION_PERMISSION_RATIONAL_SHOWN"
     }
 

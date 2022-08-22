@@ -22,7 +22,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Cas
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.White
 
 @Composable
-fun Casts() {
+fun Casts(listActors: List<CastItem>) {
     Column(
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 24.dp)
@@ -32,12 +32,12 @@ fun Casts() {
             text = "Cast",
             style = TextStyle(color = White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
         )
-        ListActors()
+        ListActors(listActors = listActors)
     }
 }
 
 @Composable
-private fun ListActors(listActors: List<CastItem> = emptyList()) {
+private fun ListActors(listActors: List<CastItem>) {
     LazyRow {
         listActors.map { actorInfo ->
             item {

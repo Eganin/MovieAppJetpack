@@ -1,12 +1,9 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details
 
-import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Intent
 import android.provider.CalendarContract
 import android.util.Log
 import androidx.lifecycle.*
-import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
@@ -55,7 +52,7 @@ class MovieDetailsViewModel(
             it.movieId = id
         }
         _detailsData.value = resultMovieDetails
-        _castData.value = resultCasts
+        _castData.value = resultCasts ?: emptyList()
         resultCasts?.let { saveDataDB(response = resultMovieDetails, credits = it) }
     }
 

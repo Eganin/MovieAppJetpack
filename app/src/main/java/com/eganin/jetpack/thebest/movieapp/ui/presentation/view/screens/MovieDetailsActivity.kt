@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -32,7 +33,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
         setContentView(view)
         setupUI()
         startWorker()
-        if(savedInstanceState == null) handleIntent(intent=intent)
+        if (savedInstanceState == null) handleIntent(intent = intent)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -45,7 +46,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
             Intent.ACTION_VIEW -> {
                 val id = intent.data?.lastPathSegment?.toIntOrNull()
                 id?.let {
-                    openMovieDetails(movieId = it,isNotification = true)
+                    openMovieDetails(movieId = it, isNotification = true)
                 }
             }
         }
@@ -81,7 +82,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
             navigate(R.id.fragmentMoviesList)
         }
 
-    override fun openMovieDetails(movieId: Int,isNotification: Boolean) {
+    override fun openMovieDetails(movieId: Int, isNotification: Boolean) {
         viewModel.firstLaunch = isNotification
         val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movieId)
         openNewFragment {
@@ -106,9 +107,13 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
 
     override fun clickPoster(idMovie: Int) {
         setContent {
-            MovieDetails()
+            val appComponent = (LocalContext.current.applicationContext as MovieApp).myComponent
+            MovieDetails(
+                id=idMovie,
+                repository = appComponent.movieDetailsRepository,
+                connection = appComponent.connection
+            )
         }
-        //openMovieDetails(movieId = idMovie)
     }
 
     companion object {

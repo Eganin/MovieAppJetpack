@@ -11,24 +11,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header.Header
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.TagLineColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.UnableColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.White
 
 @Composable
-fun MovieInfo(){
-    Title()
-    TagLine()
+fun MovieInfo(
+    title: String?,
+    tagLine: String?,
+    rating: Int?,
+    countReviews: Int?,
+    description: String?
+) {
+    title?.let { Title(title = it) }
+    tagLine?.let { TagLine(tags = it) }
     Row {
-        RatingBar()
-        CounterReviews()
+        rating?.let { RatingBar(rating = it) }
+        countReviews?.let { CounterReviews(countReviews = it) }
     }
-    StoryLine()
+    description?.let { StoryLine(description = it) }
 }
 
 @Composable
-fun Title(title: String = "Avengers the game") {
+fun Title(title: String) {
     Text(
         text = title,
         modifier = Modifier
@@ -39,7 +44,7 @@ fun Title(title: String = "Avengers the game") {
 }
 
 @Composable
-fun TagLine(tags: String = "Action,Adventure,Fantasy") {
+fun TagLine(tags: String) {
     Text(
         text = tags,
         style = TextStyle(color = TagLineColor),
@@ -48,7 +53,7 @@ fun TagLine(tags: String = "Action,Adventure,Fantasy") {
 }
 
 @Composable
-fun RatingBar(rating: Int = 4) {
+fun RatingBar(rating: Int) {
     val modifierStars = Modifier
         .padding(start = 6.dp, top = 8.dp)
         .height(12.dp)
@@ -65,7 +70,7 @@ fun RatingBar(rating: Int = 4) {
 }
 
 @Composable
-fun CounterReviews(countReviews: Int = 125) {
+fun CounterReviews(countReviews: Int) {
     Text(
         text = "$countReviews REVIEWS",
         modifier = Modifier.padding(12.dp),
@@ -74,7 +79,7 @@ fun CounterReviews(countReviews: Int = 125) {
 }
 
 @Composable
-fun StoryLine(description: String = "After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble") {
+fun StoryLine(description: String) {
     Column(
         modifier = Modifier
             .padding(top = 23.dp, start = 16.dp, end = 16.dp)
