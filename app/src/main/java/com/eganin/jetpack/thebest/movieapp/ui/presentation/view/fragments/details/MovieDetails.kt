@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details
 
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,7 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header.Header
@@ -28,6 +31,13 @@ fun MovieDetails(id: Int, repository: MovieDetailsRepository, connection: Boolea
 
     val movieDetailsData by movieDetailsViewModel.detailsData.observeAsState()
     val listActors by movieDetailsViewModel.castData.observeAsState()
+    val dataCalendar by movieDetailsViewModel.dataCalendar.observeAsState()
+
+    if (dataCalendar != null){
+        dataCalendar!!.flags = FLAG_ACTIVITY_NEW_TASK
+        LocalContext.current.applicationContext.startActivity(dataCalendar)
+    }
+
     LazyColumn(
         modifier = Modifier
             .background(BackgroundColor)
