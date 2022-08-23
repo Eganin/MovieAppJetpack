@@ -1,16 +1,20 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header.calendar
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarResult
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -23,11 +27,6 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.detail
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.AdultColor
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
-import com.vanpra.composematerialdialogs.datetime.time.timepicker
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -39,13 +38,30 @@ fun CalendarView(
     scaffoldState: ScaffoldState
 ) {
 
+    /*
+    showDatePicker,showTimePicker - переменные для показа dialog picker
+     */
     val showDatePicker = remember { mutableStateOf(false) }
     val showTimePicker = remember { mutableStateOf(false) }
+    /*
+    date,time - переменные для сохранения даты и времени
+     */
     val date = remember { mutableStateOf(LocalDate.now()) }
     val time = remember { mutableStateOf(LocalTime.now()) }
+    /*
+    showSnackBarDate,showSnackBarTime-показ SnackBar из picker dialog
+     */
     val showSnackBarDate = remember { mutableStateOf(false) }
     val showSnackBarTime = remember { mutableStateOf(false) }
-
+    val showAlertDialog = remember { mutableStateOf(false) }
+    val textMessageAlertDialog = remember { mutableStateOf("") }
+    /*
+    launchSettings-изменяемая переменная для старта активити настроек из @Composable ShowAlertDialog
+    actionTypeAlertDialog-для вызова действия из AlertDialog
+     */
+    val launchSettings = remember { mutableStateOf(false) }
+    val actionTypeAlertDialog =
+        remember { mutableStateOf(AlertDialogActionType.REQUEST_PERMISSIONS) }
 
     val permissionsState =
         rememberMultiplePermissionsState(permissions = listOf(Manifest.permission.WRITE_CALENDAR))
@@ -53,7 +69,8 @@ fun CalendarView(
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(key1 = lifecycleOwner, effect = {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
+            //запрашиваем permission, если активити в ON START
+            if (event == Lifecycle.Event.ON_START) {
                 permissionsState.launchMultiplePermissionRequest()
             }
         }
@@ -64,6 +81,10 @@ fun CalendarView(
         }
     })
 
+    /*
+    если есть permission запускаем DatePicker,
+    а также сохраняем дату и изменяем переменную для показа SnackBar
+     */
     if (showDatePicker.value) DatePicker(
         showDatePicker = showDatePicker,
         showTimePicker = showTimePicker,
@@ -71,6 +92,10 @@ fun CalendarView(
         date.value = it
         showSnackBarDate.value = !showSnackBarDate.value
     }
+    /*
+    после DatePicker запускаем TimePicker
+    сохраняем время и изменяем переменную для показа SnackBar
+     */
     if (showTimePicker.value) TimePicker(
         date = date.value,
         showTimePicker = showTimePicker,
@@ -94,6 +119,31 @@ fun CalendarView(
             ShowSnackBar(text = "you choosed ${hour}/${minute}", scaffoldState = scaffoldState)
         }
     }
+    /*
+    запуск AlertDialog в зависимости от permission
+     */
+    if (showAlertDialog.value) {
+        ShowAlertDialog(
+            textMessage = textMessageAlertDialog.value,
+            permissionsState = permissionsState,
+            actionType = actionTypeAlertDialog.value,
+            showAlertDialog = showAlertDialog,
+            launchSettings = launchSettings,
+        )
+    }
+
+    /*
+    запускаем activity settings из AlertDialog
+     */
+    if (launchSettings.value) {
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.parse("package:" + LocalContext.current.packageName)
+        )
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        LocalContext.current.applicationContext.startActivity(intent)
+        launchSettings.value = !launchSettings.value
+    }
     Image(
         painter = painterResource(id = R.drawable.ic_baseline_calendar_month_24),
         contentDescription = "Calendar for scheduled viewing",
@@ -106,13 +156,31 @@ fun CalendarView(
                         Manifest.permission.WRITE_CALENDAR -> {
                             when {
                                 perm.hasPermission -> {
+                                    //при рекопмоузе показываем DatePicker
                                     showDatePicker.value = !showDatePicker.value
                                 }
                                 perm.shouldShowRationale -> {
-
+                                    /*
+                                    при рекомпоузе показваем AlertDialog
+                                    и сохраняем туда текст и тип действия для запроса permission
+                                     */
+                                    showAlertDialog.value = !showAlertDialog.value
+                                    textMessageAlertDialog.value =
+                                        "To continue please grant access to calendar"
+                                    actionTypeAlertDialog.value =
+                                        AlertDialogActionType.REQUEST_PERMISSIONS
                                 }
                                 perm.isPermanentlyDenied() -> {
-
+                                    /*
+                                    при рекомпоузе показваем AlertDialog
+                                    и сохраняем туда текст и тип действия для запкска
+                                    activity settings
+                                     */
+                                    showAlertDialog.value = !showAlertDialog.value
+                                    textMessageAlertDialog.value =
+                                        "his feature is not available without calendar permissions. Open app settings?"
+                                    actionTypeAlertDialog.value =
+                                        AlertDialogActionType.START_SETTINGS
                                 }
                             }
                         }
@@ -120,86 +188,4 @@ fun CalendarView(
                 }
             },
     )
-}
-
-@Composable
-fun DatePicker(
-    showTimePicker: MutableState<Boolean>,
-    showDatePicker: MutableState<Boolean>,
-    onCLick: (LocalDate) -> Unit
-) {
-    val dialogState = rememberMaterialDialogState()
-    var dateTime: LocalDate? = null
-    MaterialDialog(dialogState = dialogState,
-        buttons = {
-            positiveButton("OK") {
-                showTimePicker.value = !showTimePicker.value
-                dateTime?.let {
-                    onCLick(it)
-                }
-            }
-            negativeButton("CANCEL") {
-                showDatePicker.value = !showDatePicker.value
-            }
-        }) {
-        datepicker { date ->
-            dateTime = date
-        }
-    }
-
-    dialogState.show()
-}
-
-@Composable
-fun TimePicker(
-    date: LocalDate,
-    showTimePicker: MutableState<Boolean>,
-    showDatePicker: MutableState<Boolean>,
-    viewModel: MovieDetailsViewModel,
-    movieInfo: MovieDetailsResponse,
-    onCLick: (LocalTime) -> Unit
-) {
-
-    var localTime: LocalTime? = null
-    val dialogState = rememberMaterialDialogState()
-    MaterialDialog(dialogState = dialogState,
-        buttons = {
-            positiveButton("OK") {
-                showTimePicker.value = !showTimePicker.value
-                showDatePicker.value = !showDatePicker.value
-                localTime?.let { onCLick(it) }
-            }
-            negativeButton("CANCEL") {
-                showTimePicker.value = !showTimePicker.value
-            }
-        }) {
-        timepicker { time ->
-            localTime = time
-            viewModel.writeDataCalendar(
-                year = date.year,
-                month = date.month.value,
-                date = date.dayOfMonth,
-                hourOfDay = time.hour,
-                minute = time.minute,
-                movie = movieInfo,
-            )
-        }
-    }
-
-    dialogState.show()
-}
-
-@SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-fun ShowSnackBar(text: String, scaffoldState: ScaffoldState) {
-    val coroutineScope = rememberCoroutineScope()
-    coroutineScope.launch {
-        val result = scaffoldState.snackbarHostState.showSnackbar(
-            message = text
-        )
-        when(result){
-            SnackbarResult.ActionPerformed-> return@launch
-            SnackbarResult.Dismissed->return@launch
-        }
-    }
 }
