@@ -28,17 +28,20 @@ fun MovieDetails(id: Int, repository: MovieDetailsRepository, connection: Boolea
 
     val movieDetailsData by movieDetailsViewModel.detailsData.observeAsState()
     val listActors by movieDetailsViewModel.castData.observeAsState()
-
     LazyColumn(
         modifier = Modifier
             .background(BackgroundColor)
             .fillMaxSize()
     ) {
         item {
-            Header(
-                adult = movieDetailsData?.adult ?: false,
-                imagePath = movieDetailsData?.backdropPath ?: ""
-            )
+            movieDetailsData?.let {
+                Header(
+                    adult = movieDetailsData?.adult ?: false,
+                    imagePath = movieDetailsData?.backdropPath ?: "",
+                    viewModel = movieDetailsViewModel,
+                    movieInfo = it,
+                )
+            }
         }
         item {
             MovieInfo(
