@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +36,13 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.White
 
 @Composable
-fun Header(adult: Boolean, imagePath: String,viewModel: MovieDetailsViewModel,movieInfo: MovieDetailsResponse) {
+fun Header(
+    adult: Boolean,
+    imagePath: String,
+    viewModel: MovieDetailsViewModel,
+    movieInfo: MovieDetailsResponse,
+    scaffoldState: ScaffoldState
+) {
 
     Box {
         AsyncImage(
@@ -92,7 +100,11 @@ fun Header(adult: Boolean, imagePath: String,viewModel: MovieDetailsViewModel,mo
                 .align(Alignment.BottomStart)
                 .padding(start = 65.dp, bottom = 23.dp)
         ) {
-            CalendarView(viewModel = viewModel,movieInfo=movieInfo)
+            CalendarView(
+                viewModel = viewModel,
+                movieInfo = movieInfo,
+                scaffoldState = scaffoldState
+            )
         }
     }
 }
