@@ -24,6 +24,7 @@ import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetailsViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.isPermanentlyDenied
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.utils.ShowSnackBar
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.AdultColor
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState

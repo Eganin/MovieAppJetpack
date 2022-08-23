@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header.calendar
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.utils
 
 import android.annotation.SuppressLint
 import androidx.compose.material.ScaffoldState
