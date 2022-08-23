@@ -1,9 +1,11 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -24,15 +26,19 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetailsViewModel
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header.calendar.CalendarView
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.AdultColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.TopMenuColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.White
 
 @Composable
-fun Header(adult: Boolean, imagePath: String) {
+fun Header(adult: Boolean, imagePath: String,viewModel: MovieDetailsViewModel,movieInfo: MovieDetailsResponse) {
+
     Box {
         AsyncImage(
-            model = (MoviesApi.BASE_IMAGE_URL_BACKDROP+ imagePath),
+            model = (MoviesApi.BASE_IMAGE_URL_BACKDROP + imagePath),
             contentScale = ContentScale.Crop,
             placeholder = painterResource(R.drawable.ic_baseline_cloud_download_24),
             fallback = painterResource(R.drawable.ic_baseline_sms_failed_24),
@@ -72,7 +78,7 @@ fun Header(adult: Boolean, imagePath: String) {
                 .padding(start = 16.dp, bottom = 26.dp)
         ) {
             Text(
-                text = if(adult) "18+" else "12+",
+                text = if (adult) "18+" else "12+",
                 modifier = Modifier
                     .background(AdultColor)
                     .padding(5.dp),
@@ -86,16 +92,7 @@ fun Header(adult: Boolean, imagePath: String) {
                 .align(Alignment.BottomStart)
                 .padding(start = 65.dp, bottom = 23.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_baseline_calendar_month_24),
-                contentDescription = "Calendar for scheduled viewing",
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .background(AdultColor)
-                    .padding(5.dp)
-                    .clickable { },
-            )
+            CalendarView(viewModel = viewModel,movieInfo=movieInfo)
         }
-
     }
 }
