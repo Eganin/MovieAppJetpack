@@ -1,10 +1,14 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header.calendar
 
 import android.Manifest
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarResult
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -23,15 +27,25 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun CalendarView(viewModel: MovieDetailsViewModel, movieInfo: MovieDetailsResponse) {
+fun CalendarView(
+    viewModel: MovieDetailsViewModel,
+    movieInfo: MovieDetailsResponse,
+    scaffoldState: ScaffoldState
+) {
 
     val showDatePicker = remember { mutableStateOf(false) }
     val showTimePicker = remember { mutableStateOf(false) }
     val date = remember { mutableStateOf(LocalDate.now()) }
+    val time = remember { mutableStateOf(LocalTime.now()) }
+    val showSnackBarDate = remember { mutableStateOf(false) }
+    val showSnackBarTime = remember { mutableStateOf(false) }
+
 
     val permissionsState =
         rememberMultiplePermissionsState(permissions = listOf(Manifest.permission.WRITE_CALENDAR))
@@ -55,6 +69,7 @@ fun CalendarView(viewModel: MovieDetailsViewModel, movieInfo: MovieDetailsRespon
         showTimePicker = showTimePicker,
     ) {
         date.value = it
+        showSnackBarDate.value = !showSnackBarDate.value
     }
     if (showTimePicker.value) TimePicker(
         date = date.value,
@@ -62,8 +77,23 @@ fun CalendarView(viewModel: MovieDetailsViewModel, movieInfo: MovieDetailsRespon
         showDatePicker,
         viewModel = viewModel,
         movieInfo = movieInfo,
-    )
-
+    ) {
+        time.value = it
+        showSnackBarTime.value = !showSnackBarTime.value
+    }
+    if (showSnackBarDate.value) {
+        with(date.value) {
+            ShowSnackBar(
+                text = "you choosed ${year}/${month.value}/${dayOfMonth}",
+                scaffoldState = scaffoldState
+            )
+        }
+    }
+    if (showSnackBarTime.value) {
+        with(time.value) {
+            ShowSnackBar(text = "you choosed ${hour}/${minute}", scaffoldState = scaffoldState)
+        }
+    }
     Image(
         painter = painterResource(id = R.drawable.ic_baseline_calendar_month_24),
         contentDescription = "Calendar for scheduled viewing",
@@ -127,20 +157,24 @@ fun TimePicker(
     showDatePicker: MutableState<Boolean>,
     viewModel: MovieDetailsViewModel,
     movieInfo: MovieDetailsResponse,
+    onCLick: (LocalTime) -> Unit
 ) {
+
+    var localTime: LocalTime? = null
     val dialogState = rememberMaterialDialogState()
     MaterialDialog(dialogState = dialogState,
         buttons = {
             positiveButton("OK") {
                 showTimePicker.value = !showTimePicker.value
                 showDatePicker.value = !showDatePicker.value
+                localTime?.let { onCLick(it) }
             }
             negativeButton("CANCEL") {
                 showTimePicker.value = !showTimePicker.value
             }
         }) {
         timepicker { time ->
-            date.month.value
+            localTime = time
             viewModel.writeDataCalendar(
                 year = date.year,
                 month = date.month.value,
@@ -153,4 +187,19 @@ fun TimePicker(
     }
 
     dialogState.show()
+}
+
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun ShowSnackBar(text: String, scaffoldState: ScaffoldState) {
+    val coroutineScope = rememberCoroutineScope()
+    coroutineScope.launch {
+        val result = scaffoldState.snackbarHostState.showSnackbar(
+            message = text
+        )
+        when(result){
+            SnackbarResult.ActionPerformed-> return@launch
+            SnackbarResult.Dismissed->return@launch
+        }
+    }
 }

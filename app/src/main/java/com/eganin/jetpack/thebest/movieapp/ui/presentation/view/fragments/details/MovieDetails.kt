@@ -4,13 +4,13 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header.Header
@@ -20,7 +20,10 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.MovieAppTheme
 
 @Composable
-fun MovieDetails(id: Int, repository: MovieDetailsRepository, connection: Boolean) {
+fun MovieDetails(
+    id: Int, repository: MovieDetailsRepository, connection: Boolean,
+    scaffoldState: ScaffoldState
+) {
 
     val movieDetailsViewModel: MovieDetailsViewModel = viewModel<MovieDetailsViewModel>(
         factory = MovieDetailsViewModel.Factory(
@@ -50,6 +53,7 @@ fun MovieDetails(id: Int, repository: MovieDetailsRepository, connection: Boolea
                     imagePath = movieDetailsData?.backdropPath ?: "",
                     viewModel = movieDetailsViewModel,
                     movieInfo = it,
+                    scaffoldState=scaffoldState
                 )
             }
         }
