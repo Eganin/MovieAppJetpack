@@ -37,21 +37,25 @@ class MovieDetailsViewModel(
 
     fun downloadDetailsData(id: Int) {
         viewModelScope.launch(exceptionHandler) {
-            loading.value=true
-            val resultMovieDetails = repository.downloadDetailsInfoForMovie(movieId = id)
-            val resultCasts = repository.downloadCredits(movieId = id).cast
-            resultCasts?.forEach {
-                it.movieId = id
+            withContext(Dispatchers.IO){
+                loading.value = true
+                downloadDataFromDB(id = id)
+                val resultMovieDetails = repository.downloadDetailsInfoForMovie(movieId = id)
+                val resultCasts = repository.downloadCredits(movieId = id).cast
+                resultCasts?.forEach {
+                    it.movieId = id
+                }
+                _detailsData.postValue(resultMovieDetails)
+                _castData.postValue(resultCasts ?: emptyList())
+                saveDataDB(response = resultMovieDetails, credits = resultCasts ?: emptyList())
+                loading.value = false
             }
-            _detailsData.value = resultMovieDetails
-            _castData.value = resultCasts ?: emptyList()
-            loading.value=false
         }
     }
 
     private suspend fun downloadDataFromDB(id: Int) {
-        _detailsData.value = repository.getAllInfoMovie(id = id).toMovieDetailsResponse()
-        _castData.value = repository.getAllCredits(id = id)
+        _detailsData.postValue(repository.getAllInfoMovie(id = id).toMovieDetailsResponse())
+        _castData.postValue(repository.getAllCredits(id = id))
     }
 
     private suspend fun saveDataDB(response: MovieDetailsResponse, credits: List<CastItem>) {

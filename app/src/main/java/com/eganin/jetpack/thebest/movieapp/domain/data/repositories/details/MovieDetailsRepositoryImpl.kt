@@ -52,7 +52,7 @@ class MovieDetailsRepositoryImpl(val language: String, database: MovieDatabase) 
         creditsDao.insertCredits(credits = credits)
     }
 
-    override suspend fun deleteAlCredits() = withContext(defaultDispatcher) {
+    override suspend fun deleteAllCredits() = withContext(defaultDispatcher) {
         creditsDao.deleteAllCredits()
     }
 

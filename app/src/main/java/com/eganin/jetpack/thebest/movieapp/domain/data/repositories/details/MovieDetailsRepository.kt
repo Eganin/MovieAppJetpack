@@ -27,7 +27,7 @@ interface MovieDetailsRepository {
 
     suspend fun insertCredits(credits: List<CastItem>)
 
-    suspend fun deleteAlCredits()
+    suspend fun deleteAllCredits()
 
     suspend fun deleteCreditsById(id: Int)
 }

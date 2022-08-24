@@ -49,7 +49,7 @@ fun ListMovies(
 
     LaunchedEffect(viewModel){
         viewModel.changeTypeMovies(type = typeMovie)
-        viewModel.download()
+        viewModel.downloadMovies()
     }
 
     val movies by viewModel.moviesData.observeAsState()

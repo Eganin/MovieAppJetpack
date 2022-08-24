@@ -48,38 +48,45 @@ class MoviesListViewModel(
         _changeMovies.value = type
     }
 
-    fun download() {
-        //Log.d("EEE","LOADDDDDDD")
-        viewModelScope.launch {
-            loading.value = true
-            _moviesData.value = movieRepository.downloadMovies(
+    fun downloadMovies() {
+        download {
+            movieRepository.downloadMovies(
                 page = page,
                 typeMovies = changeMovies.value ?: TypeMovies.POPULAR
             ).results ?: emptyList()
-            loading.value = false
         }
     }
 
     fun downloadSearch(query: String) {
-        viewModelScope.launch {
-            loading.value = true
-            _moviesData.value = movieRepository.downloadSearchMovies(page = page, query = query).results
+        download {
+            movieRepository.downloadSearchMovies(page = page, query = query).results
                 ?: emptyList()
+        }
+    }
+
+    private fun download(action: suspend () -> List<Movie>) {
+        viewModelScope.launch(exceptionHandler) {
+            loading.value = true
+            downloadDataFromDB()
+            withContext(Dispatchers.IO){
+                _moviesData.postValue(action())
+                withContext(Dispatchers.Main){
+                    _moviesData.value?.let {
+                        deleteAllDataDB()
+                        saveDataDB(movies = it)
+                    }
+                }
+            }
             loading.value = false
         }
     }
 
     private suspend fun downloadDataFromDB() {
         val result = movieRepository.getAllMovies()
-        _cacheMoviesData.value = result.map { it.toMovie() }
+        _moviesData.value = result.map { it.toMovie() }
         result[0].genres?.let {
             _genresData.value = it
         }
-    }
-
-    private suspend fun downloadUpdateDataFromDB() {
-        val result = movieRepository.getAllMovies().map { it.toMovie() }
-        _moviesData.value=result
     }
 
     private suspend fun saveDataDB(movies: List<Movie>) {
