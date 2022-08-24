@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.header.Header
@@ -27,8 +28,11 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme
 
 @Composable
 fun MovieDetails(
-    id: Int, repository: MovieDetailsRepository, connection: Boolean,
-    scaffoldState: ScaffoldState
+    id: Int,
+    repository: MovieDetailsRepository,
+    connection: Boolean,
+    scaffoldState: ScaffoldState,
+    navController: NavController,
 ) {
 
     val movieDetailsViewModel: MovieDetailsViewModel = viewModel<MovieDetailsViewModel>(
@@ -41,29 +45,10 @@ fun MovieDetails(
     val movieDetailsData by movieDetailsViewModel.detailsData.observeAsState()
     val listActors by movieDetailsViewModel.castData.observeAsState()
     val dataCalendar by movieDetailsViewModel.dataCalendar.observeAsState()
-    val state by movieDetailsViewModel.stateData.observeAsState()
-
 
     if (dataCalendar != null) {
         dataCalendar!!.flags = FLAG_ACTIVITY_NEW_TASK
         LocalContext.current.applicationContext.startActivity(dataCalendar)
-    }
-
-    when (state) {
-        MoviesListViewModel.State.Default -> {
-            CircularProgressIndicator()
-        }
-        MoviesListViewModel.State.Error -> {
-            ShowSnackBar(
-                text = stringResource(id = R.string.error_data_loading_snckbar_message),
-                scaffoldState = scaffoldState
-            )
-        }
-
-        MoviesListViewModel.State.Loading -> {
-            CircularProgressIndicator()
-        }
-        else -> {}
     }
 
     LazyColumn(
@@ -78,7 +63,8 @@ fun MovieDetails(
                     imagePath = movieDetailsData?.backdropPath ?: "",
                     viewModel = movieDetailsViewModel,
                     movieInfo = it,
-                    scaffoldState = scaffoldState
+                    scaffoldState = scaffoldState,
+                    navController=navController,
                 )
             }
         }

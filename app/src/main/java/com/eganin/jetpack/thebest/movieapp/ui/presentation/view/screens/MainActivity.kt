@@ -27,6 +27,7 @@ import com.eganin.jetpack.thebest.movieapp.di.AppComponent
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetails
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.ListMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.TypeMovies
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.search.ListMoviesSearch
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.BackgroundColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.Black
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.MovieAppTheme
@@ -37,7 +38,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MovieAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -50,7 +50,6 @@ class MainActivity : ComponentActivity() {
                             TypeMovies.NOW_PLAYING.value,
                             TypeMovies.UP_COMING.value,
                             TypeMovies.SEARCH.value,
-                            "details",
                         )
                     val appComponent =
                         (LocalContext.current.applicationContext as MovieApp).myComponent
@@ -63,31 +62,7 @@ class MainActivity : ComponentActivity() {
                                 bottomItems.forEach { screen ->
                                     BottomNavigationItem(selected = false,
                                         onClick = { navController.navigate(screen) },
-                                        icon = {
-                                            when (screen) {
-                                                TypeMovies.POPULAR.value -> NavigationIcon(
-                                                    description = TypeMovies.POPULAR.value,
-                                                    idPainter = R.drawable.ic_format_list_bulleted_square
-                                                )
-                                                TypeMovies.TOP_RATED.value -> NavigationIcon(
-                                                    description = TypeMovies.TOP_RATED.value,
-                                                    idPainter = R.drawable.ic_calendar_star_outline
-                                                )
-                                                TypeMovies.NOW_PLAYING.value -> NavigationIcon(
-                                                    description = TypeMovies.NOW_PLAYING.value,
-                                                    idPainter = R.drawable.ic_animation_play_outline
-                                                )
-                                                TypeMovies.UP_COMING.value -> NavigationIcon(
-                                                    description = TypeMovies.UP_COMING.value,
-                                                    idPainter = R.drawable.ic_timer_outline
-                                                )
-                                                TypeMovies.SEARCH.value -> NavigationIcon(
-                                                    description = TypeMovies.SEARCH.value,
-                                                    idPainter = R.drawable.ic_magnify_expand
-                                                )
-
-                                            }
-                                        })
+                                        icon = { GetIcon(screen = screen) })
                                 }
                             }
                         }
@@ -125,25 +100,29 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(TypeMovies.SEARCH.value) {
-                                CreateListMovie(
-                                    typeMovies = TypeMovies.SEARCH,
-                                    appComponent = appComponent,
+                                ListMoviesSearch(
+                                    repository = appComponent.getMovieRepository(),
+                                    isConnection = appComponent.connection,
+                                    sharedPreferences = appComponent.getSharedPreferencesMovieType(),
+                                    notificationsManager = appComponent.getNotificationManager(),
                                     navController = navController,
                                 )
                             }
-                            composable("details"){
-                                navController.previousBackStackEntry?.savedStateHandle?.get<Int>("ID_KEY")?.let {id->
-                                    val scaffoldState = rememberScaffoldState()
+                            composable("details") {
+                                navController.previousBackStackEntry?.savedStateHandle?.get<Int>("ID_KEY")
+                                    ?.let { id ->
+                                        val scaffoldState = rememberScaffoldState()
 
-                                    Scaffold(scaffoldState = scaffoldState) {
-                                        MovieDetails(
-                                            id = id,
-                                            repository = appComponent.movieDetailsRepository,
-                                            connection = appComponent.connection,
-                                            scaffoldState = scaffoldState
-                                        )
+                                        Scaffold(scaffoldState = scaffoldState) {
+                                            MovieDetails(
+                                                id = id,
+                                                repository = appComponent.movieDetailsRepository,
+                                                connection = appComponent.connection,
+                                                scaffoldState = scaffoldState,
+                                                navController = navController
+                                            )
+                                        }
                                     }
-                                }
                             }
                         }
                     }
@@ -154,7 +133,33 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CreateListMovie(
+private fun GetIcon(screen: String) {
+    when (screen) {
+        TypeMovies.POPULAR.value -> NavigationIcon(
+            description = screen,
+            idPainter = R.drawable.ic_format_list_bulleted_square
+        )
+        TypeMovies.TOP_RATED.value -> NavigationIcon(
+            description = screen,
+            idPainter = R.drawable.ic_calendar_star_outline
+        )
+        TypeMovies.NOW_PLAYING.value -> NavigationIcon(
+            description = screen,
+            idPainter = R.drawable.ic_animation_play_outline
+        )
+        TypeMovies.UP_COMING.value -> NavigationIcon(
+            description = screen,
+            idPainter = R.drawable.ic_timer_outline
+        )
+        TypeMovies.SEARCH.value -> NavigationIcon(
+            description = screen,
+            idPainter = R.drawable.ic_magnify_expand
+        )
+    }
+}
+
+@Composable
+private fun CreateListMovie(
     typeMovies: TypeMovies,
     appComponent: AppComponent,
     navController: NavController,
@@ -170,7 +175,7 @@ fun CreateListMovie(
 }
 
 @Composable
-fun NavigationIcon(description: String, idPainter: Int) {
+private fun NavigationIcon(description: String, idPainter: Int) {
     Icon(
         painter = painterResource(id = idPainter),
         contentDescription = description,

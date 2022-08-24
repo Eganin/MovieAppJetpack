@@ -64,7 +64,7 @@ private fun ActorCell(info: CastItem) {
                 placeholder = painterResource(R.drawable.ic_baseline_cloud_download_24),
                 fallback = painterResource(R.drawable.ic_baseline_sms_failed_24)
             )
-            Text(text = info.name ?: "", color = Color.White, modifier = Modifier.width(80.dp))
+            Text(text = info.name ?: "", color = Color.White, modifier = Modifier.width(80.dp).padding(bottom = 50.dp))
         }
     }
 }

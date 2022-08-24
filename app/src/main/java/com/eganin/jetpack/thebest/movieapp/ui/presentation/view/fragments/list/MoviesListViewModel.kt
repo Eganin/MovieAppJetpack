@@ -119,11 +119,21 @@ class MoviesListViewModel(
 
     fun download() {
         viewModelScope.launch {
-            loading.value=true
+            loading.value = true
             _moviesData.value = movieRepository.downloadMovies(
                 page = page,
                 typeMovies = changeMovies.value ?: TypeMovies.POPULAR
-            ).results!!
+            ).results?: emptyList()
+            loading.value = false
+        }
+    }
+
+    fun downloadSearch(query: String) {
+        viewModelScope.launch {
+            loading.value = true
+            _moviesData.value =
+                movieRepository.downloadSearchMovies(page = page, query = query).results
+                    ?: emptyList()
             loading.value=false
         }
     }
