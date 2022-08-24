@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
@@ -46,9 +47,12 @@ fun ListMovies(
         )
     )
 
-    viewModel.changeTypeMovies(type = typeMovie)
-    viewModel.download()
-    val movies by viewModel.movies
+    LaunchedEffect(viewModel){
+        viewModel.changeTypeMovies(type = typeMovie)
+        viewModel.download()
+    }
+
+    val movies by viewModel.moviesData.observeAsState()
     val genresList by viewModel.genresData.observeAsState(emptyList())
     val loading by viewModel.loading
 

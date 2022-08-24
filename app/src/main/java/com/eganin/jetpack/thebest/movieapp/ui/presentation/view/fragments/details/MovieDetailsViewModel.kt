@@ -1,6 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details
 
 import android.content.Intent
+import android.os.Looper
 import android.provider.CalendarContract
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
@@ -21,12 +22,7 @@ class MovieDetailsViewModel(
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "CoroutineExceptionHandler got $exception")
-        _stateData.value = MoviesListViewModel.State.Error
     } + SupervisorJob()
-
-    private val _stateData =
-        MutableLiveData<MoviesListViewModel.State>(MoviesListViewModel.State.Default)
-    val stateData: LiveData<MoviesListViewModel.State> = _stateData
 
     private val _detailsData = MutableLiveData<MovieDetailsResponse>()
     val detailsData: LiveData<MovieDetailsResponse> = _detailsData
@@ -42,21 +38,15 @@ class MovieDetailsViewModel(
     fun downloadDetailsData(id: Int) {
         viewModelScope.launch(exceptionHandler) {
             loading.value=true
-            if (!isConnection) downloadDataFromDB(id = id)
-            download(id = id)
+            val resultMovieDetails = repository.downloadDetailsInfoForMovie(movieId = id)
+            val resultCasts = repository.downloadCredits(movieId = id).cast
+            resultCasts?.forEach {
+                it.movieId = id
+            }
+            _detailsData.value = resultMovieDetails
+            _castData.value = resultCasts ?: emptyList()
             loading.value=false
         }
-    }
-
-    private suspend fun download(id: Int) {
-        val resultMovieDetails = repository.downloadDetailsInfoForMovie(movieId = id)
-        val resultCasts = repository.downloadCredits(movieId = id).cast
-        resultCasts?.forEach {
-            it.movieId = id
-        }
-        _detailsData.value = resultMovieDetails
-        _castData.value = resultCasts ?: emptyList()
-        resultCasts?.let { saveDataDB(response = resultMovieDetails, credits = it) }
     }
 
     private suspend fun downloadDataFromDB(id: Int) {

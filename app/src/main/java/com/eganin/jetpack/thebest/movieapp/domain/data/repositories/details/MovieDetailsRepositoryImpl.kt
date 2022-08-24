@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details
 
+import android.util.Log
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieDetailsEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.network.RetrofitModule

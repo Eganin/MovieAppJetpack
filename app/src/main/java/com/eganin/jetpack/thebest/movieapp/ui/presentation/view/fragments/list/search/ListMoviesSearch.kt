@@ -55,7 +55,6 @@ fun ListMoviesSearch(
     val trailingIconView = @Composable {
         IconButton(
             onClick = {
-                Log.d("EEE", text)
                 viewModel.downloadSearch(query = text)
             },
         ) {

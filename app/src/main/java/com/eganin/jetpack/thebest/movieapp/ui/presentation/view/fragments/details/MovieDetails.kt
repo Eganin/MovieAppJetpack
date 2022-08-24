@@ -1,6 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details
 
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,11 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,12 +38,16 @@ fun MovieDetails(
     navController: NavController,
 ) {
 
-    val movieDetailsViewModel: MovieDetailsViewModel = viewModel<MovieDetailsViewModel>(
+    val movieDetailsViewModel: MovieDetailsViewModel = viewModel(
         factory = MovieDetailsViewModel.Factory(
             repository = repository,
             isConnection = connection,
         )
-    ).also { it.downloadDetailsData(id = id) }
+    )
+
+    LaunchedEffect(movieDetailsViewModel){
+        movieDetailsViewModel.downloadDetailsData(id = id)
+    }
 
     val movieDetailsData by movieDetailsViewModel.detailsData.observeAsState()
     val listActors by movieDetailsViewModel.castData.observeAsState()

@@ -3,10 +3,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.content.edit
 import androidx.lifecycle.*
-import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.di.AppComponent.Companion.TOKEN_CHOICE_MOVIE
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
@@ -15,8 +12,6 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRe
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovie
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovieEntity
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
 
 
 class MoviesListViewModel(
@@ -31,9 +26,6 @@ class MoviesListViewModel(
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "CoroutineExceptionHandler got $exception")
     } + SupervisorJob()
-
-    val movies = mutableStateOf(emptyList<Movie>())
-
     private val _changeMovies = MutableLiveData(TypeMovies.POPULAR)
     val changeMovies: LiveData<TypeMovies> = _changeMovies
 
@@ -45,22 +37,25 @@ class MoviesListViewModel(
 
     val loading = mutableStateOf(false)
 
-    var isActiveDownload = false
+    private val _moviesData = MutableLiveData<List<Movie>>(emptyList())
+    val moviesData: LiveData<List<Movie>> = _moviesData
 
     init {
         notificationsManager.init()
     }
+
     fun changeTypeMovies(type: TypeMovies) {
         _changeMovies.value = type
     }
+
     fun download() {
-        Log.d("EEE","LOADDDDDDD")
+        //Log.d("EEE","LOADDDDDDD")
         viewModelScope.launch {
             loading.value = true
-            movies.value = movieRepository.downloadMovies(
+            _moviesData.value = movieRepository.downloadMovies(
                 page = page,
                 typeMovies = changeMovies.value ?: TypeMovies.POPULAR
-            ).results?: emptyList()
+            ).results ?: emptyList()
             loading.value = false
         }
     }
@@ -68,9 +63,9 @@ class MoviesListViewModel(
     fun downloadSearch(query: String) {
         viewModelScope.launch {
             loading.value = true
-            movies.value = movieRepository.downloadSearchMovies(page = page, query = query).results
+            _moviesData.value = movieRepository.downloadSearchMovies(page = page, query = query).results
                 ?: emptyList()
-            loading.value=false
+            loading.value = false
         }
     }
 
@@ -84,7 +79,7 @@ class MoviesListViewModel(
 
     private suspend fun downloadUpdateDataFromDB() {
         val result = movieRepository.getAllMovies().map { it.toMovie() }
-        movies.value = result
+        _moviesData.value=result
     }
 
     private suspend fun saveDataDB(movies: List<Movie>) {
