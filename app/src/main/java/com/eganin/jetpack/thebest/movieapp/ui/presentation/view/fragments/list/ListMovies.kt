@@ -48,7 +48,7 @@ fun ListMovies(
 
     viewModel.changeTypeMovies(type = typeMovie)
     viewModel.download()
-    val movies by viewModel.moviesData.observeAsState()
+    val movies by viewModel.movies
     val genresList by viewModel.genresData.observeAsState(emptyList())
     val loading by viewModel.loading
 

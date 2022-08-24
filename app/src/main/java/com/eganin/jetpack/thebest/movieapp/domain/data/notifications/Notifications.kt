@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
@@ -13,7 +12,7 @@ import androidx.core.app.NotificationManagerCompat.IMPORTANCE_HIGH
 import androidx.core.net.toUri
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MainActivity
 
 interface Notifications {
     fun init()
@@ -51,7 +50,7 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
                 PendingIntent.getActivity(
                     context,
                     REQUEST_CONTENT_MOVIES,
-                    Intent(context, MovieDetailsActivity::class.java)
+                    Intent(context, MainActivity::class.java)
                         .setAction(Intent.ACTION_VIEW)
                         .setData(uri),
                     PendingIntent.FLAG_UPDATE_CURRENT

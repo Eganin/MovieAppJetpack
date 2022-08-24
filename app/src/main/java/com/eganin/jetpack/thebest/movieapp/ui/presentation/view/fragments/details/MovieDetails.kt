@@ -11,6 +11,8 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -49,15 +51,19 @@ fun MovieDetails(
     val listActors by movieDetailsViewModel.castData.observeAsState()
     val dataCalendar by movieDetailsViewModel.dataCalendar.observeAsState()
     val loading by movieDetailsViewModel.loading
+    val launchCalendar = remember { mutableStateOf(true) }
 
-    if (dataCalendar != null) {
+    if (dataCalendar != null && launchCalendar.value) {
+        launchCalendar.value = !launchCalendar.value
         dataCalendar!!.flags = FLAG_ACTIVITY_NEW_TASK
         LocalContext.current.applicationContext.startActivity(dataCalendar)
     }
 
-    Column(modifier = Modifier
-        .background(BackgroundColor)
-        .fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .background(BackgroundColor)
+            .fillMaxSize()
+    ) {
         LazyColumn {
             item {
                 movieDetailsData?.let {
@@ -67,14 +73,16 @@ fun MovieDetails(
                         viewModel = movieDetailsViewModel,
                         movieInfo = it,
                         scaffoldState = scaffoldState,
-                        navController=navController,
+                        navController = navController,
                     )
                 }
             }
             item {
                 MovieInfo(
                     title = movieDetailsData?.title,
-                    tagLine = movieDetailsData?.genres?.joinToString(separator = ",") { it.name ?: "" },
+                    tagLine = movieDetailsData?.genres?.joinToString(separator = ",") {
+                        it.name ?: ""
+                    },
                     rating = (movieDetailsData?.voteAverage?.div(2))?.toInt(),
                     countReviews = movieDetailsData?.voteCount,
                     description = movieDetailsData?.overview

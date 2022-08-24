@@ -1,6 +1,5 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card

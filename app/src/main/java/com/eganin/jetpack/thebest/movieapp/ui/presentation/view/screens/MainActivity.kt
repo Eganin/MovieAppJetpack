@@ -1,6 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,11 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.work.WorkManager
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.di.AppComponent
@@ -33,6 +34,11 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.MovieAppTheme
 
 class MainActivity : ComponentActivity() {
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+    }
+
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +48,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    StartWorker()
                     val navController: NavHostController = rememberNavController()
                     val bottomItems =
                         listOf(
@@ -109,20 +116,10 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable("details") {
-                                navController.previousBackStackEntry?.savedStateHandle?.get<Int>("ID_KEY")
-                                    ?.let { id ->
-                                        val scaffoldState = rememberScaffoldState()
-
-                                        Scaffold(scaffoldState = scaffoldState) {
-                                            MovieDetails(
-                                                id = id,
-                                                repository = appComponent.movieDetailsRepository,
-                                                connection = appComponent.connection,
-                                                scaffoldState = scaffoldState,
-                                                navController = navController
-                                            )
-                                        }
-                                    }
+                                OpenDetailsPage(
+                                    navController = navController,
+                                    appComponent = appComponent,
+                                )
                             }
                         }
                     }
@@ -130,6 +127,44 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Composable
+private fun OpenDetailsPage(
+    navController: NavController,
+    appComponent: AppComponent,
+    movieId: Int? = null
+) {
+    if (movieId == null) {
+        navController.previousBackStackEntry?.savedStateHandle?.get<Int>("ID_KEY")
+            ?.let { id ->
+                val scaffoldState = rememberScaffoldState()
+
+                Scaffold(scaffoldState = scaffoldState) {
+                    MovieDetails(
+                        id = id,
+                        repository = appComponent.movieDetailsRepository,
+                        connection = appComponent.connection,
+                        scaffoldState = scaffoldState,
+                        navController = navController
+                    )
+                }
+            }
+    } else {
+        val scaffoldState = rememberScaffoldState()
+
+        Scaffold(scaffoldState = scaffoldState) {
+            MovieDetails(
+                id = movieId,
+                repository = appComponent.movieDetailsRepository,
+                connection = appComponent.connection,
+                scaffoldState = scaffoldState,
+                navController = navController
+            )
+        }
+    }
+
 }
 
 @Composable
@@ -181,4 +216,11 @@ private fun NavigationIcon(description: String, idPainter: Int) {
         contentDescription = description,
         tint = Black,
     )
+}
+
+@Composable
+private fun StartWorker() {
+    val repository =
+        (LocalContext.current.applicationContext as MovieApp).myComponent.getWorkerRepository()
+    WorkManager.getInstance(LocalContext.current.applicationContext).enqueue(repository.request)
 }

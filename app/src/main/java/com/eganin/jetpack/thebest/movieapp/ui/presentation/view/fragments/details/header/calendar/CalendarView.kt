@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -137,13 +138,14 @@ fun CalendarView(
     запускаем activity settings из AlertDialog
      */
     if (launchSettings.value) {
+        Log.d("EEE","AAAAAAAAAAAAAA")
         val intent = Intent(
             Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
             Uri.parse("package:" + LocalContext.current.packageName)
         )
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        LocalContext.current.applicationContext.startActivity(intent)
         launchSettings.value = !launchSettings.value
+        LocalContext.current.applicationContext.startActivity(intent)
     }
     Image(
         painter = painterResource(id = R.drawable.ic_baseline_calendar_month_24),

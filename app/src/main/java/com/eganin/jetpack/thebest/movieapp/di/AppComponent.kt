@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
@@ -15,8 +14,6 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.isConnection
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetailsViewModel
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MovieDetailsActivity
 import java.util.*
 
 
@@ -43,31 +40,6 @@ class AppComponent(applicationContext: Context) {
 
     private val notificationManager = MovieNotificationsManager(context = applicationContext)
 
-    fun getMoviesViewModel(
-        activity: MovieDetailsActivity? = null,
-        fragment: Fragment? = null
-    ): MoviesListViewModel? {
-        val viewModelFactory = MoviesListViewModel.Factory(
-            repository = movieRepository,
-            isConnection = connection,
-            sharedPreferences = sharedPreferencesMovieType,
-            notificationsManager = notificationManager,
-        )
-        activity?.let {
-            return ViewModelProvider(
-                activity,
-                viewModelFactory
-            )[MoviesListViewModel::class.java]
-        }
-        fragment?.let {
-            return ViewModelProvider(
-                fragment,
-                viewModelFactory
-            )[MoviesListViewModel::class.java]
-        }
-        return null
-
-    }
 
     fun getMoviesDetailsRepository(fragment: Fragment): MovieDetailsViewModel {
         return ViewModelProvider(

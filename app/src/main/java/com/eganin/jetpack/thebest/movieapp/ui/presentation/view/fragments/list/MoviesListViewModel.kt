@@ -26,28 +26,13 @@ class MoviesListViewModel(
     val notificationsManager: MovieNotificationsManager,
 ) : ViewModel() {
 
-    var isQueryRequest = false
-    var firstLaunch = true
-    private var queryText = ""
     var page = 1
-
-    @OptIn(ObsoleteCoroutinesApi::class)
-    val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "CoroutineExceptionHandler got $exception")
-        errorLoading()
     } + SupervisorJob()
 
-
-    private val _moviesData = MutableLiveData<List<Movie>>(emptyList())
-    val moviesData: LiveData<List<Movie>> = _moviesData
-
-    private val _moviesSearchData = MutableLiveData<List<Movie>>(emptyList())
-    val moviesSearchData: LiveData<List<Movie>> = _moviesSearchData
-
-    private val _stateData = MutableLiveData<State>(State.Default)
-    val stateData: LiveData<State> = _stateData
+    val movies = mutableStateOf(emptyList<Movie>())
 
     private val _changeMovies = MutableLiveData(TypeMovies.POPULAR)
     val changeMovies: LiveData<TypeMovies> = _changeMovies
@@ -65,62 +50,14 @@ class MoviesListViewModel(
     init {
         notificationsManager.init()
     }
-
-    fun downloadMovies(isAdapter: Boolean = false) {
-        viewModelScope.launch(exceptionHandler) {
-            isActiveDownload = true
-            startLoading()
-            if (!isConnection) {
-                downloadDataFromDB()
-                getChoiceMovie()
-            }
-            if (isAdapter) page++
-            if (isQueryRequest) {
-                downloadSearchMoviesList(query = queryText)
-            } else {
-                downloadMovieList()
-            }
-            stopLoading()
-            isActiveDownload = false
-
-        }
-
+    fun changeTypeMovies(type: TypeMovies) {
+        _changeMovies.value = type
     }
-
-    fun downloadSearchMoviesList(query: String) {
-        viewModelScope.launch(exceptionHandler) {
-            isQueryRequest = true
-            queryText = query
-            _genresData.value = movieRepository.downloadGenres()
-            val data =
-                movieRepository.downloadSearchMovies(page = page, query = queryText).results
-            val newList = mutableListOf<Movie>()
-            _moviesSearchData.value?.let { newList.addAll(it) }
-            data?.let { newList.addAll(it) }
-            _moviesSearchData.value = newList
-            saveDataDB(movies = newList)
-        }
-    }
-
-    private suspend fun downloadMovieList() {
-        isQueryRequest = false
-        _genresData.value = movieRepository.downloadGenres()
-        val data =
-            movieRepository.downloadMovies(
-                page = page,
-                typeMovies = changeMovies.value ?: TypeMovies.POPULAR
-            ).results
-        val newList = mutableListOf<Movie>()
-        _moviesData.value?.let { newList.addAll(it) }
-        data?.let { newList.addAll(it) }
-        _moviesData.value = newList
-        saveDataDB(movies = newList)
-    }
-
     fun download() {
+        Log.d("EEE","LOADDDDDDD")
         viewModelScope.launch {
             loading.value = true
-            _moviesData.value = movieRepository.downloadMovies(
+            movies.value = movieRepository.downloadMovies(
                 page = page,
                 typeMovies = changeMovies.value ?: TypeMovies.POPULAR
             ).results?: emptyList()
@@ -131,9 +68,8 @@ class MoviesListViewModel(
     fun downloadSearch(query: String) {
         viewModelScope.launch {
             loading.value = true
-            _moviesData.value =
-                movieRepository.downloadSearchMovies(page = page, query = query).results
-                    ?: emptyList()
+            movies.value = movieRepository.downloadSearchMovies(page = page, query = query).results
+                ?: emptyList()
             loading.value=false
         }
     }
@@ -148,7 +84,7 @@ class MoviesListViewModel(
 
     private suspend fun downloadUpdateDataFromDB() {
         val result = movieRepository.getAllMovies().map { it.toMovie() }
-        _moviesData.value = result
+        movies.value = result
     }
 
     private suspend fun saveDataDB(movies: List<Movie>) {
@@ -157,82 +93,6 @@ class MoviesListViewModel(
 
     private suspend fun deleteAllDataDB() {
         movieRepository.deleteAllMovies()
-    }
-
-    private fun clearData() {
-        _moviesData.value = emptyList()
-    }
-
-    private fun startLoading() {
-        _stateData.value = State.Loading
-    }
-
-    private fun stopLoading() {
-        _stateData.value = State.Success
-    }
-
-    private fun errorLoading() {
-        _stateData.value = State.Error
-    }
-
-    private fun changeMovies(typeMovies: TypeMovies) {
-        if (isConnection) {
-            viewModelScope.launch(exceptionHandler) {
-                deleteAllDataDB()
-            }
-        }
-        firstLaunch = true
-        page = 1
-        //_changeMovies.value = typeMovies.value
-        saveChoiceMovie()
-        //this.typeMovies = typeMovies
-        _moviesData.value = emptyList()
-    }
-
-    fun changeTypeMovies(type: TypeMovies) {
-        _changeMovies.value = type
-    }
-
-    fun changeMoviesList(idPage: Int) =
-        when (idPage) {
-            R.id.page_1 -> {
-                changeMovies(typeMovies = TypeMovies.POPULAR)
-                true
-            }
-            R.id.page_2 -> {
-                changeMovies(typeMovies = TypeMovies.TOP_RATED)
-                true
-            }
-            R.id.page_3 -> {
-                changeMovies(typeMovies = TypeMovies.NOW_PLAYING)
-                true
-            }
-            R.id.page_4 -> {
-                changeMovies(typeMovies = TypeMovies.UP_COMING)
-                true
-            }
-            R.id.page_5 -> {
-                clearData()
-                if (!isConnection) {
-                    viewModelScope.launch(exceptionHandler) {
-                        deleteAllDataDB()
-                    }
-                }
-                true
-            }
-            else -> false
-        }
-
-    private fun saveChoiceMovie() {
-        sharedPreferences.edit {
-            //putString(TOKEN_CHOICE_MOVIE, _changeMovies.value)
-        }
-    }
-
-    private fun getChoiceMovie() {
-        firstLaunch = false
-        //_changeMovies.value =
-        //sharedPreferences.getString(TOKEN_CHOICE_MOVIE, TypeMovies.POPULAR.value)
     }
 
     fun usingDBFavouriteMovie(movie: Movie, condition: Boolean) {

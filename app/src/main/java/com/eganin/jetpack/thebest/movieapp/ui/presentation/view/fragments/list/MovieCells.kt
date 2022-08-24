@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.MovieBox
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.BackgroundColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.TimeLineColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.TopMenuColor
