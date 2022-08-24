@@ -17,6 +17,7 @@ import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.ActivityMainBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.routing.Router
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetails
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.ListMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 
@@ -76,25 +77,45 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
                 }
             }
         }
+
+        openMovieList()
     }
 
-    override fun openMovieList() =
-        openNewFragment {
-            navigate(R.id.fragmentMoviesList)
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+    override fun openMovieList() {
+        setContent {
+            val appComponent = (LocalContext.current.applicationContext as MovieApp).myComponent
+            val scaffoldState = rememberScaffoldState()
+
+            Scaffold(scaffoldState = scaffoldState) {
+                ListMovies(
+                    repository = appComponent.getMovieRepository(),
+                    isConnection = appComponent.connection,
+                    sharedPreferences = appComponent.getSharedPreferencesMovieType(),
+                    notificationsManager = appComponent.getNotificationManager(),
+                )
+            }
         }
+    }
+
 
     override fun openMovieDetails(movieId: Int, isNotification: Boolean) {
         viewModel.firstLaunch = isNotification
         val bundle = bundleOf(SAVE_MOVIE_DATA_KEY to movieId)
+        /*
         openNewFragment {
             navigate(R.id.fragmentMoviesDetails, bundle)
         }
+         */
     }
 
     override fun openSearch() {
+        /*
         openNewFragment {
             navigate(R.id.fragmentSearch)
         }
+
+         */
     }
 
     private fun openNewFragment(
