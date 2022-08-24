@@ -5,4 +5,5 @@ enum class TypeMovies(val value : String) {
     POPULAR(value="Popular"),
     NOW_PLAYING(value="Now Playing"),
     UP_COMING(value="Up Coming"),
+    SEARCH(value = "Search")
 }

@@ -55,7 +55,8 @@ class MoviesListViewModel(
     private val _cacheMoviesData = MutableLiveData<List<Movie>>(emptyList())
     val cacheMoviesData: LiveData<List<Movie>> = _cacheMoviesData
 
-    var genresList: List<GenresItem>? = null
+    private val _genresData = MutableLiveData<List<GenresItem>>(emptyList())
+    val genresData: LiveData<List<GenresItem>> = _genresData
 
     var isActiveDownload = false
 
@@ -88,7 +89,7 @@ class MoviesListViewModel(
         viewModelScope.launch(exceptionHandler) {
             isQueryRequest = true
             queryText = query
-            genresList = movieRepository.downloadGenres()
+            _genresData.value = movieRepository.downloadGenres()
             val data =
                 movieRepository.downloadSearchMovies(page = page, query = queryText).results
             val newList = mutableListOf<Movie>()
@@ -101,7 +102,7 @@ class MoviesListViewModel(
 
     private suspend fun downloadMovieList() {
         isQueryRequest = false
-        genresList = movieRepository.downloadGenres()
+        _genresData.value = movieRepository.downloadGenres()
         val data =
             movieRepository.downloadMovies(page = page, typeMovies = typeMovies).results
         val newList = mutableListOf<Movie>()
@@ -114,7 +115,9 @@ class MoviesListViewModel(
     private suspend fun downloadDataFromDB() {
         val result = movieRepository.getAllMovies()
         _cacheMoviesData.value = result.map { it.toMovie() }
-        genresList = result[0].genres
+        result[0].genres?.let {
+            _genresData.value=it
+        }
     }
 
     private suspend fun downloadUpdateDataFromDB() {
@@ -123,7 +126,7 @@ class MoviesListViewModel(
     }
 
     private suspend fun saveDataDB(movies: List<Movie>) {
-        movieRepository.insertMovies(movies = movies.map { it.toMovieEntity(genres = genresList) })
+        movieRepository.insertMovies(movies = movies.map { it.toMovieEntity(genres = _genresData.value) })
     }
 
     private suspend fun deleteAllDataDB() {
@@ -233,7 +236,7 @@ class MoviesListViewModel(
                 movieRepository = repository,
                 isConnection = isConnection,
                 sharedPreferences = sharedPreferences,
-                notificationsManager=notificationsManager
+                notificationsManager = notificationsManager
             ) as T
         }
     }

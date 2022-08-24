@@ -93,6 +93,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
                     isConnection = appComponent.connection,
                     sharedPreferences = appComponent.getSharedPreferencesMovieType(),
                     notificationsManager = appComponent.getNotificationManager(),
+                    typeMovie = "Popular"
                 )
             }
         }

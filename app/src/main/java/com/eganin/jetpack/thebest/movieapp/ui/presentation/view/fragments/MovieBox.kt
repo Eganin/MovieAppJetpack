@@ -1,7 +1,9 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,25 +24,30 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi
+import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.*
 
 @Composable
-fun MovieBox(movie: Movie){
+fun MovieBox(movie: Movie, genres: List<GenresItem>?) {
     Box {
-        ImagePoster(imageUrlPath = movie.posterPath?:"")
-        Text(
-            text = if (movie.adult == true) "18+" else "12+",
+        ImagePoster(imageUrlPath = movie.posterPath ?: "")
+        Card(
             modifier = Modifier
-                .background(AdultColor)
                 .align(Alignment.TopStart)
-                .padding(start = 10.dp, top = 12.dp),
-            style = TextStyle(
-                color = White,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-            ),
-        )
+                .padding(start = 10.dp, top = 12.dp)
+        ) {
+            Text(
+                text = if (movie.adult == true) "18+" else "12+",
+                modifier = Modifier
+                    .background(AdultColor),
+                style = TextStyle(
+                    color = White,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                ),
+            )
+        }
         Icon(
             painter = painterResource(id = R.drawable.ic_like_unable),
             contentDescription = stringResource(
@@ -58,13 +65,18 @@ fun MovieBox(movie: Movie){
         ) {
             Text(
                 modifier = Modifier.padding(start = 2.dp),
-                text = movie.genreIds.toString(),
-                style = TextStyle(color = TagLineColor, fontSize = 8.sp),
+                text = getTagLine(genres = genres, genreIds = movie.genreIds ?: emptyList()),
+                style = TextStyle(
+                    color = TagLineColor,
+                    fontSize = 9.sp,
+                    fontWeight = FontWeight.Bold,
+                ),
             )
             Row(modifier = Modifier.padding(top = 4.dp)) {
                 val vote = (movie.voteAverage?.div(2))?.toInt()
+                Log.d("EEE",vote.toString())
                 (0..4).map {
-                    if (it <= (vote ?: 0)){
+                    if (it < (vote ?: 0)) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_star_unable_icon),
                             contentDescription = "$it star rating",
@@ -73,7 +85,7 @@ fun MovieBox(movie: Movie){
                                 .padding(start = 2.dp),
                             tint = TagLineColor,
                         )
-                    }else{
+                    } else {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_star_unable_icon),
                             contentDescription = "$it star rating",
@@ -98,8 +110,13 @@ fun MovieBox(movie: Movie){
     }
 }
 
+private fun getTagLine(genreIds: List<Int>, genres: List<GenresItem>?): String {
+    return genres?.filter { it.id in genreIds }?.joinToString { it.name ?: "" } ?: ""
+}
+
+
 @Composable
-fun ImagePoster(imageUrlPath :String){
+fun ImagePoster(imageUrlPath: String) {
     AsyncImage(
         modifier = Modifier
             .fillMaxWidth()
@@ -116,7 +133,7 @@ fun ImagePoster(imageUrlPath :String){
                     drawRect(gradient, blendMode = BlendMode.Multiply)
                 }
             },
-        model =(MoviesApi.BASE_IMAGE_URL + imageUrlPath),
+        model = (MoviesApi.BASE_IMAGE_URL + imageUrlPath),
         contentDescription = stringResource(id = R.string.poster_movie_description),
         contentScale = ContentScale.Crop,
         placeholder = painterResource(R.drawable.ic_baseline_cloud_download_24),

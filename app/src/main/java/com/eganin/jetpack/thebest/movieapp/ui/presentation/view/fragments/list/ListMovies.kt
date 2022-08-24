@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,8 +48,9 @@ fun ListMovies(
     isConnection: Boolean,
     sharedPreferences: SharedPreferences,
     notificationsManager: MovieNotificationsManager,
+    typeMovie : String,
 ) {
-
+    Log.d("EEE",typeMovie)
     val viewModel = viewModel<MoviesListViewModel>(
         factory = MoviesListViewModel.Factory(
             repository = repository,
@@ -56,11 +58,12 @@ fun ListMovies(
             sharedPreferences = sharedPreferences,
             notificationsManager = notificationsManager,
         )
-    ).also { it.downloadMovies() }
+    )
 
     val movies by viewModel.moviesData.observeAsState()
     val typeMovie by viewModel.changeMovies.observeAsState("Popular")
-
+    val genresList by viewModel.genresData.observeAsState(emptyList())
+    viewModel.downloadMovies()
     Column(
         modifier = Modifier
             .background(BackgroundColor)
@@ -73,7 +76,7 @@ fun ListMovies(
         ) {
             movies?.map {
                 item {
-                    MovieCells(movie = it)
+                    MovieCells(movie = it,genres=genresList)
                 }
             }
         }

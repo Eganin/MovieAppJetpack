@@ -127,4 +127,6 @@ dependencies {
     implementation "com.google.accompanist:accompanist-permissions:0.21.1-beta"
 
     implementation "io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc"
+
+    implementation "androidx.navigation:navigation-compose:$nav_version"
 }

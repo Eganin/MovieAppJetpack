@@ -21,7 +21,7 @@ class MovieAdapter(private val moviesListViewModel: MoviesListViewModel) :
         itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.view_holder_movie, parent, false),
         listener = listener,
-        genres = moviesListViewModel.genresList,
+        genres = emptyList(),
         usingDB = usingDBFavourite,
     ) { moviesListViewModel.existsMovie(it) }
 
