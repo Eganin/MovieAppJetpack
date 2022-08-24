@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -23,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.di.AppComponent
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.ListMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.TypeMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.BackgroundColor
@@ -62,38 +64,27 @@ class MainActivity : ComponentActivity() {
                                         onClick = { navController.navigate(screen.value) },
                                         icon = {
                                             when (screen) {
-                                                TypeMovies.POPULAR ->
-                                                    Icon(
-                                                        painter = painterResource(id = R.drawable.ic_format_list_bulleted_square),
-                                                        contentDescription = TypeMovies.POPULAR.value,
-                                                        tint = Black,
-                                                    )
+                                                TypeMovies.POPULAR -> NavigationIcon(
+                                                    description = TypeMovies.POPULAR.value,
+                                                    idPainter = R.drawable.ic_format_list_bulleted_square
+                                                )
+                                                TypeMovies.TOP_RATED -> NavigationIcon(
+                                                    description = TypeMovies.TOP_RATED.value,
+                                                    idPainter = R.drawable.ic_calendar_star_outline
+                                                )
+                                                TypeMovies.NOW_PLAYING -> NavigationIcon(
+                                                    description = TypeMovies.NOW_PLAYING.value,
+                                                    idPainter = R.drawable.ic_animation_play_outline
+                                                )
+                                                TypeMovies.UP_COMING -> NavigationIcon(
+                                                    description = TypeMovies.UP_COMING.value,
+                                                    idPainter = R.drawable.ic_timer_outline
+                                                )
+                                                TypeMovies.SEARCH -> NavigationIcon(
+                                                    description = TypeMovies.SEARCH.value,
+                                                    idPainter = R.drawable.ic_magnify_expand
+                                                )
 
-                                                TypeMovies.TOP_RATED ->
-                                                    Icon(
-                                                        painter = painterResource(id = R.drawable.ic_calendar_star_outline),
-                                                        contentDescription = TypeMovies.TOP_RATED.value,
-                                                        tint = Black
-                                                    )
-                                                TypeMovies.NOW_PLAYING ->
-                                                    Icon(
-                                                        painter = painterResource(id = R.drawable.ic_animation_play_outline),
-                                                        contentDescription = TypeMovies.NOW_PLAYING.value,
-                                                        tint = Black,
-                                                    )
-                                                TypeMovies.UP_COMING ->
-                                                    Icon(
-                                                        painter = painterResource(id = R.drawable.ic_timer_outline),
-                                                        contentDescription = TypeMovies.UP_COMING.value,
-                                                        tint = Black,
-                                                    )
-                                                TypeMovies.SEARCH ->
-                                                    Icon(
-                                                        painter = painterResource(id = R.drawable.ic_magnify_expand),
-                                                        contentDescription = TypeMovies.SEARCH.value,
-                                                        tint = Black,
-                                                        modifier = Modifier.padding(top = 5.dp),
-                                                    )
                                             }
                                         })
                                 }
@@ -105,49 +96,19 @@ class MainActivity : ComponentActivity() {
                             startDestination = TypeMovies.POPULAR.value
                         ) {
                             composable(TypeMovies.POPULAR.value) {
-                                ListMovies(
-                                    repository = appComponent.getMovieRepository(),
-                                    isConnection = appComponent.connection,
-                                    sharedPreferences = appComponent.getSharedPreferencesMovieType(),
-                                    notificationsManager = appComponent.getNotificationManager(),
-                                    typeMovie = TypeMovies.POPULAR.value,
-                                )
+                                CreateListMovie(typeMovies = TypeMovies.POPULAR.value,appComponent=appComponent)
                             }
                             composable(TypeMovies.TOP_RATED.value) {
-                                ListMovies(
-                                    repository = appComponent.getMovieRepository(),
-                                    isConnection = appComponent.connection,
-                                    sharedPreferences = appComponent.getSharedPreferencesMovieType(),
-                                    notificationsManager = appComponent.getNotificationManager(),
-                                    typeMovie = TypeMovies.TOP_RATED.value,
-                                )
+                                CreateListMovie(typeMovies = TypeMovies.TOP_RATED.value,appComponent=appComponent)
                             }
                             composable(TypeMovies.NOW_PLAYING.value) {
-                                ListMovies(
-                                    repository = appComponent.getMovieRepository(),
-                                    isConnection = appComponent.connection,
-                                    sharedPreferences = appComponent.getSharedPreferencesMovieType(),
-                                    notificationsManager = appComponent.getNotificationManager(),
-                                    typeMovie = TypeMovies.NOW_PLAYING.value,
-                                )
+                                CreateListMovie(typeMovies = TypeMovies.NOW_PLAYING.value,appComponent=appComponent)
                             }
                             composable(TypeMovies.UP_COMING.value) {
-                                ListMovies(
-                                    repository = appComponent.getMovieRepository(),
-                                    isConnection = appComponent.connection,
-                                    sharedPreferences = appComponent.getSharedPreferencesMovieType(),
-                                    notificationsManager = appComponent.getNotificationManager(),
-                                    typeMovie = TypeMovies.UP_COMING.value,
-                                )
+                                CreateListMovie(typeMovies = TypeMovies.UP_COMING.value,appComponent=appComponent)
                             }
                             composable(TypeMovies.SEARCH.value) {
-                                ListMovies(
-                                    repository = appComponent.getMovieRepository(),
-                                    isConnection = appComponent.connection,
-                                    sharedPreferences = appComponent.getSharedPreferencesMovieType(),
-                                    notificationsManager = appComponent.getNotificationManager(),
-                                    typeMovie = TypeMovies.SEARCH.value,
-                                )
+                                CreateListMovie(typeMovies = TypeMovies.SEARCH.value,appComponent=appComponent)
                             }
                         }
                     }
@@ -155,4 +116,24 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+@Composable
+fun CreateListMovie(typeMovies: String,appComponent:AppComponent){
+    ListMovies(
+        repository = appComponent.getMovieRepository(),
+        isConnection = appComponent.connection,
+        sharedPreferences = appComponent.getSharedPreferencesMovieType(),
+        notificationsManager = appComponent.getNotificationManager(),
+        typeMovie = typeMovies,
+    )
+}
+
+@Composable
+fun NavigationIcon(description: String, idPainter: Int) {
+    Icon(
+        painter = painterResource(id = idPainter),
+        contentDescription = description,
+        tint = Black,
+    )
 }
