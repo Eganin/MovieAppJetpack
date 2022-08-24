@@ -63,7 +63,7 @@ class FragmentMoviesList : BaseFragment() {
         viewModel?.stateData?.observe(this.viewLifecycleOwner) {
             setState(state = it, progressBar = binding.progressBarMoviesList)
         }
-        viewModel?.changeMovies?.observe(this.viewLifecycleOwner, this::setListMovies)
+        //viewModel?.changeMovies?.observe(this.viewLifecycleOwner, this::setListMovies)
         viewModel?.moviesData?.observe(this.viewLifecycleOwner) {
             movieAdapter?.bindMovies(movies = it)
         }

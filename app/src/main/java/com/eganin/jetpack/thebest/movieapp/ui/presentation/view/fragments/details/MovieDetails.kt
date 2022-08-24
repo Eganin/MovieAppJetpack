@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.detai
 
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator

@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.edit
 import androidx.lifecycle.*
 import com.eganin.jetpack.thebest.movieapp.R
@@ -29,7 +30,6 @@ class MoviesListViewModel(
     var firstLaunch = true
     private var queryText = ""
     var page = 1
-    private var typeMovies = TypeMovies.POPULAR
 
     @OptIn(ObsoleteCoroutinesApi::class)
     val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
@@ -49,14 +49,16 @@ class MoviesListViewModel(
     private val _stateData = MutableLiveData<State>(State.Default)
     val stateData: LiveData<State> = _stateData
 
-    private val _changeMovies = MutableLiveData(TypeMovies.POPULAR.value)
-    val changeMovies: LiveData<String> = _changeMovies
+    private val _changeMovies = MutableLiveData(TypeMovies.POPULAR)
+    val changeMovies: LiveData<TypeMovies> = _changeMovies
 
     private val _cacheMoviesData = MutableLiveData<List<Movie>>(emptyList())
     val cacheMoviesData: LiveData<List<Movie>> = _cacheMoviesData
 
     private val _genresData = MutableLiveData<List<GenresItem>>(emptyList())
     val genresData: LiveData<List<GenresItem>> = _genresData
+
+    val loading = mutableStateOf(false)
 
     var isActiveDownload = false
 
@@ -104,7 +106,10 @@ class MoviesListViewModel(
         isQueryRequest = false
         _genresData.value = movieRepository.downloadGenres()
         val data =
-            movieRepository.downloadMovies(page = page, typeMovies = typeMovies).results
+            movieRepository.downloadMovies(
+                page = page,
+                typeMovies = changeMovies.value ?: TypeMovies.POPULAR
+            ).results
         val newList = mutableListOf<Movie>()
         _moviesData.value?.let { newList.addAll(it) }
         data?.let { newList.addAll(it) }
@@ -112,11 +117,22 @@ class MoviesListViewModel(
         saveDataDB(movies = newList)
     }
 
+    fun download() {
+        viewModelScope.launch {
+            loading.value=true
+            _moviesData.value = movieRepository.downloadMovies(
+                page = page,
+                typeMovies = changeMovies.value ?: TypeMovies.POPULAR
+            ).results!!
+            loading.value=false
+        }
+    }
+
     private suspend fun downloadDataFromDB() {
         val result = movieRepository.getAllMovies()
         _cacheMoviesData.value = result.map { it.toMovie() }
         result[0].genres?.let {
-            _genresData.value=it
+            _genresData.value = it
         }
     }
 
@@ -157,10 +173,14 @@ class MoviesListViewModel(
         }
         firstLaunch = true
         page = 1
-        _changeMovies.value = typeMovies.value
+        //_changeMovies.value = typeMovies.value
         saveChoiceMovie()
-        this.typeMovies = typeMovies
+        //this.typeMovies = typeMovies
         _moviesData.value = emptyList()
+    }
+
+    fun changeTypeMovies(type: TypeMovies) {
+        _changeMovies.value = type
     }
 
     fun changeMoviesList(idPage: Int) =
@@ -195,14 +215,14 @@ class MoviesListViewModel(
 
     private fun saveChoiceMovie() {
         sharedPreferences.edit {
-            putString(TOKEN_CHOICE_MOVIE, _changeMovies.value)
+            //putString(TOKEN_CHOICE_MOVIE, _changeMovies.value)
         }
     }
 
     private fun getChoiceMovie() {
         firstLaunch = false
-        _changeMovies.value =
-            sharedPreferences.getString(TOKEN_CHOICE_MOVIE, TypeMovies.POPULAR.value)
+        //_changeMovies.value =
+        //sharedPreferences.getString(TOKEN_CHOICE_MOVIE, TypeMovies.POPULAR.value)
     }
 
     fun usingDBFavouriteMovie(movie: Movie, condition: Boolean) {

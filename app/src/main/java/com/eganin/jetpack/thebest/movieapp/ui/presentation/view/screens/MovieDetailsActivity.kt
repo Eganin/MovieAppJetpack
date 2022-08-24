@@ -17,7 +17,6 @@ import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.databinding.ActivityMainBinding
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.routing.Router
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetails
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.ListMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MovieAdapter
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.MoviesListViewModel
 
@@ -83,6 +82,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun openMovieList() {
+        /*
         setContent {
             val appComponent = (LocalContext.current.applicationContext as MovieApp).myComponent
             val scaffoldState = rememberScaffoldState()
@@ -93,10 +93,12 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
                     isConnection = appComponent.connection,
                     sharedPreferences = appComponent.getSharedPreferencesMovieType(),
                     notificationsManager = appComponent.getNotificationManager(),
-                    typeMovie = "Popular"
+                    typeMovie = TypeMovies.POPULAR
                 )
             }
         }
+
+         */
     }
 
 
@@ -130,6 +132,7 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun clickPoster(idMovie: Int) {
+        /*
         setContent {
             val appComponent = (LocalContext.current.applicationContext as MovieApp).myComponent
             val scaffoldState = rememberScaffoldState()
@@ -143,6 +146,8 @@ class MovieDetailsActivity : AppCompatActivity(), Router, MovieAdapter.OnClickPo
                 )
             }
         }
+
+         */
     }
 
     companion object {

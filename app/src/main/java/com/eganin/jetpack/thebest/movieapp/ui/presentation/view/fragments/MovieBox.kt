@@ -74,7 +74,6 @@ fun MovieBox(movie: Movie, genres: List<GenresItem>?) {
             )
             Row(modifier = Modifier.padding(top = 4.dp)) {
                 val vote = (movie.voteAverage?.div(2))?.toInt()
-                Log.d("EEE",vote.toString())
                 (0..4).map {
                     if (it < (vote ?: 0)) {
                         Icon(
