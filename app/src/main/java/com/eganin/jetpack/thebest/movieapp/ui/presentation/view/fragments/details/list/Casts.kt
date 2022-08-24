@@ -19,6 +19,7 @@ import coil.compose.AsyncImage
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.BackgroundColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.White
 
 @Composable
@@ -51,7 +52,7 @@ private fun ListActors(listActors: List<CastItem>) {
 private fun ActorCell(info: CastItem) {
     Card(
         shape = RoundedCornerShape(4.dp),
-        backgroundColor = Color(0xFF191926),
+        backgroundColor = BackgroundColor,
         modifier = Modifier.padding(8.dp)
     ) {
         Column {
@@ -63,7 +64,7 @@ private fun ActorCell(info: CastItem) {
                 placeholder = painterResource(R.drawable.ic_baseline_cloud_download_24),
                 fallback = painterResource(R.drawable.ic_baseline_sms_failed_24)
             )
-            Text(text = info.name ?: "", color = Color.White, modifier = Modifier.width(80.dp))
+            Text(text = info.name ?: "", color = Color.White, modifier = Modifier.width(80.dp).padding(bottom = 50.dp))
         }
     }
 }

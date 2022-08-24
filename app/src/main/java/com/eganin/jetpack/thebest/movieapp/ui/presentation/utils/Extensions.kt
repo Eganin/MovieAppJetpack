@@ -1,29 +1,10 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.utils
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.EditText
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieDetailsEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
-
-fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            // do nothing
-        }
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            // do nothing
-        }
-
-        override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged.invoke(editable.toString())
-        }
-    })
-}
 
 fun Movie.toMovieEntity(genres: List<GenresItem>?): MovieEntity {
     return MovieEntity(

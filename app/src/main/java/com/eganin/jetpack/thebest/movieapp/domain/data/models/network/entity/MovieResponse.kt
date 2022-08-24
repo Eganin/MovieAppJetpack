@@ -21,6 +21,9 @@ data class MovieResponse(
 @Serializable
 data class Movie(
 
+    @SerialName("runtime")
+    val runtime: Int? = null,
+
     @SerialName("original_title")
     val originalTitle: String?=null,
 

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetailsViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.isPermanentlyDenied
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.utils.ShowSnackBar
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.AdultColor
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -136,13 +138,14 @@ fun CalendarView(
     запускаем activity settings из AlertDialog
      */
     if (launchSettings.value) {
+        Log.d("EEE","AAAAAAAAAAAAAA")
         val intent = Intent(
             Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
             Uri.parse("package:" + LocalContext.current.packageName)
         )
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        LocalContext.current.applicationContext.startActivity(intent)
         launchSettings.value = !launchSettings.value
+        LocalContext.current.applicationContext.startActivity(intent)
     }
     Image(
         painter = painterResource(id = R.drawable.ic_baseline_calendar_month_24),

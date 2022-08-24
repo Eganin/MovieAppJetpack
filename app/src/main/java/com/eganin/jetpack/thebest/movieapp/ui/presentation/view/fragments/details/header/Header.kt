@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi
@@ -41,7 +42,8 @@ fun Header(
     imagePath: String,
     viewModel: MovieDetailsViewModel,
     movieInfo: MovieDetailsResponse,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    navController: NavController,
 ) {
 
     Box {
@@ -76,7 +78,9 @@ fun Header(
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(start = 18.dp, top = 53.dp)
-                .clickable { },
+                .clickable {
+                    navController.popBackStack()
+                },
         )
 
         Card(
