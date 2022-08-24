@@ -50,6 +50,7 @@ fun ListMovies(
     viewModel.download()
     val movies by viewModel.moviesData.observeAsState()
     val genresList by viewModel.genresData.observeAsState(emptyList())
+    val loading by viewModel.loading
 
     Column(
         modifier = Modifier
@@ -66,6 +67,12 @@ fun ListMovies(
                     MovieCells(movie = it, genres = genresList, navController = navController)
                 }
             }
+        }
+        if (loading) {
+            CircularProgressIndicator(
+                color = White,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
     }
 }

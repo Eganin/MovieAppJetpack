@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.detai
 
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,6 +11,7 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,6 +27,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.M
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.utils.ShowSnackBar
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.BackgroundColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.MovieAppTheme
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.White
 
 @Composable
 fun MovieDetails(
@@ -45,39 +48,47 @@ fun MovieDetails(
     val movieDetailsData by movieDetailsViewModel.detailsData.observeAsState()
     val listActors by movieDetailsViewModel.castData.observeAsState()
     val dataCalendar by movieDetailsViewModel.dataCalendar.observeAsState()
+    val loading by movieDetailsViewModel.loading
 
     if (dataCalendar != null) {
         dataCalendar!!.flags = FLAG_ACTIVITY_NEW_TASK
         LocalContext.current.applicationContext.startActivity(dataCalendar)
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .background(BackgroundColor)
-            .fillMaxSize()
-    ) {
-        item {
-            movieDetailsData?.let {
-                Header(
-                    adult = movieDetailsData?.adult ?: false,
-                    imagePath = movieDetailsData?.backdropPath ?: "",
-                    viewModel = movieDetailsViewModel,
-                    movieInfo = it,
-                    scaffoldState = scaffoldState,
-                    navController=navController,
+    Column(modifier = Modifier
+        .background(BackgroundColor)
+        .fillMaxSize()) {
+        LazyColumn {
+            item {
+                movieDetailsData?.let {
+                    Header(
+                        adult = movieDetailsData?.adult ?: false,
+                        imagePath = movieDetailsData?.backdropPath ?: "",
+                        viewModel = movieDetailsViewModel,
+                        movieInfo = it,
+                        scaffoldState = scaffoldState,
+                        navController=navController,
+                    )
+                }
+            }
+            item {
+                MovieInfo(
+                    title = movieDetailsData?.title,
+                    tagLine = movieDetailsData?.genres?.joinToString(separator = ",") { it.name ?: "" },
+                    rating = (movieDetailsData?.voteAverage?.div(2))?.toInt(),
+                    countReviews = movieDetailsData?.voteCount,
+                    description = movieDetailsData?.overview
                 )
             }
+            item { Casts(listActors = listActors ?: emptyList()) }
         }
-        item {
-            MovieInfo(
-                title = movieDetailsData?.title,
-                tagLine = movieDetailsData?.genres?.joinToString(separator = ",") { it.name ?: "" },
-                rating = (movieDetailsData?.voteAverage?.div(2))?.toInt(),
-                countReviews = movieDetailsData?.voteCount,
-                description = movieDetailsData?.overview
+
+        if (loading) {
+            CircularProgressIndicator(
+                color = White,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
-        item { Casts(listActors = listActors ?: emptyList()) }
     }
 }
 

@@ -55,7 +55,7 @@ fun ListMoviesSearch(
     val trailingIconView = @Composable {
         IconButton(
             onClick = {
-                Log.d("EEE",text)
+                Log.d("EEE", text)
                 viewModel.downloadSearch(query = text)
             },
         ) {
@@ -94,7 +94,6 @@ fun ListMoviesSearch(
         )
         LazyVerticalGrid(
             columns = GridCells.Adaptive(170.dp),
-            modifier = Modifier.padding(top = 18.dp)
         ) {
             movies?.map {
                 item {
@@ -103,11 +102,18 @@ fun ListMoviesSearch(
             }
         }
 
-        if (text.isEmpty()){
+        if (text.isEmpty()) {
             Text(
                 text = stringResource(id = R.string.start_typing_in_a_search_bar_to_find_a_movie),
                 style = TextStyle(fontSize = 14.sp, color = White),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+        }
+
+        if (loading) {
+            CircularProgressIndicator(
+                color = White,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
 
