@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 data class CreditsMovies(
 
     @SerialName("cast")
-    val cast: List<CastItem>? = null,
+    val cast: List<CastItem> = emptyList(),
 
     @SerialName("id")
     val id: Int,
@@ -27,19 +27,19 @@ data class CastItem(
 
     @ColumnInfo(name = Contract.Credits.COLUMN_CHARACTER)
     @SerialName("character")
-    val character: String? = null,
+    val character: String ="",
 
     @ColumnInfo(name = Contract.Credits.COLUMN_ORIGINAL_NAME)
     @SerialName("original_name")
-    val originalName: String? = null,
+    val originalName: String = "",
 
     @ColumnInfo(name = Contract.Credits.COLUMN_NAME)
     @SerialName("name")
-    val name: String? = null,
+    val name: String = "",
 
     @ColumnInfo(name = Contract.Credits.COLUMN_PROFILE_PATH)
     @SerialName("profile_path")
-    val profilePath: String? = null,
+    val profilePath: String = "",
 
     @ColumnInfo(name = Contract.Credits.COLUMN_NAME_ID)
     @PrimaryKey(autoGenerate = true)
@@ -47,5 +47,5 @@ data class CastItem(
     val id: Int,
 
     @ColumnInfo(name = Contract.Credits.COLUMN_ID_BY_MOVIE)
-    var movieId : Int?=null,
+    var movieId : Int=0,
     )

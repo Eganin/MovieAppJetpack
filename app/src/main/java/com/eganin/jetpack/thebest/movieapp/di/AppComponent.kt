@@ -1,6 +1,10 @@
 package com.eganin.jetpack.thebest.movieapp.di
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
@@ -9,6 +13,8 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRe
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepositoryImpl
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.MovieDetailsViewModel
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MoviesListViewModel
 import java.util.*
 
 
@@ -17,21 +23,29 @@ class AppComponent(applicationContext: Context) {
     private val defaultLanguage = Locale.getDefault().language
     val database = MovieDatabase.create(applicationContext)
 
-    private val movieRepository: MovieRepository =
+    val movieRepository: MovieRepository =
         MovieRepositoryImpl(language = defaultLanguage, database = database)
 
-    val movieDetailsRepository: MovieDetailsRepository = MovieDetailsRepositoryImpl(
+    private val movieDetailsRepository: MovieDetailsRepository = MovieDetailsRepositoryImpl(
         language = defaultLanguage,
         database = database
     )
-    private val workerRepository: WorkerRepository = WorkerRepositoryImpl()
+    val workerRepository: WorkerRepository = WorkerRepositoryImpl()
 
-    private val notificationManager = MovieNotificationsManager(context = applicationContext)
+    val notificationManager = MovieNotificationsManager(context = applicationContext)
 
-    fun getMovieRepository() = movieRepository
+    @Composable
+    fun getMoviesListViewModel() = viewModel<MoviesListViewModel>(
+        factory = MoviesListViewModel.Factory(
+            repository = movieRepository,
+            notificationsManager = notificationManager,
+        )
+    )
 
-    fun getWorkerRepository() = workerRepository
-
-    fun getNotificationManager()= notificationManager
-
+    @Composable
+    fun getMovieDetailsViewModel() = viewModel<MovieDetailsViewModel>(
+        factory = MovieDetailsViewModel.Factory(
+            repository = movieDetailsRepository,
+        )
+    )
 }

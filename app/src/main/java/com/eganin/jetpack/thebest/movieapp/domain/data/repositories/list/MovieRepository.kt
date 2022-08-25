@@ -4,7 +4,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEn
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieResponse
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.TypeMovies
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
@@ -17,7 +17,7 @@ interface MovieRepository {
 
     suspend fun downloadSearchMovies(page: Int, query: String): MovieResponse
 
-    suspend fun downloadGenres(): List<GenresItem>?
+    suspend fun downloadGenres(): List<GenresItem>
 
     suspend fun getAllMovies() : List<MovieEntity>
 

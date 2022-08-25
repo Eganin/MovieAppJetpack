@@ -9,16 +9,16 @@ import kotlinx.serialization.Serializable
 data class GenresResponse(
 
 	@SerialName("genres")
-	val genres: List<GenresItem>?=null,
+	val genres: List<GenresItem>,
 )
 @Serializable
 data class GenresItem(
 
 	@ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_NAME_GENRE)
 	@SerialName("name")
-	val name: String?=null,
+	val name: String="",
 
 	@ColumnInfo(name = Contract.MovieDetails.COLUMN_NAME_ID_GENRE)
 	@SerialName("id")
-	val id: Int?=null,
+	val id: Int=0,
 )
