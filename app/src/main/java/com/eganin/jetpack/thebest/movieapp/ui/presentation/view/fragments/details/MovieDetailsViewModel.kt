@@ -39,7 +39,7 @@ class MovieDetailsViewModel(
         viewModelScope.launch(exceptionHandler) {
             withContext(Dispatchers.IO){
                 loading.value = true
-                downloadDataFromDB(id = id)
+                //downloadDataFromDB(id = id)
                 val resultMovieDetails = repository.downloadDetailsInfoForMovie(movieId = id)
                 val resultCasts = repository.downloadCredits(movieId = id).cast
                 resultCasts?.forEach {
