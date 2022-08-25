@@ -12,7 +12,7 @@ MovieEntity - класс для сохранения данных о фильм�
 MovieDetailsResponse- класс для детальных данных в DetailPage
 MovieDetailsEntity- класс для сохранения детальной информации о фильмев БД
  */
-fun Movie.toMovieEntity(genres: List<GenresItem>?): MovieEntity {
+fun Movie.toMovieEntity(genres: List<GenresItem>): MovieEntity {
     return MovieEntity(
         id = this.id,
         originalTitle = this.originalTitle,

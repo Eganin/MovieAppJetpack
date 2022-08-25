@@ -94,7 +94,7 @@ class MoviesListViewModel(
     }
 
     private suspend fun saveDataDB() {
-        movieRepository.insertMovies(movies = _moviesData.value?.map { it.toMovieEntity(genres = _genresData.value) }
+        movieRepository.insertMovies(movies = _moviesData.value?.map { it.toMovieEntity(genres = _genresData.value ?: emptyList()) }
             ?: emptyList())
     }
 
