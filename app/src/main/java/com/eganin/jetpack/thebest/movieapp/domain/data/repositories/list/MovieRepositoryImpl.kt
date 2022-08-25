@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list
 
+import android.util.Log
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
@@ -8,6 +9,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Gen
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.TypeMovies
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 
 class MovieRepositoryImpl(val language: String, database: MovieDatabase) : MovieRepository {
@@ -47,7 +49,10 @@ class MovieRepositoryImpl(val language: String, database: MovieDatabase) : Movie
     }
 
     override suspend fun getAllMovies(): List<MovieEntity> = withContext(defaultDispatcher) {
-        movieDao.getAllMovies()
+        val res = movieDao.getAllMovies()
+        res.ifEmpty {
+            emptyList()
+        }
     }
 
     override suspend fun insertMovies(movies: List<MovieEntity>) = withContext(defaultDispatcher) {
@@ -58,7 +63,7 @@ class MovieRepositoryImpl(val language: String, database: MovieDatabase) : Movie
         movieDao.deleteAllMovies()
     }
 
-    override suspend fun getFavouriteMovieUsingID(id: Int): FavouriteEntity =
+    override suspend fun getFavouriteMovieUsingID(id: Int): FavouriteEntity? =
         withContext(defaultDispatcher) {
             favouriteDao.getFavouriteMovieUsingID(id = id)
         }

@@ -10,7 +10,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEn
 interface FavouriteDao {
 
     @Query("SELECT * FROM favourites WHERE id_movie == :id")
-    fun getFavouriteMovieUsingID(id: Int): FavouriteEntity
+    fun getFavouriteMovieUsingID(id: Int): FavouriteEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFavouriteMovie(favouriteMovie: FavouriteEntity)

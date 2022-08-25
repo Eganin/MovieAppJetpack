@@ -21,7 +21,12 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.White
 
 @Composable
-fun MovieCells(movie: Movie, genres: List<GenresItem>?, navController: NavController) {
+fun MovieCells(
+    movie: Movie,
+    genres: List<GenresItem>?,
+    navController: NavController,
+    viewModel: MoviesListViewModel,
+) {
     Card(
         modifier = Modifier
             .width(170.dp)
@@ -38,7 +43,7 @@ fun MovieCells(movie: Movie, genres: List<GenresItem>?, navController: NavContro
         backgroundColor = BackgroundColor
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            MovieBox(movie = movie, genres = genres)
+            MovieBox(movie = movie, genres = genres, viewModel = viewModel)
             Text(
                 text = movie.title ?: "",
                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 14.sp, color = White),

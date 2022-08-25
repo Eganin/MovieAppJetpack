@@ -33,7 +33,6 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme
 fun MovieDetails(
     id: Int,
     repository: MovieDetailsRepository,
-    connection: Boolean,
     scaffoldState: ScaffoldState,
     navController: NavController,
 ) {
@@ -41,7 +40,6 @@ fun MovieDetails(
     val movieDetailsViewModel: MovieDetailsViewModel = viewModel(
         factory = MovieDetailsViewModel.Factory(
             repository = repository,
-            isConnection = connection,
         )
     )
 

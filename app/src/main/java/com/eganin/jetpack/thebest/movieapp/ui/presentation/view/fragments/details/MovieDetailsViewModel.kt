@@ -17,7 +17,6 @@ import java.util.*
 
 class MovieDetailsViewModel(
     private val repository: MovieDetailsRepository,
-    private val isConnection: Boolean,
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -39,7 +38,8 @@ class MovieDetailsViewModel(
         viewModelScope.launch(exceptionHandler) {
             withContext(Dispatchers.IO){
                 loading.value = true
-                //downloadDataFromDB(id = id)
+
+                downloadDataFromDB(id = id)
                 val resultMovieDetails = repository.downloadDetailsInfoForMovie(movieId = id)
                 val resultCasts = repository.downloadCredits(movieId = id).cast
                 resultCasts?.forEach {
@@ -48,13 +48,14 @@ class MovieDetailsViewModel(
                 _detailsData.postValue(resultMovieDetails)
                 _castData.postValue(resultCasts ?: emptyList())
                 saveDataDB(response = resultMovieDetails, credits = resultCasts ?: emptyList())
+
                 loading.value = false
             }
         }
     }
 
     private suspend fun downloadDataFromDB(id: Int) {
-        _detailsData.postValue(repository.getAllInfoMovie(id = id).toMovieDetailsResponse())
+        _detailsData.postValue(repository.getAllInfoMovie(id = id)?.toMovieDetailsResponse())
         _castData.postValue(repository.getAllCredits(id = id))
     }
 
@@ -109,13 +110,11 @@ class MovieDetailsViewModel(
 
     class Factory(
         private val repository: MovieDetailsRepository,
-        private val isConnection: Boolean,
     ) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MovieDetailsViewModel(
                 repository = repository,
-                isConnection = isConnection,
             ) as T
         }
     }

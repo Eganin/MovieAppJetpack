@@ -3,6 +3,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,6 +62,8 @@ class MainActivity : ComponentActivity() {
                     val appComponent =
                         (LocalContext.current.applicationContext as MovieApp).myComponent
 
+                    val uri = "https://android.movieapp"
+
                     Scaffold(
                         bottomBar = {
                             BottomNavigation(
@@ -78,6 +81,15 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startDestination = TypeMovies.POPULAR.value
                         ) {
+                            composable(route = "/movies/{id}",
+                                deepLinks = listOf(navDeepLink { uriPattern = "$uri/movies/{id}" })
+                            ) {navBackStackEntry ->
+                                OpenDetailsPage(
+                                    navController = navController,
+                                    appComponent = appComponent,
+                                    movieId = navBackStackEntry.arguments?.get("id").toString().toInt()
+                                )
+                            }
                             composable(TypeMovies.POPULAR.value) {
                                 CreateListMovie(
                                     typeMovies = TypeMovies.POPULAR,
@@ -109,8 +121,6 @@ class MainActivity : ComponentActivity() {
                             composable(TypeMovies.SEARCH.value) {
                                 ListMoviesSearch(
                                     repository = appComponent.getMovieRepository(),
-                                    isConnection = appComponent.connection,
-                                    sharedPreferences = appComponent.getSharedPreferencesMovieType(),
                                     notificationsManager = appComponent.getNotificationManager(),
                                     navController = navController,
                                 )
@@ -145,7 +155,6 @@ private fun OpenDetailsPage(
                     MovieDetails(
                         id = id,
                         repository = appComponent.movieDetailsRepository,
-                        connection = appComponent.connection,
                         scaffoldState = scaffoldState,
                         navController = navController
                     )
@@ -158,7 +167,6 @@ private fun OpenDetailsPage(
             MovieDetails(
                 id = movieId,
                 repository = appComponent.movieDetailsRepository,
-                connection = appComponent.connection,
                 scaffoldState = scaffoldState,
                 navController = navController
             )
@@ -201,8 +209,6 @@ private fun CreateListMovie(
 ) {
     ListMovies(
         repository = appComponent.getMovieRepository(),
-        isConnection = appComponent.connection,
-        sharedPreferences = appComponent.getSharedPreferencesMovieType(),
         notificationsManager = appComponent.getNotificationManager(),
         typeMovie = typeMovies,
         navController = navController,

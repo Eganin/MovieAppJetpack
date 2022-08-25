@@ -31,8 +31,6 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme
 @Composable
 fun ListMoviesSearch(
     repository: MovieRepository,
-    isConnection: Boolean,
-    sharedPreferences: SharedPreferences,
     notificationsManager: MovieNotificationsManager,
     navController: NavController,
 ) {
@@ -40,8 +38,6 @@ fun ListMoviesSearch(
     val viewModel = viewModel<MoviesListViewModel>(
         factory = MoviesListViewModel.Factory(
             repository = repository,
-            isConnection = isConnection,
-            sharedPreferences = sharedPreferences,
             notificationsManager = notificationsManager,
         )
     )
@@ -96,7 +92,12 @@ fun ListMoviesSearch(
         ) {
             movies?.map {
                 item {
-                    MovieCells(movie = it, genres = genresList, navController = navController)
+                    MovieCells(
+                        movie = it,
+                        genres = genresList,
+                        navController = navController,
+                        viewModel = viewModel,
+                    )
                 }
             }
         }

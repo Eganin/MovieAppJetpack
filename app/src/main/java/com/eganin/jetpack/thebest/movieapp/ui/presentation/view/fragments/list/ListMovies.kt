@@ -32,8 +32,6 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme
 @Composable
 fun ListMovies(
     repository: MovieRepository,
-    isConnection: Boolean,
-    sharedPreferences: SharedPreferences,
     notificationsManager: MovieNotificationsManager,
     typeMovie: TypeMovies,
     navController: NavController,
@@ -41,13 +39,11 @@ fun ListMovies(
     val viewModel = viewModel<MoviesListViewModel>(
         factory = MoviesListViewModel.Factory(
             repository = repository,
-            isConnection = isConnection,
-            sharedPreferences = sharedPreferences,
             notificationsManager = notificationsManager,
         )
     )
 
-    LaunchedEffect(viewModel){
+    LaunchedEffect(viewModel) {
         viewModel.changeTypeMovies(type = typeMovie)
         viewModel.downloadMovies()
     }
@@ -68,7 +64,12 @@ fun ListMovies(
         ) {
             movies?.map {
                 item {
-                    MovieCells(movie = it, genres = genresList, navController = navController)
+                    MovieCells(
+                        movie = it,
+                        genres = genresList,
+                        navController = navController,
+                        viewModel = viewModel,
+                    )
                 }
             }
         }

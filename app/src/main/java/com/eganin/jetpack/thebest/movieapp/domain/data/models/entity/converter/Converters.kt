@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.converter
 
 import androidx.room.TypeConverter
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
+import java.lang.Exception
 
 class Converters {
     @TypeConverter
@@ -11,7 +12,13 @@ class Converters {
 
     @TypeConverter
     fun stringToGenreIds(str: String): List<Int> {
-        return str.split(",").map { it.toInt() }
+        return str.split(",").map {
+            try {
+                it.toInt()
+            }catch (e : Exception){
+                0
+            }
+        }
     }
 
     @TypeConverter
