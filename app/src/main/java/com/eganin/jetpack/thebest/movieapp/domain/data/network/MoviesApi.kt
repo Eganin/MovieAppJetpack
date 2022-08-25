@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.domain.data.models.network
+package com.eganin.jetpack.thebest.movieapp.domain.data.network
 
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.*
 import retrofit2.http.GET

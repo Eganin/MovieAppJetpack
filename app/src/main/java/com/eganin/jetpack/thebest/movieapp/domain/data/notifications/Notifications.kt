@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
@@ -13,7 +12,7 @@ import androidx.core.app.NotificationManagerCompat.IMPORTANCE_HIGH
 import androidx.core.net.toUri
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.MainActivity
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.MainActivity
 
 interface Notifications {
     fun init()
@@ -27,6 +26,8 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
 
     override fun init() {
         if (notificationManager.getNotificationChannel(CHANNEL_MOVIES) == null) {
+            // создаем канал для нотификаций, если он отсутсвует
+            // канал notification с высоким приоритетом
             val channel =
                 NotificationChannelCompat.Builder(CHANNEL_MOVIES, IMPORTANCE_HIGH)
                     .setName(context.getString(R.string.name_channel_notifications))
@@ -40,6 +41,7 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
     @SuppressLint("UnspecifiedImmutableFlag")
     @WorkerThread
     override fun showNotification(movie: Movie) {
+        // deep link
         val uri = "https://android.movieapp/movies/${movie.id}".toUri()
 
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_MOVIES)
@@ -48,6 +50,7 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
             .setSmallIcon(R.drawable.ic_baseline_movie_24)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(
+                // PrndingIntent - для запуска DetailPage в MainActivity
                 PendingIntent.getActivity(
                     context,
                     REQUEST_CONTENT_MOVIES,

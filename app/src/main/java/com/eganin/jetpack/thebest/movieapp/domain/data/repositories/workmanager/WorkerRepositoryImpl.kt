@@ -8,6 +8,10 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.workmanager.MyWorkerMovie
 import java.util.concurrent.TimeUnit
 
 class WorkerRepositoryImpl : WorkerRepository {
+    /*
+    Выполняем отложенную работу только когда
+    устройство подключено к зарядке и wifi
+     */
     override val constrains: Constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.UNMETERED)
         .setRequiresCharging(true)

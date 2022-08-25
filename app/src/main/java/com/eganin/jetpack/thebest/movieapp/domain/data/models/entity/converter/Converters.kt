@@ -30,7 +30,7 @@ class Converters {
     fun stringToGenreList(str: String): List<GenresItem> {
         val lst = str.split(",")
         val listGenres = mutableListOf<GenresItem>()
-        for (genre in lst!!) {
+        for (genre in lst) {
             val pair = genre.split(":")
             val result = GenresItem(id = pair[0].toInt(), name = pair[1])
             listGenres.add(result)

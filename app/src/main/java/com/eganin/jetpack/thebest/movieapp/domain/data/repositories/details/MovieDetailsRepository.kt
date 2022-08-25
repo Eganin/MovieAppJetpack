@@ -15,7 +15,7 @@ interface MovieDetailsRepository {
 
     suspend fun downloadCredits(movieId: Int): CreditsMovies
 
-    suspend fun getAllInfoMovie(id: Int): MovieDetailsEntity
+    suspend fun getAllInfoMovie(id: Int): MovieDetailsEntity?
 
     suspend fun insertMovieDetails(movie: MovieDetailsEntity)
 

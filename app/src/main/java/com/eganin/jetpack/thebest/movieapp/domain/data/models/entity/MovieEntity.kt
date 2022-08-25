@@ -18,29 +18,29 @@ data class MovieEntity(
     val id: Int,
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_ORIGINAL_TITLE)
-    val originalTitle: String? = null,
+    val originalTitle: String = "",
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_TITLE)
-    val title: String? = null,
+    val title: String = "",
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_GENRE_IDS)
-    val genreIds: List<Int>? = null,
+    val genreIds: List<Int> = emptyList(),
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_POSTER_PATH)
-    val posterPath: String? = null,
+    val posterPath: String = "",
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_BACKDROP_PATH)
-    val backdropPath: String? = null,
+    val backdropPath: String = "",
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_VOTE_AVERAGE)
-    val voteAverage: Double? = null,
+    val voteAverage: Double = 0.0,
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_ADULT)
-    val adult: Boolean? = null,
+    val adult: Boolean = false,
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_VOTE_COUNT)
-    val voteCount: Int? = null,
+    val voteCount: Int = 0,
 
     @ColumnInfo(name = Contract.Movies.COLUMN_NAME_GENRES_LIST)
-    val genres: List<GenresItem>? = null
+    val genres: List<GenresItem> = emptyList()
 )

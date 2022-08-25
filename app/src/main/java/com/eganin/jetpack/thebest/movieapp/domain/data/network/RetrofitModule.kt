@@ -1,6 +1,5 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.network
 
-import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.MoviesApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
