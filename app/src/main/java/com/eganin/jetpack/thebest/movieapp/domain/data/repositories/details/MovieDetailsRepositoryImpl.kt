@@ -25,7 +25,7 @@ class MovieDetailsRepositoryImpl(val language: String, database: MovieDatabase) 
             RetrofitModule.api.getCreditsUsingId(movieId = movieId, language = language)
         }
 
-    override suspend fun getAllInfoMovie(id: Int): MovieDetailsEntity? =
+    override suspend fun getAllInfoMovie(id: Int): MovieDetailsEntity =
         withContext(defaultDispatcher) {
             movieDetailsDao.getAllInfo(id = id)
         }

@@ -1,9 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.di
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
@@ -12,8 +9,6 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRe
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepositoryImpl
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.isConnection
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.details.MovieDetailsViewModel
 import java.util.*
 
 

@@ -92,7 +92,12 @@ fun ListMoviesSearch(
         ) {
             movies?.map {
                 item {
-                    MovieCells(movie = it, genres = genresList, navController = navController)
+                    MovieCells(
+                        movie = it,
+                        genres = genresList,
+                        navController = navController,
+                        viewModel = viewModel,
+                    )
                 }
             }
         }

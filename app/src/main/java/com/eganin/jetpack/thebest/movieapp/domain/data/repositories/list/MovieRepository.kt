@@ -19,13 +19,13 @@ interface MovieRepository {
 
     suspend fun downloadGenres(): List<GenresItem>?
 
-    suspend fun getAllMovies() : List<MovieEntity>?
+    suspend fun getAllMovies() : List<MovieEntity>
 
     suspend fun insertMovies(movies: List<MovieEntity>)
 
     suspend fun deleteAllMovies()
 
-    suspend fun getFavouriteMovieUsingID(id: Int): FavouriteEntity
+    suspend fun getFavouriteMovieUsingID(id: Int): FavouriteEntity?
 
     suspend fun insertFavouriteMovie(favouriteMovie: FavouriteEntity)
 

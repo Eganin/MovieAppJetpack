@@ -10,7 +10,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Cas
 interface CreditsDao {
 
     @Query("SELECT * FROM credits WHERE id_movie == :id ")
-    fun getAllCredits(id: Int) : List<CastItem>?
+    fun getAllCredits(id: Int) : List<CastItem>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCredits(credits: List<CastItem>)

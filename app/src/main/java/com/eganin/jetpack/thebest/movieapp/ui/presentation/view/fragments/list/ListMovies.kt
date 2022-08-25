@@ -43,7 +43,7 @@ fun ListMovies(
         )
     )
 
-    LaunchedEffect(viewModel){
+    LaunchedEffect(viewModel) {
         viewModel.changeTypeMovies(type = typeMovie)
         viewModel.downloadMovies()
     }
@@ -64,7 +64,12 @@ fun ListMovies(
         ) {
             movies?.map {
                 item {
-                    MovieCells(movie = it, genres = genresList, navController = navController)
+                    MovieCells(
+                        movie = it,
+                        genres = genresList,
+                        navController = navController,
+                        viewModel = viewModel,
+                    )
                 }
             }
         }

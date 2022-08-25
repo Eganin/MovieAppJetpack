@@ -11,6 +11,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRe
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovie
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.utils.toMovieEntity
 import kotlinx.coroutines.*
+import kotlin.coroutines.coroutineContext
 
 
 class MoviesListViewModel(
@@ -30,6 +31,7 @@ class MoviesListViewModel(
     val genresData: LiveData<List<GenresItem>> = _genresData
 
     val loading = mutableStateOf(false)
+    private val isFavouriteMovie = mutableStateOf(false)
 
     private val _moviesData = MutableLiveData<List<Movie>>(emptyList())
     val moviesData: LiveData<List<Movie>> = _moviesData
@@ -59,7 +61,7 @@ class MoviesListViewModel(
     }
 
     private fun download(action: suspend () -> List<Movie>) {
-        viewModelScope.launch(exceptionHandler) {
+        viewModelScope.launch {
             loading.value = true
             downloadDataFromDB()
             withContext(Dispatchers.IO) {
@@ -76,21 +78,24 @@ class MoviesListViewModel(
 
     private suspend fun downloadDataFromDB() {
         val result = movieRepository.getAllMovies()
-        _moviesData.value = result?.map { it.toMovie() }
-        _genresData.value = result?.get(0)?.genres ?: emptyList()
+        if(result.isNotEmpty()){
+            _moviesData.value = result.map { it.toMovie() }
+            _genresData.value = result[0].genres ?: emptyList()
+        }
     }
 
     private suspend fun saveDataDB() {
-        movieRepository.insertMovies(movies = _moviesData.value?.map { it.toMovieEntity(genres = _genresData.value) } ?: emptyList())
+        movieRepository.insertMovies(movies = _moviesData.value?.map { it.toMovieEntity(genres = _genresData.value) }
+            ?: emptyList())
     }
 
     private suspend fun deleteAllDataDB() {
         movieRepository.deleteAllMovies()
     }
 
-    fun usingDBFavouriteMovie(movie: Movie, condition: Boolean) {
+    fun usingDBFavouriteMovie(movie: Movie,condition : Boolean) {
         viewModelScope.launch(exceptionHandler) {
-            if (condition) {
+            if (!condition) {
                 movieRepository.insertFavouriteMovie(
                     favouriteMovie = FavouriteEntity(
                         idMovie = movie.id,
@@ -103,8 +108,11 @@ class MoviesListViewModel(
         }
     }
 
-    suspend fun existsMovie(id: Int): Boolean = withContext(Dispatchers.IO) {
-        movieRepository.getFavouriteMovieUsingID(id = id) != null
+    fun existsMovie(id: Int) : Pair<Boolean,Int>{
+        viewModelScope.launch(exceptionHandler) {
+            isFavouriteMovie.value = movieRepository.getFavouriteMovieUsingID(id = id) != null
+        }
+        return isFavouriteMovie.value to id
     }
 
     class Factory(

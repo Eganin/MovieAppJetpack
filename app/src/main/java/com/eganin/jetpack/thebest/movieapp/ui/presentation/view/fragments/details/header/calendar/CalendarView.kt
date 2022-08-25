@@ -138,7 +138,6 @@ fun CalendarView(
     запускаем activity settings из AlertDialog
      */
     if (launchSettings.value) {
-        Log.d("EEE","AAAAAAAAAAAAAA")
         val intent = Intent(
             Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
             Uri.parse("package:" + LocalContext.current.packageName)

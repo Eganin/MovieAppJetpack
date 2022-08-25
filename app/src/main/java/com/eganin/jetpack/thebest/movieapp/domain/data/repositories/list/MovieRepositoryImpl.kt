@@ -48,8 +48,11 @@ class MovieRepositoryImpl(val language: String, database: MovieDatabase) : Movie
         RetrofitModule.api.getGenres().genres
     }
 
-    override suspend fun getAllMovies(): List<MovieEntity>? = withContext(defaultDispatcher) {
-        movieDao.getAllMovies()
+    override suspend fun getAllMovies(): List<MovieEntity> = withContext(defaultDispatcher) {
+        val res = movieDao.getAllMovies()
+        res.ifEmpty {
+            emptyList()
+        }
     }
 
     override suspend fun insertMovies(movies: List<MovieEntity>) = withContext(defaultDispatcher) {
@@ -60,7 +63,7 @@ class MovieRepositoryImpl(val language: String, database: MovieDatabase) : Movie
         movieDao.deleteAllMovies()
     }
 
-    override suspend fun getFavouriteMovieUsingID(id: Int): FavouriteEntity =
+    override suspend fun getFavouriteMovieUsingID(id: Int): FavouriteEntity? =
         withContext(defaultDispatcher) {
             favouriteDao.getFavouriteMovieUsingID(id = id)
         }

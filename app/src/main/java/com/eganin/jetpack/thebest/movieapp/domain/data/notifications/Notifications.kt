@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
@@ -57,7 +58,6 @@ class MovieNotificationsManager(private val context: Context) : Notifications {
                 )
             )
             .setWhen(System.currentTimeMillis())
-
         notificationManager.notify(
             MOVIE_TAG,
             movie.id,

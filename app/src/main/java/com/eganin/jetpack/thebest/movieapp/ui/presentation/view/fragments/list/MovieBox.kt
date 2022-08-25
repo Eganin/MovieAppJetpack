@@ -1,11 +1,16 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -28,7 +33,17 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Mov
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme.*
 
 @Composable
-fun MovieBox(movie: Movie, genres: List<GenresItem>?) {
+fun MovieBox(movie: Movie, genres: List<GenresItem>?, viewModel: MoviesListViewModel) {
+
+    val isFavouriteMovie = remember { mutableStateOf(false) }
+    val id = remember { mutableStateOf(0) }
+
+    LaunchedEffect(viewModel) {
+        val res = viewModel.existsMovie(id = movie.id)
+        isFavouriteMovie.value = res.first
+        id.value = res.second
+    }
+
     Box {
         ImagePoster(imageUrlPath = movie.posterPath ?: "")
         Card(
@@ -52,10 +67,18 @@ fun MovieBox(movie: Movie, genres: List<GenresItem>?) {
             contentDescription = stringResource(
                 id = R.string.like_description
             ),
-            tint = UnableColor,
+            tint = if (isFavouriteMovie.value && id.value == movie.id) TagLineColor else UnableColor,
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(top = 13.dp, end = 8.dp)
+                .clickable {
+                    Log.d("EEE", isFavouriteMovie.value.toString())
+                    viewModel.usingDBFavouriteMovie(
+                        movie = movie,
+                        condition = isFavouriteMovie.value,
+                    )
+                    isFavouriteMovie.value = !isFavouriteMovie.value
+                }
         )
         Column(
             modifier = Modifier
