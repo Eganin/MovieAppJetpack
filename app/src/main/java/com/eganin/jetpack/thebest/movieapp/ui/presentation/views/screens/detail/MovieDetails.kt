@@ -21,6 +21,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.list.Ca
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.MovieAppTheme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
 
 @Composable
 fun MovieDetails(
@@ -79,10 +80,7 @@ fun MovieDetails(
         }
 
         if (loading) {
-            CircularProgressIndicator(
-                color = White,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            )
+            ProgressBar()
         }
     }
 }

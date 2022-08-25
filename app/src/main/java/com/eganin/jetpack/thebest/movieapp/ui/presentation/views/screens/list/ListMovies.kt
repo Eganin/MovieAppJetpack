@@ -1,6 +1,7 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,6 +23,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TopBarMovi
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
 
 @Composable
 fun ListMovies(
@@ -67,10 +69,7 @@ fun ListMovies(
             }
         }
         if (loading) {
-            CircularProgressIndicator(
-                color = White,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
+            ProgressBar()
         }
     }
 }
