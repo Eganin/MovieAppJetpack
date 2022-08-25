@@ -32,8 +32,6 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.screens.ui.theme
 @Composable
 fun ListMovies(
     repository: MovieRepository,
-    isConnection: Boolean,
-    sharedPreferences: SharedPreferences,
     notificationsManager: MovieNotificationsManager,
     typeMovie: TypeMovies,
     navController: NavController,
@@ -41,8 +39,6 @@ fun ListMovies(
     val viewModel = viewModel<MoviesListViewModel>(
         factory = MoviesListViewModel.Factory(
             repository = repository,
-            isConnection = isConnection,
-            sharedPreferences = sharedPreferences,
             notificationsManager = notificationsManager,
         )
     )

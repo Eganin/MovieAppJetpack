@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list
 
+import android.util.Log
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
@@ -8,6 +9,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Gen
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list.TypeMovies
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 
 class MovieRepositoryImpl(val language: String, database: MovieDatabase) : MovieRepository {
@@ -46,7 +48,7 @@ class MovieRepositoryImpl(val language: String, database: MovieDatabase) : Movie
         RetrofitModule.api.getGenres().genres
     }
 
-    override suspend fun getAllMovies(): List<MovieEntity> = withContext(defaultDispatcher) {
+    override suspend fun getAllMovies(): List<MovieEntity>? = withContext(defaultDispatcher) {
         movieDao.getAllMovies()
     }
 

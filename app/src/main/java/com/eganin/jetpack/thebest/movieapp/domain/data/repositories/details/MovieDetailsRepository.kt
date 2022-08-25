@@ -15,7 +15,7 @@ interface MovieDetailsRepository {
 
     suspend fun downloadCredits(movieId: Int): CreditsMovies
 
-    suspend fun getAllInfoMovie(id: Int): MovieDetailsEntity
+    suspend fun getAllInfoMovie(id: Int): MovieDetailsEntity?
 
     suspend fun insertMovieDetails(movie: MovieDetailsEntity)
 
@@ -23,7 +23,7 @@ interface MovieDetailsRepository {
 
     suspend fun deleteInfoMovieById(id: Int)
 
-    suspend fun getAllCredits(id: Int): List<CastItem>
+    suspend fun getAllCredits(id: Int): List<CastItem>?
 
     suspend fun insertCredits(credits: List<CastItem>)
 

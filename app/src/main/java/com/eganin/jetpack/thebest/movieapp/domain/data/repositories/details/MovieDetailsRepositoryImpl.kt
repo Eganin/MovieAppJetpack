@@ -1,12 +1,11 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details
 
-import android.util.Log
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieDetailsEntity
-import com.eganin.jetpack.thebest.movieapp.domain.data.network.RetrofitModule
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CreditsMovies
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
+import com.eganin.jetpack.thebest.movieapp.domain.data.network.RetrofitModule
 import kotlinx.coroutines.withContext
 
 class MovieDetailsRepositoryImpl(val language: String, database: MovieDatabase) :
@@ -26,7 +25,7 @@ class MovieDetailsRepositoryImpl(val language: String, database: MovieDatabase) 
             RetrofitModule.api.getCreditsUsingId(movieId = movieId, language = language)
         }
 
-    override suspend fun getAllInfoMovie(id: Int): MovieDetailsEntity =
+    override suspend fun getAllInfoMovie(id: Int): MovieDetailsEntity? =
         withContext(defaultDispatcher) {
             movieDetailsDao.getAllInfo(id = id)
         }

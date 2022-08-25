@@ -21,51 +21,22 @@ class AppComponent(applicationContext: Context) {
 
     private val defaultLanguage = Locale.getDefault().language
     val database = MovieDatabase.create(applicationContext)
-    private val sharedPreferencesMovieType =
-        applicationContext.getSharedPreferences(SHARED_PREFERENCES_TAG_MOVIE, MODE_PRIVATE)
-
-    private val sharedPreferencesRationalShown = applicationContext.getSharedPreferences(
-        SHARED_PREFERENCES_TAG_RATIONAL_SHOWN, MODE_PRIVATE
-    )
 
     private val movieRepository: MovieRepository =
         MovieRepositoryImpl(language = defaultLanguage, database = database)
+
     val movieDetailsRepository: MovieDetailsRepository = MovieDetailsRepositoryImpl(
         language = defaultLanguage,
         database = database
     )
     private val workerRepository: WorkerRepository = WorkerRepositoryImpl()
 
-    val connection = isConnection(context = applicationContext)
-
     private val notificationManager = MovieNotificationsManager(context = applicationContext)
 
-
-    fun getMoviesDetailsRepository(fragment: Fragment): MovieDetailsViewModel {
-        return ViewModelProvider(
-            fragment,
-            MovieDetailsViewModel.Factory(
-                repository = movieDetailsRepository,
-                isConnection = connection,
-            )
-        )[MovieDetailsViewModel::class.java]
-    }
-
-
     fun getMovieRepository() = movieRepository
-
-    fun getSharedPreferencesMovieType() = sharedPreferencesMovieType
-
-    fun getSharedPreferencesRationalShown() = sharedPreferencesRationalShown
 
     fun getWorkerRepository() = workerRepository
 
     fun getNotificationManager()= notificationManager
-
-    companion object {
-        private const val SHARED_PREFERENCES_TAG_MOVIE = "MOVIE_CHOICE"
-        private const val SHARED_PREFERENCES_TAG_RATIONAL_SHOWN = "MOVIE_CHOICE"
-        const val TOKEN_CHOICE_MOVIE = "TOKEN_CHOICE_MOVIE"
-    }
 
 }

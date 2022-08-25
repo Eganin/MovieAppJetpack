@@ -109,8 +109,6 @@ class MainActivity : ComponentActivity() {
                             composable(TypeMovies.SEARCH.value) {
                                 ListMoviesSearch(
                                     repository = appComponent.getMovieRepository(),
-                                    isConnection = appComponent.connection,
-                                    sharedPreferences = appComponent.getSharedPreferencesMovieType(),
                                     notificationsManager = appComponent.getNotificationManager(),
                                     navController = navController,
                                 )
@@ -145,7 +143,6 @@ private fun OpenDetailsPage(
                     MovieDetails(
                         id = id,
                         repository = appComponent.movieDetailsRepository,
-                        connection = appComponent.connection,
                         scaffoldState = scaffoldState,
                         navController = navController
                     )
@@ -158,7 +155,6 @@ private fun OpenDetailsPage(
             MovieDetails(
                 id = movieId,
                 repository = appComponent.movieDetailsRepository,
-                connection = appComponent.connection,
                 scaffoldState = scaffoldState,
                 navController = navController
             )
@@ -201,8 +197,6 @@ private fun CreateListMovie(
 ) {
     ListMovies(
         repository = appComponent.getMovieRepository(),
-        isConnection = appComponent.connection,
-        sharedPreferences = appComponent.getSharedPreferencesMovieType(),
         notificationsManager = appComponent.getNotificationManager(),
         typeMovie = typeMovies,
         navController = navController,

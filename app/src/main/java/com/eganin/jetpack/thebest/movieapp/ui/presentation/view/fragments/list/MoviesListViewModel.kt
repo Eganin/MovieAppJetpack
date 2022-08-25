@@ -1,6 +1,5 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.view.fragments.list
 
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
@@ -16,21 +15,16 @@ import kotlinx.coroutines.*
 
 class MoviesListViewModel(
     private val movieRepository: MovieRepository,
-    private val isConnection: Boolean,
-    private val sharedPreferences: SharedPreferences,
     val notificationsManager: MovieNotificationsManager,
 ) : ViewModel() {
 
-    var page = 1
+    private var page = 1
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "CoroutineExceptionHandler got $exception")
     } + SupervisorJob()
     private val _changeMovies = MutableLiveData(TypeMovies.POPULAR)
-    val changeMovies: LiveData<TypeMovies> = _changeMovies
-
-    private val _cacheMoviesData = MutableLiveData<List<Movie>>(emptyList())
-    val cacheMoviesData: LiveData<List<Movie>> = _cacheMoviesData
+    private val changeMovies: LiveData<TypeMovies> = _changeMovies
 
     private val _genresData = MutableLiveData<List<GenresItem>>(emptyList())
     val genresData: LiveData<List<GenresItem>> = _genresData
@@ -68,13 +62,12 @@ class MoviesListViewModel(
         viewModelScope.launch(exceptionHandler) {
             loading.value = true
             downloadDataFromDB()
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 _moviesData.postValue(action())
-                withContext(Dispatchers.Main){
-                    _moviesData.value?.let {
-                        deleteAllDataDB()
-                        saveDataDB(movies = it)
-                    }
+                _genresData.postValue(movieRepository.downloadGenres())
+                withContext(Dispatchers.Main) {
+                    deleteAllDataDB()
+                    saveDataDB()
                 }
             }
             loading.value = false
@@ -83,14 +76,12 @@ class MoviesListViewModel(
 
     private suspend fun downloadDataFromDB() {
         val result = movieRepository.getAllMovies()
-        _moviesData.value = result.map { it.toMovie() }
-        result[0].genres?.let {
-            _genresData.value = it
-        }
+        _moviesData.value = result?.map { it.toMovie() }
+        _genresData.value = result?.get(0)?.genres ?: emptyList()
     }
 
-    private suspend fun saveDataDB(movies: List<Movie>) {
-        movieRepository.insertMovies(movies = movies.map { it.toMovieEntity(genres = _genresData.value) })
+    private suspend fun saveDataDB() {
+        movieRepository.insertMovies(movies = _moviesData.value?.map { it.toMovieEntity(genres = _genresData.value) } ?: emptyList())
     }
 
     private suspend fun deleteAllDataDB() {
@@ -118,27 +109,15 @@ class MoviesListViewModel(
 
     class Factory(
         private val repository: MovieRepository,
-        private val isConnection: Boolean,
-        private val sharedPreferences: SharedPreferences,
         private val notificationsManager: MovieNotificationsManager,
     ) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MoviesListViewModel(
                 movieRepository = repository,
-                isConnection = isConnection,
-                sharedPreferences = sharedPreferences,
                 notificationsManager = notificationsManager
             ) as T
         }
-    }
-
-
-    sealed class State {
-        object Default : State()
-        object Loading : State()
-        object Error : State()
-        object Success : State()
     }
 
     companion object {

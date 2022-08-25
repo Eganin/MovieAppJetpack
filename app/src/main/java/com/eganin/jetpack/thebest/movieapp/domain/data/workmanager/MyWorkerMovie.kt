@@ -23,8 +23,6 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
         Log.d("EEE","WORKER")
         val componentDi = (context.applicationContext as MovieApp).myComponent
         val repository = componentDi.getMovieRepository()
-        val typeMovieString = componentDi.getSharedPreferencesMovieType()
-            .getString(AppComponent.TOKEN_CHOICE_MOVIE, TypeMovies.POPULAR.value)
 
         val notificationsManager = componentDi.getNotificationManager()
 
@@ -32,7 +30,7 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
             coroutineScope.launch {
                 val responseMovies = repository.downloadMovies(
                     page = 1,
-                    typeMovies = getTypeMovie(value = typeMovieString ?: "Popular")
+                    typeMovies = TypeMovies.POPULAR
                 ).results ?: emptyList()
 
                 val genres = repository.downloadGenres() ?: emptyList()
@@ -47,14 +45,6 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
     }
 
     private fun getTorRatedMovie(listMovie: List<Movie>) = listMovie.maxByOrNull { it.voteAverage!! }
-
-
-    private fun getTypeMovie(value: String) = when (value) {
-        "Top Rated" -> TypeMovies.TOP_RATED
-        "Popular" -> TypeMovies.POPULAR
-        "Now Playing" -> TypeMovies.NOW_PLAYING
-        else -> TypeMovies.UP_COMING
-    }
 
     companion object {
         private const val TAG = "MyWorkerMovie"
