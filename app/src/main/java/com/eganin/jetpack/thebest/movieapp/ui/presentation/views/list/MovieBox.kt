@@ -33,10 +33,10 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.network.MoviesApi
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.*
 
 @Composable
-fun MovieBox(movie: Movie, genres: List<GenresItem>,typeMovies: TypeMovies) {
+fun MovieBox(movie: Movie, genres: List<GenresItem>) {
 
     val viewModel =
-        (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel(typeMovies = typeMovies)
+        (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel()
     // isFavouriteImage - для отслеживания сотояния фильма из БД
     val isFavouriteMovie = remember { mutableStateOf(false) }
     val id = remember { mutableStateOf(0) }

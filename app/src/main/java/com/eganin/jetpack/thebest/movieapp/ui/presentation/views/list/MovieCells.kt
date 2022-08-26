@@ -26,8 +26,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.them
 fun MovieCells(
     movie: Movie,
     genres: List<GenresItem>,
-    navController: NavController,
-    typeMovies: TypeMovies
+    navController: NavController
 ) {
     Card(
         modifier = Modifier
@@ -46,7 +45,7 @@ fun MovieCells(
         backgroundColor = BackgroundColor
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            MovieBox(movie = movie, genres = genres,typeMovies=typeMovies)
+            MovieBox(movie = movie, genres = genres)
             Text(
                 text = movie.title,
                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 14.sp, color = White),

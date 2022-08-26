@@ -37,7 +37,7 @@ fun ListMovies(
 
     val genresList by viewModel.genresData.observeAsState(emptyList())
 
-    val state = viewModel.state
+    val state = viewModel.mainScreenState
 
     Column(
         modifier = Modifier
@@ -61,7 +61,6 @@ fun ListMovies(
                     movie = item,
                     genres = genresList,
                     navController = navController,
-                    typeMovies = typeMovie,
                 )
             }
         }

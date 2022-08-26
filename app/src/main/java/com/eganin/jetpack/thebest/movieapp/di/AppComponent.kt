@@ -36,7 +36,7 @@ class AppComponent(applicationContext: Context) {
     val notificationManager = MovieNotificationsManager(context = applicationContext)
 
     @Composable
-    fun getMoviesListViewModel(typeMovies: TypeMovies) = viewModel<MoviesListViewModel>(
+    fun getMoviesListViewModel(typeMovies: TypeMovies=TypeMovies.POPULAR) = viewModel<MoviesListViewModel>(
         factory = MoviesListViewModel.Factory(
             repository = movieRepository,
             notificationsManager = notificationManager,

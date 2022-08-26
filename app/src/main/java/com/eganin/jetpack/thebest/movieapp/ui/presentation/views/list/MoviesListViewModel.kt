@@ -13,6 +13,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Gen
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
 import com.eganin.jetpack.thebest.movieapp.domain.data.paging.DefaultPaginator
+import com.eganin.jetpack.thebest.movieapp.domain.data.paging.SearchPaginator
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovie
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovieEntity
@@ -24,9 +25,6 @@ class MoviesListViewModel(
     private val notificationsManager: MovieNotificationsManager,
     private val typeMovies: TypeMovies,
 ) : ViewModel() {
-
-    private var page = 1
-
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "CoroutineExceptionHandler got $exception")
     } + SupervisorJob()
@@ -35,9 +33,6 @@ class MoviesListViewModel(
     private val _genresData = MutableLiveData<List<GenresItem>>(emptyList())
     val genresData: LiveData<List<GenresItem>> = _genresData
 
-    //для отслеживания загрузки и отображения ProgressBar на странице
-    val loading = mutableStateOf(false)
-
     // для отслеживания любимых фильмов
     private val isFavouriteMovie = mutableStateOf(false)
 
@@ -45,11 +40,13 @@ class MoviesListViewModel(
     private val _moviesData = MutableLiveData<List<Movie>>(emptyList())
     val moviesData: LiveData<List<Movie>> = _moviesData
 
-    var state by mutableStateOf(ScreenState())
+    var mainScreenState by mutableStateOf(MainScreenState())
+    var searchScreenState by mutableStateOf(SearchScreenState())
+
     private val paginator = DefaultPaginator(
-        initialKey = state.page,
+        initialKey = mainScreenState.page,
         onLoadUpdated = {
-            state = state.copy(isLoading = it)
+            mainScreenState = mainScreenState.copy(isLoading = it)
         },
         onRequest = { nextPage ->
             Log.d("EEE",typeMovies.value)
@@ -59,11 +56,31 @@ class MoviesListViewModel(
             ).results
         },
         getNextKey = {
-            state.page + 1
+            mainScreenState.page + 1
         },
         onSuccess = { items, newKey ->
-            state = state.copy(
-                items = state.items + items,
+            mainScreenState = mainScreenState.copy(
+                items = mainScreenState.items + items,
+                page = newKey,
+                endReached = items.isEmpty(),
+            )
+        }
+    )
+
+    private val paginatorSearch = SearchPaginator(
+        initialKey = searchScreenState.page,
+        onLoadUpdated = {
+            searchScreenState = searchScreenState.copy(isLoading = it)
+        },
+        onRequest = { nextPage, query ->
+            movieRepository.downloadSearchMovies(page = nextPage, query = query).results
+        },
+        getNextKey = {
+            searchScreenState.page + 1
+        },
+        onSuccess = { items, newKey ->
+            searchScreenState = searchScreenState.copy(
+                items = searchScreenState.items + items,
                 page = newKey,
                 endReached = items.isEmpty(),
             )
@@ -81,29 +98,9 @@ class MoviesListViewModel(
         }
     }
 
-    fun downloadSearch(query: String) {
-        download {
-            movieRepository.downloadSearchMovies(page = page, query = query).results
-        }
-    }
-
-    private fun download(action: suspend () -> List<Movie>) {
+    fun loadSearchItems(query : String){
         viewModelScope.launch {
-            loading.value = true
-            // сохраняем данные в БД
-            downloadDataFromDB()
-            withContext(Dispatchers.IO) {
-                // загружаем фильмы любого типа
-                _moviesData.postValue(action())
-                // сохраняем genres
-                _genresData.postValue(movieRepository.downloadGenres())
-                withContext(Dispatchers.Main) {
-                    // очищишаем данные, чтобы точно сохранить фильмы послденго типа
-                    deleteAllDataDB()
-                    saveDataDB()
-                }
-            }
-            loading.value = false
+            paginatorSearch.loadNextItems(query = query)
         }
     }
 
@@ -174,7 +171,14 @@ class MoviesListViewModel(
     }
 }
 
-data class ScreenState(
+data class MainScreenState(
+    val isLoading: Boolean = false,
+    val items: List<Movie> = emptyList(),
+    val endReached: Boolean = false,
+    val page: Int = 1,
+)
+
+data class SearchScreenState(
     val isLoading: Boolean = false,
     val items: List<Movie> = emptyList(),
     val endReached: Boolean = false,

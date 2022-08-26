@@ -31,20 +31,18 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.them
 fun ListMoviesSearch(
     navController: NavController,
 ) {
-    /*
     val viewModel =
         (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel()
 
-    val movies by viewModel.moviesData.observeAsState()
     val genresList by viewModel.genresData.observeAsState(emptyList())
-    val loading by viewModel.loading
+    val state = viewModel.searchScreenState
 
     var text by remember { mutableStateOf("") }
 
     val trailingIconView = @Composable {
         IconButton(
             onClick = {
-                viewModel.downloadSearch(query = text)
+                viewModel.loadSearchItems(query = text)
             },
         ) {
             Icon(
@@ -83,14 +81,16 @@ fun ListMoviesSearch(
         LazyVerticalGrid(
             columns = GridCells.Adaptive(170.dp),
         ) {
-            movies?.map {
-                item {
-                    MovieCells(
-                        movie = it,
-                        genres = genresList,
-                        navController = navController,
-                    )
+            items(state.items.size) { i ->
+                val item = state.items[i]
+                if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
+                    viewModel.loadSearchItems(query = text)
                 }
+                MovieCells(
+                    movie = item,
+                    genres = genresList,
+                    navController = navController,
+                )
             }
         }
 
@@ -102,7 +102,7 @@ fun ListMoviesSearch(
             )
         }
 
-        if (loading) {
+        if (state.isLoading) {
             CircularProgressIndicator(
                 color = White,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -111,5 +111,4 @@ fun ListMoviesSearch(
 
     }
 
-     */
 }
