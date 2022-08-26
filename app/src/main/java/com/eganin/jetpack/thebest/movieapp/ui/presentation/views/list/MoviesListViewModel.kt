@@ -12,6 +12,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEn
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
+import com.eganin.jetpack.thebest.movieapp.domain.data.paging.DBPaginatorImpl
 import com.eganin.jetpack.thebest.movieapp.domain.data.paging.DefaultPaginator
 import com.eganin.jetpack.thebest.movieapp.domain.data.paging.SearchPaginator
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
@@ -36,12 +37,9 @@ class MoviesListViewModel(
     // для отслеживания любимых фильмов
     private val isFavouriteMovie = mutableStateOf(false)
 
-    // для хранения листа фильмов
-    private val _moviesData = MutableLiveData<List<Movie>>(emptyList())
-    val moviesData: LiveData<List<Movie>> = _moviesData
-
     var mainScreenState by mutableStateOf(MainScreenState())
     var searchScreenState by mutableStateOf(SearchScreenState())
+    var dbScreenState by mutableStateOf(DBScreenState())
 
     private val paginator = DefaultPaginator(
         initialKey = mainScreenState.page,
@@ -49,11 +47,13 @@ class MoviesListViewModel(
             mainScreenState = mainScreenState.copy(isLoading = it)
         },
         onRequest = { nextPage ->
-            Log.d("EEE",typeMovies.value)
-            movieRepository.downloadMovies(
+            val result = movieRepository.downloadMovies(
                 page = nextPage,
                 typeMovies = typeMovies,
             ).results
+            deleteAllDataDB()
+            saveDataDB(list = result)
+            result
         },
         getNextKey = {
             mainScreenState.page + 1
@@ -87,39 +87,62 @@ class MoviesListViewModel(
         }
     )
 
+    private val dbPaginator = DBPaginatorImpl(
+        onLoadUpdated = {
+            dbScreenState = dbScreenState.copy(isLoading = it)
+        },
+        onRequest = {
+            downloadDataFromDB()
+        },
+        onSuccess = { items ->
+            dbScreenState = dbScreenState.copy(
+                items = items,
+            )
+        }
+    )
+
     init {
         notificationsManager.init()
+        loadItemsFromDB()
         loadNextItems()
+        viewModelScope.launch(exceptionHandler) {
+            _genresData.postValue(movieRepository.downloadGenres())
+        }
     }
 
     fun loadNextItems() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             paginator.loadNextItems()
         }
     }
 
-    fun loadSearchItems(query : String){
-        viewModelScope.launch {
+    fun loadSearchItems(query: String) {
+        viewModelScope.launch(exceptionHandler) {
             paginatorSearch.loadNextItems(query = query)
         }
     }
 
-    private suspend fun downloadDataFromDB() {
-        val result = movieRepository.getAllMovies()
-        if (result.isNotEmpty()) {
-            _moviesData.value = result.map { it.toMovie() }
-            // выгружаем genres
-            _genresData.value = result[0].genres
+    fun loadItemsFromDB(){
+        viewModelScope.launch(exceptionHandler){
+            dbPaginator.loadItems()
         }
     }
 
-    private suspend fun saveDataDB() {
-        movieRepository.insertMovies(movies = _moviesData.value?.map {
+    private suspend fun downloadDataFromDB(): List<Movie> {
+        val result = movieRepository.getAllMovies()
+        if (result.isNotEmpty()) {
+            // выгружаем genres
+            _genresData.value = result[0].genres
+        }
+        return result.map { it.toMovie() }
+    }
+
+    private suspend fun saveDataDB(list: List<Movie>) {
+        movieRepository.insertMovies(movies = list.map {
             it.toMovieEntity(
                 genres = _genresData.value ?: emptyList()
             )
-        }
-            ?: emptyList())
+        })
     }
 
     private suspend fun deleteAllDataDB() {
@@ -183,4 +206,9 @@ data class SearchScreenState(
     val items: List<Movie> = emptyList(),
     val endReached: Boolean = false,
     val page: Int = 1,
+)
+
+data class DBScreenState(
+    val isLoading: Boolean = false,
+    val items: List<Movie> = emptyList(),
 )

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +39,7 @@ fun ListMovies(
     val genresList by viewModel.genresData.observeAsState(emptyList())
 
     val state = viewModel.mainScreenState
+    val dbState = viewModel.dbScreenState
 
     Column(
         modifier = Modifier
@@ -52,19 +54,30 @@ fun ListMovies(
             columns = GridCells.Adaptive(170.dp),
             modifier = Modifier.padding(top = 18.dp)
         ) {
-            items(state.items.size) { i ->
-                val item = state.items[i]
-                if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
-                    viewModel.loadNextItems()
+            if (state.items.isEmpty()) {
+                items(dbState.items.size) { i ->
+                    val item = dbState.items[i]
+                    MovieCells(
+                        movie = item,
+                        genres = genresList,
+                        navController = navController,
+                    )
                 }
-                MovieCells(
-                    movie = item,
-                    genres = genresList,
-                    navController = navController,
-                )
+            } else {
+                items(state.items.size) { i ->
+                    val item = state.items[i]
+                    if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
+                        viewModel.loadNextItems()
+                    }
+                    MovieCells(
+                        movie = item,
+                        genres = genresList,
+                        navController = navController,
+                    )
+                }
             }
         }
-        if (state.isLoading) {
+        if (state.isLoading || dbState.isLoading) {
             ProgressBar()
         }
     }
