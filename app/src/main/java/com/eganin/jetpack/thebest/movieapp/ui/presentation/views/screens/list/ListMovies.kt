@@ -1,11 +1,13 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +24,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TopBarMovi
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
 
 @Composable
 fun ListMovies(
@@ -29,19 +32,14 @@ fun ListMovies(
     navController: NavController,
 ) {
     val viewModel =
-        (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel()
+        (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel(
+            typeMovies = typeMovie
+        )
 
-    /*
-    LaunchedEffect - для одного запуска методов внутря, не смотря на recompose
-     */
-    LaunchedEffect(viewModel) {
-        viewModel.changeTypeMovies(type = typeMovie)
-        viewModel.downloadMovies()
-    }
-
-    val movies by viewModel.moviesData.observeAsState(emptyList())
     val genresList by viewModel.genresData.observeAsState(emptyList())
-    val loading by viewModel.loading
+
+    val state = viewModel.mainScreenState
+    val dbState = viewModel.dbScreenState
 
     Column(
         modifier = Modifier
@@ -56,21 +54,31 @@ fun ListMovies(
             columns = GridCells.Adaptive(170.dp),
             modifier = Modifier.padding(top = 18.dp)
         ) {
-            movies.map {
-                item {
+            if (state.items.isEmpty()) {
+                items(dbState.items.size) { i ->
+                    val item = dbState.items[i]
                     MovieCells(
-                        movie = it,
+                        movie = item,
+                        genres = genresList,
+                        navController = navController,
+                    )
+                }
+            } else {
+                items(state.items.size) { i ->
+                    val item = state.items[i]
+                    if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
+                        viewModel.loadNextItems()
+                    }
+                    MovieCells(
+                        movie = item,
                         genres = genresList,
                         navController = navController,
                     )
                 }
             }
         }
-        if (loading) {
-            CircularProgressIndicator(
-                color = White,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
+        if (state.isLoading || dbState.isLoading) {
+            ProgressBar()
         }
     }
 }

@@ -26,7 +26,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.them
 fun MovieCells(
     movie: Movie,
     genres: List<GenresItem>,
-    navController: NavController,
+    navController: NavController
 ) {
     Card(
         modifier = Modifier
