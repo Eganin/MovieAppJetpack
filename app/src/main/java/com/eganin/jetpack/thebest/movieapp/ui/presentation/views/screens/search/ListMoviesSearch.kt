@@ -31,6 +31,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.them
 fun ListMoviesSearch(
     navController: NavController,
 ) {
+    /*
     val viewModel =
         (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel()
 
@@ -109,4 +110,6 @@ fun ListMoviesSearch(
         }
 
     }
+
+     */
 }

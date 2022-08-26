@@ -31,19 +31,13 @@ fun ListMovies(
     navController: NavController,
 ) {
     val viewModel =
-        (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel()
+        (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel(
+            typeMovies = typeMovie
+        )
 
-    /*
-    LaunchedEffect - для одного запуска методов внутря, не смотря на recompose
-     */
-    LaunchedEffect(viewModel) {
-        viewModel.changeTypeMovies(type = typeMovie)
-        viewModel.downloadMovies()
-    }
-
-    val movies by viewModel.moviesData.observeAsState(emptyList())
     val genresList by viewModel.genresData.observeAsState(emptyList())
-    val loading by viewModel.loading
+
+    val state = viewModel.state
 
     Column(
         modifier = Modifier
@@ -58,17 +52,20 @@ fun ListMovies(
             columns = GridCells.Adaptive(170.dp),
             modifier = Modifier.padding(top = 18.dp)
         ) {
-            movies.map {
-                item {
-                    MovieCells(
-                        movie = it,
-                        genres = genresList,
-                        navController = navController,
-                    )
+            items(state.items.size) { i ->
+                val item = state.items[i]
+                if (i >= state.items.size - 1 && !state.endReached && !state.isLoading) {
+                    viewModel.loadNextItems()
                 }
+                MovieCells(
+                    movie = item,
+                    genres = genresList,
+                    navController = navController,
+                    typeMovies = typeMovie,
+                )
             }
         }
-        if (loading) {
+        if (state.isLoading) {
             ProgressBar()
         }
     }

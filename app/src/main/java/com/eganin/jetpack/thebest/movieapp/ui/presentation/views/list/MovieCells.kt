@@ -27,6 +27,7 @@ fun MovieCells(
     movie: Movie,
     genres: List<GenresItem>,
     navController: NavController,
+    typeMovies: TypeMovies
 ) {
     Card(
         modifier = Modifier
@@ -45,7 +46,7 @@ fun MovieCells(
         backgroundColor = BackgroundColor
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            MovieBox(movie = movie, genres = genres)
+            MovieBox(movie = movie, genres = genres,typeMovies=typeMovies)
             Text(
                 text = movie.title,
                 style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 14.sp, color = White),

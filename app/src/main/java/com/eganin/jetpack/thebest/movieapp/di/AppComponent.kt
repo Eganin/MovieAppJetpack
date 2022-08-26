@@ -15,6 +15,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.MovieDetailsViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MoviesListViewModel
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import java.util.*
 
 
@@ -35,10 +36,11 @@ class AppComponent(applicationContext: Context) {
     val notificationManager = MovieNotificationsManager(context = applicationContext)
 
     @Composable
-    fun getMoviesListViewModel() = viewModel<MoviesListViewModel>(
+    fun getMoviesListViewModel(typeMovies: TypeMovies) = viewModel<MoviesListViewModel>(
         factory = MoviesListViewModel.Factory(
             repository = movieRepository,
             notificationsManager = notificationManager,
+            typeMovies=typeMovies,
         )
     )
 

@@ -1,12 +1,18 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list
 
 import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
+import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
+import com.eganin.jetpack.thebest.movieapp.domain.data.paging.DefaultPaginator
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovie
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovieEntity
@@ -15,7 +21,8 @@ import kotlinx.coroutines.*
 
 class MoviesListViewModel(
     private val movieRepository: MovieRepository,
-    val notificationsManager: MovieNotificationsManager,
+    private val notificationsManager: MovieNotificationsManager,
+    private val typeMovies: TypeMovies,
 ) : ViewModel() {
 
     private var page = 1
@@ -23,9 +30,6 @@ class MoviesListViewModel(
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "CoroutineExceptionHandler got $exception")
     } + SupervisorJob()
-    //livedata - для изменения типа скачиваемых фильмов
-    private val _changeMovies = MutableLiveData(TypeMovies.POPULAR)
-    private val changeMovies: LiveData<TypeMovies> = _changeMovies
 
     //liveData - для сохранения genre list
     private val _genresData = MutableLiveData<List<GenresItem>>(emptyList())
@@ -41,20 +45,39 @@ class MoviesListViewModel(
     private val _moviesData = MutableLiveData<List<Movie>>(emptyList())
     val moviesData: LiveData<List<Movie>> = _moviesData
 
+    var state by mutableStateOf(ScreenState())
+    private val paginator = DefaultPaginator(
+        initialKey = state.page,
+        onLoadUpdated = {
+            state = state.copy(isLoading = it)
+        },
+        onRequest = { nextPage ->
+            Log.d("EEE",typeMovies.value)
+            movieRepository.downloadMovies(
+                page = nextPage,
+                typeMovies = typeMovies,
+            ).results
+        },
+        getNextKey = {
+            state.page + 1
+        },
+        onSuccess = { items, newKey ->
+            state = state.copy(
+                items = state.items + items,
+                page = newKey,
+                endReached = items.isEmpty(),
+            )
+        }
+    )
+
     init {
         notificationsManager.init()
+        loadNextItems()
     }
 
-    fun changeTypeMovies(type: TypeMovies) {
-        _changeMovies.value = type
-    }
-
-    fun downloadMovies() {
-        download {
-            movieRepository.downloadMovies(
-                page = page,
-                typeMovies = changeMovies.value ?: TypeMovies.POPULAR
-            ).results
+    fun loadNextItems() {
+        viewModelScope.launch {
+            paginator.loadNextItems()
         }
     }
 
@@ -86,7 +109,7 @@ class MoviesListViewModel(
 
     private suspend fun downloadDataFromDB() {
         val result = movieRepository.getAllMovies()
-        if(result.isNotEmpty()){
+        if (result.isNotEmpty()) {
             _moviesData.value = result.map { it.toMovie() }
             // выгружаем genres
             _genresData.value = result[0].genres
@@ -94,7 +117,11 @@ class MoviesListViewModel(
     }
 
     private suspend fun saveDataDB() {
-        movieRepository.insertMovies(movies = _moviesData.value?.map { it.toMovieEntity(genres = _genresData.value ?: emptyList()) }
+        movieRepository.insertMovies(movies = _moviesData.value?.map {
+            it.toMovieEntity(
+                genres = _genresData.value ?: emptyList()
+            )
+        }
             ?: emptyList())
     }
 
@@ -102,7 +129,7 @@ class MoviesListViewModel(
         movieRepository.deleteAllMovies()
     }
 
-    fun usingDBFavouriteMovie(movie: Movie,condition : Boolean) {
+    fun usingDBFavouriteMovie(movie: Movie, condition: Boolean) {
         viewModelScope.launch(exceptionHandler) {
             if (!condition) {
                 // если фильм еще не добавлен в избрангное
@@ -119,7 +146,7 @@ class MoviesListViewModel(
         }
     }
 
-    fun existsMovie(id: Int) : Pair<Boolean,Int>{
+    fun existsMovie(id: Int): Pair<Boolean, Int> {
         // метод возврщает сущестоввание фильма в БД по id
         viewModelScope.launch(exceptionHandler) {
             isFavouriteMovie.value = movieRepository.getFavouriteMovieUsingID(id = id) != null
@@ -130,12 +157,14 @@ class MoviesListViewModel(
     class Factory(
         private val repository: MovieRepository,
         private val notificationsManager: MovieNotificationsManager,
+        private val typeMovies: TypeMovies,
     ) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MoviesListViewModel(
                 movieRepository = repository,
-                notificationsManager = notificationsManager
+                notificationsManager = notificationsManager,
+                typeMovies = typeMovies,
             ) as T
         }
     }
@@ -144,3 +173,10 @@ class MoviesListViewModel(
         private const val TAG = "MoviesListViewModel"
     }
 }
+
+data class ScreenState(
+    val isLoading: Boolean = false,
+    val items: List<Movie> = emptyList(),
+    val endReached: Boolean = false,
+    val page: Int = 1,
+)
