@@ -15,7 +15,7 @@ import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.header.Header
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.info.MovieInfo
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.list.Casts
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
 
 @Composable
@@ -45,7 +45,7 @@ fun MovieDetails(
 
     Column(
         modifier = Modifier
-            .background(BackgroundColor)
+            .background(JetMovieTheme.colors.primaryBackground)
             .fillMaxSize()
     ) {
         LazyColumn {

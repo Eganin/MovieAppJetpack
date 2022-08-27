@@ -15,10 +15,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.TimeLineColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.TopMenuColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
 
 @Composable
 fun MovieCells(
@@ -30,7 +27,7 @@ fun MovieCells(
         modifier = Modifier
             .width(170.dp)
             .fillMaxHeight()
-            .padding(16.dp)
+            .padding(16.dp + JetMovieTheme.shapes.padding)
             .clickable {
                 with(navController) {
                     //кладем id и навигируемся на MovieDetails
@@ -38,21 +35,26 @@ fun MovieCells(
                     navigate("details")
                 }
             },
-        shape = RoundedCornerShape(4.dp),
-        border = BorderStroke(1.dp, TopMenuColor),
-        backgroundColor = BackgroundColor
+        shape = JetMovieTheme.shapes.cornersStyle,
+        border = BorderStroke(width = 1.dp, JetMovieTheme.colors.secondaryText),
+        backgroundColor = JetMovieTheme.colors.cardBackground,
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             MovieBox(movie = movie, genres = genres)
             Text(
                 text = movie.title,
-                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 14.sp, color = White),
-                modifier = Modifier.padding(start = 8.dp, top = 8.dp)
+                color = JetMovieTheme.colors.primaryText,
+                style = JetMovieTheme.typography.caption,
+                modifier = Modifier.padding(
+                    start = 8.dp + JetMovieTheme.shapes.padding,
+                    top = 8.dp + JetMovieTheme.shapes.padding
+                )
             )
             Text(
                 text = "${movie.voteCount} REVIEWS",
-                style = TextStyle(color = TimeLineColor, fontSize = 8.sp),
-                modifier = Modifier.padding(8.dp)
+                color = JetMovieTheme.colors.secondaryText,
+                style = JetMovieTheme.typography.body,
+                modifier = Modifier.padding(8.dp + JetMovieTheme.shapes.padding)
             )
         }
     }

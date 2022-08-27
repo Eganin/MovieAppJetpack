@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.platform.LocalContext
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
@@ -43,9 +43,9 @@ fun TimePicker(
         }) {
         timepicker(
             colors = TimePickerDefaults.colors(
-                selectorColor = BackgroundColor,
-                selectorTextColor = BackgroundColor,
-                activeBackgroundColor = BackgroundColor,
+                selectorColor = JetMovieTheme.colors.secondaryBackground,
+                selectorTextColor = JetMovieTheme.colors.secondaryBackground,
+                activeBackgroundColor = JetMovieTheme.colors.secondaryBackground,
             )
         ) { time ->
             localTime = time

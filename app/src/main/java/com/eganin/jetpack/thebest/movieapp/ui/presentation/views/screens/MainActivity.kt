@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
             val isDarkModeValue = true
             val currentStyle = remember { mutableStateOf(JetMovieStyle.Orange) }
             val currentFontSize = remember { mutableStateOf(JetMovieSize.Medium) }
-            val currentPaddingSize = remember { mutableStateOf(JetMovieSize.Medium) }
+            val currentPaddingSize = remember { mutableStateOf(JetMovieSize.Small) }
             val currentCornersStyle = remember { mutableStateOf(JetMovieCorners.Rounded) }
             val isDarkMode = remember { mutableStateOf(isDarkModeValue) }
 
@@ -69,13 +69,13 @@ class MainActivity : ComponentActivity() {
             ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = JetMovieTheme.colors.primaryBackground,
                 ) {
                     Scaffold(
                         scaffoldState = scaffoldState,
                         bottomBar = {
                             BottomNavigation(
-                                backgroundColor = BackgroundColor
+                                backgroundColor = JetMovieTheme.colors.secondaryBackground,
                             ) {
                                 bottomItems.forEach { screen ->
                                     BottomNavigationItem(selected = false,
@@ -229,7 +229,7 @@ private fun NavigationIcon(description: String, idPainter: Int) {
     Icon(
         painter = painterResource(id = idPainter),
         contentDescription = description,
-        tint = Black,
+        tint = JetMovieTheme.colors.tintColor,
     )
 }
 

@@ -23,7 +23,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.isPermanentlyDenied
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.AdultColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ShowSnackBar
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -148,8 +148,8 @@ fun CalendarView(
         painter = painterResource(id = R.drawable.ic_baseline_calendar_month_24),
         contentDescription = "Calendar for scheduled viewing",
         modifier = Modifier
-            .background(AdultColor)
-            .padding(5.dp)
+            .background(JetMovieTheme.colors.secondaryBackground)
+            .padding(5.dp + JetMovieTheme.shapes.padding)
             .clickable {
                 permissionsState.permissions.forEach { perm ->
                     when (perm.permission) {

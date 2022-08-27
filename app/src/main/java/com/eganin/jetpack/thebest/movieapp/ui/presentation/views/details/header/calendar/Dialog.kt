@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 
@@ -29,10 +30,18 @@ fun ShowAlertDialog(
             openDialog.value = false
             showAlertDialog.value = !showAlertDialog.value
         }, title = {
-            Text(text = "Permission")
+
+            Text(
+                text = "Permission",
+                style = JetMovieTheme.typography.heading,
+                color = JetMovieTheme.colors.primaryText,
+            )
         },
             text = {
-                Text(text = textMessage)
+                Text(
+                    text = textMessage, style = JetMovieTheme.typography.heading,
+                    color = JetMovieTheme.colors.primaryText,
+                )
             },
             confirmButton = {
                 Button(onClick = {
@@ -49,7 +58,11 @@ fun ShowAlertDialog(
                         }
                     }
                 }) {
-                    Text(text = "OK")
+
+                    Text(
+                        text = "OK", style = JetMovieTheme.typography.heading,
+                        color = JetMovieTheme.colors.primaryText
+                    )
                 }
             },
             dismissButton = {
@@ -57,7 +70,10 @@ fun ShowAlertDialog(
                     openDialog.value = false
                     showAlertDialog.value = !showAlertDialog.value
                 }) {
-                    Text(text = "CANCEL")
+                    Text(
+                        text = "CANCEL", style = JetMovieTheme.typography.heading,
+                        color = JetMovieTheme.colors.primaryText
+                    )
                 }
             })
     }

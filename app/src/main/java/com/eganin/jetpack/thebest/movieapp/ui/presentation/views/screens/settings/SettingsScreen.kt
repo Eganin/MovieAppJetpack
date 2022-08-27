@@ -130,6 +130,12 @@ fun SettingsScreen(
                     }
                 }
             )
+            Divider(
+                modifier = Modifier.padding(start = 16.dp + JetMovieTheme.shapes.padding),
+                thickness = 1.dp,
+                color = JetMovieTheme.colors.secondaryText
+            )
+
 
             Row(
                 modifier = Modifier

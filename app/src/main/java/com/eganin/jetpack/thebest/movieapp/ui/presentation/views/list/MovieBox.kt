@@ -48,21 +48,21 @@ fun MovieBox(movie: Movie, genres: List<GenresItem>) {
     }
 
     Box {
-        ImagePoster(imageUrlPath = movie.posterPath )
+        ImagePoster(imageUrlPath = movie.posterPath)
         Card(
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(start = 10.dp, top = 12.dp)
+                .padding(
+                    start = 10.dp + JetMovieTheme.shapes.padding,
+                    top = 12.dp + JetMovieTheme.shapes.padding
+                )
         ) {
             Text(
                 text = if (movie.adult) "18+" else "12+",
                 modifier = Modifier
-                    .background(AdultColor),
-                style = TextStyle(
-                    color = White,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                ),
+                    .background(JetMovieTheme.colors.secondaryBackground),
+                style = JetMovieTheme.typography.caption,
+                color = JetMovieTheme.colors.primaryText,
             )
         }
         Icon(
@@ -70,10 +70,11 @@ fun MovieBox(movie: Movie, genres: List<GenresItem>) {
             contentDescription = stringResource(
                 id = R.string.like_description
             ),
-            tint = if (isFavouriteMovie.value && id.value == movie.id) TagLineColor else UnableColor,
+            tint = if (isFavouriteMovie.value && id.value == movie.id) JetMovieTheme.colors.tintColor
+            else JetMovieTheme.colors.secondaryText,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 13.dp, end = 8.dp)
+                .padding(top = 13.dp+ JetMovieTheme.shapes.padding, end = 8.dp+ JetMovieTheme.shapes.padding)
                 .clickable {
                     viewModel.usingDBFavouriteMovie(
                         movie = movie,
@@ -84,19 +85,16 @@ fun MovieBox(movie: Movie, genres: List<GenresItem>) {
         )
         Column(
             modifier = Modifier
-                .padding(start = 6.dp)
+                .padding(start = 6.dp+ JetMovieTheme.shapes.padding)
                 .align(Alignment.BottomStart)
         ) {
             Text(
-                modifier = Modifier.padding(start = 2.dp),
+                modifier = Modifier.padding(start = 2.dp+ JetMovieTheme.shapes.padding),
                 text = getTagLine(genres = genres, genreIds = movie.genreIds),
-                style = TextStyle(
-                    color = TagLineColor,
-                    fontSize = 9.sp,
-                    fontWeight = FontWeight.Bold,
-                ),
+                style = JetMovieTheme.typography.body,
+                color = JetMovieTheme.colors.tintColor,
             )
-            RatingBarAndCountReviews(movie=movie)
+            RatingBarAndCountReviews(movie = movie)
         }
     }
 }
@@ -134,38 +132,29 @@ fun ImagePoster(imageUrlPath: String) {
 }
 
 @Composable
-fun RatingBarAndCountReviews(movie: Movie){
-    Row(modifier = Modifier.padding(top = 4.dp)) {
-        val vote = (movie.voteAverage/2).toInt()
+fun RatingBarAndCountReviews(movie: Movie) {
+    Row(modifier = Modifier.padding(top = 4.dp+ JetMovieTheme.shapes.padding)) {
+        val vote = (movie.voteAverage / 2).toInt()
         (0..4).map {
-            if (it < vote ) {
+            if (it < vote) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_star_unable_icon),
                     contentDescription = "$it star rating",
                     modifier = Modifier
-                        .size(12.dp)
-                        .padding(start = 2.dp),
-                    tint = TagLineColor,
+                        .size(12.dp+ JetMovieTheme.shapes.padding)
+                        .padding(start = 2.dp+ JetMovieTheme.shapes.padding),
+                    tint = JetMovieTheme.colors.tintColor,
                 )
             } else {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_star_unable_icon),
                     contentDescription = "$it star rating",
                     modifier = Modifier
-                        .size(12.dp)
-                        .padding(start = 2.dp),
-                    tint = UnableColor,
+                        .size(12.dp+ JetMovieTheme.shapes.padding)
+                        .padding(start = 2.dp+ JetMovieTheme.shapes.padding),
+                    tint = JetMovieTheme.colors.secondaryText,
                 )
             }
         }
-        Text(
-            text = "${movie.voteCount} REVIEWS",
-            style = TextStyle(
-                color = TopMenuColor,
-                fontSize = 8.sp,
-                fontWeight = FontWeight.Bold,
-            ),
-            modifier = Modifier.padding(start = 6.dp)
-        )
     }
 }

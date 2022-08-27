@@ -19,19 +19,24 @@ import coil.compose.AsyncImage
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.network.MoviesApi
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
+
 
 @Composable
 fun Casts(listActors: List<CastItem>) {
     Column(
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, top = 24.dp)
+            .padding(
+                start = 16.dp + JetMovieTheme.shapes.padding,
+                end = 16.dp + JetMovieTheme.shapes.padding,
+                top = 24.dp + JetMovieTheme.shapes.padding
+            )
             .fillMaxWidth()
     ) {
         Text(
             text = "Cast",
-            style = TextStyle(color = White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            color=JetMovieTheme.colors.primaryText,
+            style = JetMovieTheme.typography.caption,
         )
         ListActors(listActors = listActors)
     }
@@ -51,9 +56,9 @@ private fun ListActors(listActors: List<CastItem>) {
 @Composable
 private fun ActorCell(info: CastItem) {
     Card(
-        shape = RoundedCornerShape(4.dp),
-        backgroundColor = BackgroundColor,
-        modifier = Modifier.padding(8.dp)
+        shape = JetMovieTheme.shapes.cornersStyle,
+        backgroundColor = JetMovieTheme.colors.primaryBackground,
+        modifier = Modifier.padding(8.dp+ JetMovieTheme.shapes.padding)
     ) {
         Column {
             AsyncImage(
@@ -64,7 +69,13 @@ private fun ActorCell(info: CastItem) {
                 placeholder = painterResource(R.drawable.ic_baseline_cloud_download_24),
                 fallback = painterResource(R.drawable.ic_baseline_sms_failed_24)
             )
-            Text(text = info.name, color = Color.White, modifier = Modifier.width(80.dp).padding(bottom = 50.dp))
+            Text(
+                text = info.name,
+                color = JetMovieTheme.colors.primaryText,
+                modifier = Modifier
+                    .width(80.dp+ JetMovieTheme.shapes.padding)
+                    .padding(bottom = 50.dp+ JetMovieTheme.shapes.padding)
+            )
         }
     }
 }

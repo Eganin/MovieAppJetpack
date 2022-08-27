@@ -17,7 +17,7 @@ import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MovieCells
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TopBarMovieList
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
 
 @Composable
@@ -37,7 +37,7 @@ fun ListMovies(
 
     Column(
         modifier = Modifier
-            .background(BackgroundColor)
+            .background(JetMovieTheme.colors.primaryBackground)
             .fillMaxSize()
     ) {
         TopBarMovieList(typeMovie = typeMovie.value)
@@ -46,7 +46,7 @@ fun ListMovies(
          */
         LazyVerticalGrid(
             columns = GridCells.Adaptive(170.dp),
-            modifier = Modifier.padding(top = 18.dp)
+            modifier = Modifier.padding(top = 18.dp+JetMovieTheme.shapes.padding)
         ) {
             if (state.items.isEmpty()) {
                 // с начала загружаем данные из БД

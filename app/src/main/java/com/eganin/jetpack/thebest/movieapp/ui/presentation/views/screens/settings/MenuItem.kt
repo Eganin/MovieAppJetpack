@@ -93,7 +93,7 @@ fun MenuItem(
 
         Divider(
             modifier = Modifier.padding(start = 16.dp + JetMovieTheme.shapes.padding),
-            thickness = 0.5.dp,
+            thickness = 1.dp,
             color = JetMovieTheme.colors.secondaryText
         )
     }

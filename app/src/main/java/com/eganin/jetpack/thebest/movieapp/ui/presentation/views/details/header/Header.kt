@@ -68,35 +68,46 @@ fun Header(
         Text(
             text = stringResource(id = R.string.forward_back_text_view_path) + " " +
                     stringResource(id = R.string.forward_back_text_view_text),
-            style = TextStyle(fontSize = 12.sp, color = TopMenuColor),
+            style = JetMovieTheme.typography.body,
+            color = JetMovieTheme.colors.secondaryText,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(start = 18.dp, top = 53.dp)
+                .padding(
+                    start = 18.dp + JetMovieTheme.shapes.padding,
+                    top = 53.dp + JetMovieTheme.shapes.padding
+                )
                 .clickable {
                     navController.popBackStack()
                 },
         )
 
         Card(
-            shape = RoundedCornerShape(5.dp),
+            shape = JetMovieTheme.shapes.cornersStyle,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 16.dp, bottom = 26.dp)
+                .padding(
+                    start = 16.dp + JetMovieTheme.shapes.padding,
+                    bottom = 26.dp + JetMovieTheme.shapes.padding
+                )
         ) {
             Text(
                 text = if (adult) "18+" else "12+",
                 modifier = Modifier
-                    .background(AdultColor)
-                    .padding(5.dp),
-                style = TextStyle(color = White, fontSize = 12.sp),
+                    .background(JetMovieTheme.colors.secondaryBackground)
+                    .padding(5.dp + JetMovieTheme.shapes.padding),
+                color = JetMovieTheme.colors.primaryText,
+                style = JetMovieTheme.typography.caption,
             )
         }
 
         Card(
-            shape = RoundedCornerShape(5.dp),
+            shape = JetMovieTheme.shapes.cornersStyle,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 65.dp, bottom = 23.dp)
+                .padding(
+                    start = 65.dp + JetMovieTheme.shapes.padding,
+                    bottom = 27.dp + JetMovieTheme.shapes.padding
+                )
         ) {
             CalendarView(
                 movieInfo = movieInfo,

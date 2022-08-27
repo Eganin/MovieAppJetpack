@@ -14,7 +14,8 @@ data class JetMovieColors(
     val secondaryBackground: Color,
     val tintColor: Color,
     val controlColor: Color,
-    val errorColor: Color
+    val errorColor: Color,
+    val cardBackground : Color,
 )
 
 data class JetMovieTypography(

@@ -11,27 +11,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val DarkColorScheme = darkColorScheme(
-    primary = OnPrimaryColor,
-    secondary = AdultColor,
-    onPrimary = OnPrimaryColor,
-    onSecondary = Black,
-    background = BackgroundColor
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = OnPrimaryColor,
-    secondary = AdultColor,
-    onPrimary = OnPrimaryColor,
-    onSecondary = Black,
-    background = BackgroundColor
-)
-
 @Composable
 fun MainTheme(
     style: JetMovieStyle = JetMovieStyle.Orange,
     textSize: JetMovieSize = JetMovieSize.Medium,
-    paddingSize: JetMovieSize = JetMovieSize.Medium,
+    paddingSize: JetMovieSize = JetMovieSize.Small,
     corners: JetMovieCorners = JetMovieCorners.Rounded,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
@@ -68,18 +52,18 @@ fun MainTheme(
         ),
         body = TextStyle(
             fontSize = when (textSize) {
-                JetMovieSize.Small -> 9.sp
-                JetMovieSize.Medium -> 11.sp
-                JetMovieSize.Big -> 13.sp
+                JetMovieSize.Small -> 12.sp
+                JetMovieSize.Medium -> 14.sp
+                JetMovieSize.Big -> 16.sp
             },
             fontWeight = FontWeight.Normal
         ),
 
         caption = TextStyle(
             fontSize = when (textSize) {
-                JetMovieSize.Small -> 12.sp
-                JetMovieSize.Medium -> 14.sp
-                JetMovieSize.Big -> 16.sp
+                JetMovieSize.Small -> 14.sp
+                JetMovieSize.Medium -> 16.sp
+                JetMovieSize.Big -> 18.sp
             },
             fontWeight = FontWeight.Bold,
         )

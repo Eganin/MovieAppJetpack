@@ -2,17 +2,10 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Black = Color(0xFF000000)
-val White = Color(0xFFFFFFFF)
 val BackgroundColor = Color(0xFF191926)
-val TopMenuColor = Color(0xFF6D6D80)
-val TagLineColor= Color(0xFFFF3466)
-val UnableColor = Color(0xFF6D6D80)
-val OnPrimaryColor = Color(0xFF26263C)
-val AdultColor = Color(0xFF191926)
-val TimeLineColor=  Color(0XFF565665)
 val StartGradientColor =Color(0x00191926)
 val EndGradientColor = Color(0xFF7F7F9E)
+val EditTextSearchBackGround =Color(0xFFF3F4F5)
 
 val baseLightPalette = JetMovieColors(
     primaryBackground = Color(0xFFFFFFFF),
@@ -22,6 +15,7 @@ val baseLightPalette = JetMovieColors(
     tintColor = Color.Magenta,
     controlColor = Color(0xFF7A8A99),
     errorColor = Color(0xFFFF3377),
+    cardBackground = Color(0xFFC5D2DF)
 )
 
 val baseDarkPalette = JetMovieColors(
@@ -31,7 +25,8 @@ val baseDarkPalette = JetMovieColors(
     secondaryText = Color(0xFF6D6D80),
     tintColor = Color.Magenta,
     controlColor = Color(0xFF7A8A99),
-    errorColor = Color(0xFFFF6699)
+    errorColor = Color(0xFFFF6699),
+    cardBackground = Color(0xFF242438)
 )
 
 val purpleLightPalette = baseLightPalette.copy(
