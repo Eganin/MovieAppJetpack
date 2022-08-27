@@ -2,7 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.header
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -34,7 +34,7 @@ fun DatePicker(
                 showDatePicker.value = !showDatePicker.value
             }
         }) {
-        datepicker(colors = DatePickerDefaults.colors(headerBackgroundColor = BackgroundColor)) { date ->
+        datepicker(colors = DatePickerDefaults.colors(headerBackgroundColor = JetMovieTheme.colors.secondaryBackground)) { date ->
             dateTime = date
         }
     }

@@ -23,9 +23,8 @@ import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MovieCells
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.Black
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
 
 @Composable
 fun ListMoviesSearch(
@@ -48,21 +47,21 @@ fun ListMoviesSearch(
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_search_24),
                 contentDescription = "",
-                tint = Black
+                tint = JetMovieTheme.colors.tintColor,
             )
         }
     }
 
     Column(
         modifier = Modifier
-            .background(BackgroundColor)
+            .background(JetMovieTheme.colors.primaryBackground)
             .fillMaxSize()
     ) {
 
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(20.dp + JetMovieTheme.shapes.padding),
             value = text,
             onValueChange = {
                 text = it
@@ -71,12 +70,12 @@ fun ListMoviesSearch(
             placeholder = { Text(text = "Enter Text") },
             trailingIcon = trailingIconView,
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = White,
-                cursorColor = Black,
-                focusedLabelColor = Black,
-                focusedIndicatorColor = Black,
+                backgroundColor = EditTextSearchBackGround,
+                cursorColor = JetMovieTheme.colors.tintColor,
+                focusedLabelColor = JetMovieTheme.colors.tintColor,
+                focusedIndicatorColor = JetMovieTheme.colors.tintColor,
             ),
-            shape = RoundedCornerShape(20.dp)
+            shape = JetMovieTheme.shapes.cornersStyle,
         )
         LazyVerticalGrid(
             columns = GridCells.Adaptive(170.dp),
@@ -97,16 +96,14 @@ fun ListMoviesSearch(
         if (text.isEmpty()) {
             Text(
                 text = stringResource(id = R.string.start_typing_in_a_search_bar_to_find_a_movie),
-                style = TextStyle(fontSize = 14.sp, color = White),
+                style = JetMovieTheme.typography.body,
+                color =JetMovieTheme.colors.primaryText,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
         }
 
         if (state.isLoading) {
-            CircularProgressIndicator(
-                color = White,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
+            ProgressBar()
         }
 
     }

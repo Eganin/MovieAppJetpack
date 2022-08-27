@@ -11,9 +11,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.TagLineColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.UnableColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.TagLineColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.UnableColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.White
 
 @Composable
 fun MovieInfo(
@@ -37,9 +38,13 @@ fun Title(title: String) {
     Text(
         text = title,
         modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp)
+            .padding(
+                start = 16.dp + JetMovieTheme.shapes.padding,
+                end = 16.dp + JetMovieTheme.shapes.padding
+            )
             .fillMaxWidth(),
-        style = TextStyle(color = White, fontSize = 40.sp, fontWeight = FontWeight.Bold)
+        color = JetMovieTheme.colors.primaryText,
+        style = JetMovieTheme.typography.heading,
     )
 }
 
@@ -47,22 +52,36 @@ fun Title(title: String) {
 fun TagLine(tags: String) {
     Text(
         text = tags,
-        style = TextStyle(color = TagLineColor),
-        modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+        style = JetMovieTheme.typography.body,
+        color = JetMovieTheme.colors.tintColor,
+        modifier = Modifier.padding(
+            start = 16.dp + JetMovieTheme.shapes.padding,
+            top = 4.dp + JetMovieTheme.shapes.padding
+        )
     )
 }
 
 @Composable
 fun RatingBar(rating: Int) {
     val modifierStars = Modifier
-        .padding(start = 6.dp, top = 8.dp)
-        .height(12.dp)
-    Row(modifier = Modifier.padding(start = 10.dp, top = 8.dp)) {
+        .padding(
+            start = 6.dp + JetMovieTheme.shapes.padding,
+            top = 8.dp + JetMovieTheme.shapes.padding
+        )
+        .height(12.dp + JetMovieTheme.shapes.padding)
+    Row(
+        modifier = Modifier.padding(
+            start = 10.dp + JetMovieTheme.shapes.padding,
+            top = 8.dp + JetMovieTheme.shapes.padding
+        )
+    ) {
         (0..4).map { i ->
             Icon(
                 painter = painterResource(id = R.drawable.ic_star_unable_icon),
                 contentDescription = "$i Star Rating",
-                tint = if (i >= rating) UnableColor else TagLineColor,
+                tint =
+                if (i >= rating) JetMovieTheme.colors.secondaryText
+                else JetMovieTheme.colors.tintColor,
                 modifier = modifierStars
             )
         }
@@ -73,8 +92,9 @@ fun RatingBar(rating: Int) {
 fun CounterReviews(countReviews: Int) {
     Text(
         text = "$countReviews REVIEWS",
-        modifier = Modifier.padding(12.dp),
-        style = TextStyle(color = UnableColor, fontWeight = FontWeight.Bold)
+        modifier = Modifier.padding(12.dp + JetMovieTheme.shapes.padding),
+        color = JetMovieTheme.colors.secondaryText,
+        style = JetMovieTheme.typography.caption,
     )
 }
 
@@ -82,17 +102,23 @@ fun CounterReviews(countReviews: Int) {
 fun StoryLine(description: String) {
     Column(
         modifier = Modifier
-            .padding(top = 23.dp, start = 16.dp, end = 16.dp)
+            .padding(
+                top = 23.dp + JetMovieTheme.shapes.padding,
+                start = 16.dp + JetMovieTheme.shapes.padding,
+                end = 16.dp + JetMovieTheme.shapes.padding
+            )
             .fillMaxWidth()
     ) {
         Text(
             text = "StoryLine",
-            style = TextStyle(color = White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            color = JetMovieTheme.colors.primaryText,
+            style = JetMovieTheme.typography.caption,
         )
         Text(
-            modifier = Modifier.padding(top = 15.dp),
+            modifier = Modifier.padding(top = 15.dp + JetMovieTheme.shapes.padding),
             text = description,
-            style = TextStyle(color = UnableColor, fontSize = 14.sp)
+            color = JetMovieTheme.colors.secondaryText,
+            style = JetMovieTheme.typography.body,
         )
     }
 }

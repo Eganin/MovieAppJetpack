@@ -10,6 +10,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -24,9 +26,8 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.detail.MovieDetails
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.ListMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.search.ListMoviesSearch
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.Black
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.MovieAppTheme
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.settings.SettingsScreen
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
 
 class MainActivity : ComponentActivity() {
 
@@ -34,6 +35,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val isDarkModeValue = true
+            val currentStyle = remember { mutableStateOf(JetMovieStyle.Orange) }
+            val currentFontSize = remember { mutableStateOf(JetMovieSize.Medium) }
+            val currentPaddingSize = remember { mutableStateOf(JetMovieSize.Small) }
+            val currentCornersStyle = remember { mutableStateOf(JetMovieCorners.Rounded) }
+            val isDarkMode = remember { mutableStateOf(isDarkModeValue) }
+
             //запускаем Work manager
             StartWorker()
             val navController: NavHostController = rememberNavController()
@@ -44,22 +53,29 @@ class MainActivity : ComponentActivity() {
                     TypeMovies.NOW_PLAYING.value,
                     TypeMovies.UP_COMING.value,
                     TypeMovies.SEARCH.value,
+                    "settings",
                 )
 
             // root uri for deep links
             val uri = "https://android.movieapp"
             // scaffoldState for SnackBar
             val scaffoldState = rememberScaffoldState()
-            MovieAppTheme {
+            MainTheme(
+                style = currentStyle.value,
+                darkTheme = isDarkMode.value,
+                textSize = currentFontSize.value,
+                corners = currentCornersStyle.value,
+                paddingSize = currentPaddingSize.value
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = JetMovieTheme.colors.primaryBackground,
                 ) {
                     Scaffold(
                         scaffoldState = scaffoldState,
                         bottomBar = {
                             BottomNavigation(
-                                backgroundColor = BackgroundColor
+                                backgroundColor = JetMovieTheme.colors.secondaryBackground,
                             ) {
                                 bottomItems.forEach { screen ->
                                     BottomNavigationItem(selected = false,
@@ -120,6 +136,29 @@ class MainActivity : ComponentActivity() {
                                     scaffoldState = scaffoldState,
                                 )
                             }
+                            composable("settings") {
+                                SettingsScreen(
+                                    isDarkMode = isDarkMode.value,
+                                    currentTextSize = currentFontSize.value,
+                                    currentPaddingSize = currentPaddingSize.value,
+                                    currentCornersStyle = currentCornersStyle.value,
+                                    onDarkModeChanged = {
+                                        isDarkMode.value = it
+                                    },
+                                    onNewStyle = {
+                                        currentStyle.value = it
+                                    },
+                                    onTextSizeChanged = {
+                                        currentFontSize.value = it
+                                    },
+                                    onPaddingSizeChanged = {
+                                        currentPaddingSize.value = it
+                                    },
+                                    onCornersStyleChanged = {
+                                        currentCornersStyle.value = it
+                                    }
+                                )
+                            }
                         }
                     }
                 }
@@ -178,6 +217,10 @@ private fun GetIcon(screen: String) {
             description = screen,
             idPainter = R.drawable.ic_magnify_expand
         )
+        "settings" -> NavigationIcon(
+            description = "settings",
+            idPainter = R.drawable.ic_baseline_settings_24,
+        )
     }
 }
 
@@ -186,7 +229,7 @@ private fun NavigationIcon(description: String, idPainter: Int) {
     Icon(
         painter = painterResource(id = idPainter),
         contentDescription = description,
-        tint = Black,
+        tint = JetMovieTheme.colors.tintColor,
     )
 }
 
