@@ -1,25 +1,15 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.ViewCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = OnPrimaryColor,
@@ -97,9 +87,9 @@ fun MainTheme(
 
     val shapes = JetMovieShape(
         padding = when (paddingSize) {
-            JetMovieSize.Small -> 5.dp
-            JetMovieSize.Medium -> 8.dp
-            JetMovieSize.Big -> 12.dp
+            JetMovieSize.Small -> 0.dp
+            JetMovieSize.Medium -> 3.dp
+            JetMovieSize.Big -> 5.dp
         },
         cornersStyle = when (corners) {
             JetMovieCorners.Flat -> RoundedCornerShape(0.dp)

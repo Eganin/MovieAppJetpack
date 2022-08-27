@@ -43,7 +43,7 @@ fun MenuItem(
         Row(
             Modifier
                 .clickable { isDropdownOpen.value = true }
-                .padding(16.dp),
+                .padding(16.dp+JetMovieTheme.shapes.padding),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -61,7 +61,7 @@ fun MenuItem(
 
             Icon(
                 modifier = Modifier
-                    .size(18.dp)
+                    .size(18.dp+JetMovieTheme.shapes.padding)
                     .align(Alignment.CenterVertically),
                 painter = painterResource(id = R.drawable.ic_baseline_arrow_forward_ios_24),
                 contentDescription = "Arrow choice",
@@ -92,11 +92,9 @@ fun MenuItem(
         }
 
         Divider(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .align(Alignment.BottomStart),
+            modifier = Modifier.padding(start = 16.dp + JetMovieTheme.shapes.padding),
             thickness = 0.5.dp,
-            color = JetMovieTheme.colors.secondaryText.copy(alpha = 0.3f)
+            color = JetMovieTheme.colors.secondaryText
         )
     }
 }
