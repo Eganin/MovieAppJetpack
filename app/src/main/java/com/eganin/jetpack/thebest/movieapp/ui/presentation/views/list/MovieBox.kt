@@ -136,9 +136,9 @@ fun ImagePoster(imageUrlPath: String) {
 @Composable
 fun RatingBarAndCountReviews(movie: Movie){
     Row(modifier = Modifier.padding(top = 4.dp)) {
-        val vote = (movie.voteAverage?.div(2))?.toInt()
+        val vote = (movie.voteAverage/2).toInt()
         (0..4).map {
-            if (it < (vote ?: 0)) {
+            if (it < vote ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_star_unable_icon),
                     contentDescription = "$it star rating",

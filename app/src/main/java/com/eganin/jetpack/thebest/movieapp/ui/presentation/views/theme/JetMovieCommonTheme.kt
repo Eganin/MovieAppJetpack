@@ -20,7 +20,6 @@ data class JetMovieColors(
 data class JetMovieTypography(
     val heading: TextStyle,
     val body: TextStyle,
-    val toolbar: TextStyle,
     val caption: TextStyle,
 )
 

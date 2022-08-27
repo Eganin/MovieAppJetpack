@@ -39,13 +39,13 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun MainTheme(
-    style: JetMovieStyle=  JetMovieStyle.Orange,
-    textSize : JetMovieSize = JetMovieSize.Medium,
-    paddingSize : JetMovieSize = JetMovieSize.Medium,
-    corners : JetMovieCorners = JetMovieCorners.Rounded,
-    darkTheme : Boolean = isSystemInDarkTheme(),
+    style: JetMovieStyle = JetMovieStyle.Orange,
+    textSize: JetMovieSize = JetMovieSize.Medium,
+    paddingSize: JetMovieSize = JetMovieSize.Medium,
+    corners: JetMovieCorners = JetMovieCorners.Rounded,
+    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
-){
+) {
     val colors = when (darkTheme) {
         true -> {
             when (style) {
@@ -70,34 +70,28 @@ fun MainTheme(
     val typography = JetMovieTypography(
         heading = TextStyle(
             fontSize = when (textSize) {
-                JetMovieSize.Small -> 24.sp
-                JetMovieSize.Medium -> 28.sp
-                JetMovieSize.Big -> 32.sp
+                JetMovieSize.Small -> 30.sp
+                JetMovieSize.Medium -> 35.sp
+                JetMovieSize.Big -> 40.sp
             },
             fontWeight = FontWeight.Bold
         ),
         body = TextStyle(
             fontSize = when (textSize) {
-                JetMovieSize.Small -> 14.sp
-                JetMovieSize.Medium -> 16.sp
-                JetMovieSize.Big -> 18.sp
+                JetMovieSize.Small -> 9.sp
+                JetMovieSize.Medium -> 11.sp
+                JetMovieSize.Big -> 13.sp
             },
             fontWeight = FontWeight.Normal
         ),
-        toolbar = TextStyle(
-            fontSize = when (textSize) {
-                JetMovieSize.Small -> 14.sp
-                JetMovieSize.Medium -> 16.sp
-                JetMovieSize.Big -> 18.sp
-            },
-            fontWeight = FontWeight.Medium
-        ),
+
         caption = TextStyle(
             fontSize = when (textSize) {
-                JetMovieSize.Small -> 10.sp
-                JetMovieSize.Medium -> 12.sp
-                JetMovieSize.Big -> 14.sp
-            }
+                JetMovieSize.Small -> 12.sp
+                JetMovieSize.Medium -> 14.sp
+                JetMovieSize.Big -> 16.sp
+            },
+            fontWeight = FontWeight.Bold,
         )
     )
 
@@ -116,7 +110,7 @@ fun MainTheme(
     CompositionLocalProvider(
         LocalJetMovieColors provides colors,
         LocalJetMovieTypography provides typography,
-        LocalJetMovieShape provides  shapes,
+        LocalJetMovieShape provides shapes,
         content = content
     )
 }
