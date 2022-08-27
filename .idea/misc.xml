@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.193" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_animation_play_outline.xml" value="0.1845" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_baseline_calendar_month_24.xml" value="0.4125" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_baseline_cloud_download_24.xml" value="0.4645" />
@@ -11,11 +12,14 @@
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_baseline_sms_failed_24.xml" value="0.1845" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_calendar_star_outline.xml" value="0.1845" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_combined_shape.xml" value="0.1845" />
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_format_list_bulleted_square.xml" value="0.193" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_like.xml" value="0.1245" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_like_unable.xml" value="0.1245" />
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_magnify_expand.xml" value="0.193" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_mask.xml" value="0.1765" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_star_icon.xml" value="0.2385" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_star_unable_icon.xml" value="0.2385" />
+        <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/ic_timer_outline.xml" value="0.193" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/rounded_adult.xml" value="0.199" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/rounded_adult_movie_poster.xml" value="0.1605" />
         <entry key="..\:/Users/Eganin/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/rounded_card_view.xml" value="0.147" />

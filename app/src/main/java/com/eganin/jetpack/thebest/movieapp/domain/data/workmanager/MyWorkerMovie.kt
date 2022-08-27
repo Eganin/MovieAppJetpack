@@ -30,7 +30,7 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
                 val responseMovies = repository.downloadMovies(
                     page = 1,
                     typeMovies = TypeMovies.POPULAR
-                )?.results ?: emptyList()
+                ).results
 
                 val genres = repository.downloadGenres()
                 // удаляем старые фильмы из БД
@@ -50,7 +50,7 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
     /*
     Метод возвращает фильм с наивысшым рейтингом
      */
-    private fun getTorRatedMovie(listMovie: List<Movie>) = listMovie.maxByOrNull { it.voteAverage!! }
+    private fun getTorRatedMovie(listMovie: List<Movie>) = listMovie.maxByOrNull { it.voteAverage }
 
     companion object {
         private const val TAG = "MyWorkerMovie"
