@@ -13,8 +13,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.TagLineColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.TagLineColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.White
 
 @Composable
 fun TopBarMovieList(typeMovie : String){

@@ -24,9 +24,9 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.detail.MovieDetails
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.ListMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.search.ListMoviesSearch
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.Black
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.MovieAppTheme
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.Black
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.MovieAppTheme
 
 class MainActivity : ComponentActivity() {
 

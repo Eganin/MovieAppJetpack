@@ -5,8 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.platform.LocalContext
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.MovieDetailsViewModel
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker

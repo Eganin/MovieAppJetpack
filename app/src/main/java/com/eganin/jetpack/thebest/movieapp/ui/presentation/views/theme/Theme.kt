@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme
 
 import android.app.Activity
 import android.os.Build

@@ -29,7 +29,7 @@ import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.network.MoviesApi
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.header.calendar.CalendarView
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.*
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
 
 @Composable
 fun Header(

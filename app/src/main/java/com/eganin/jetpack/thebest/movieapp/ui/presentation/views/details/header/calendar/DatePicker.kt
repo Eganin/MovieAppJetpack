@@ -2,7 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.header
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker

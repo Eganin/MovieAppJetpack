@@ -23,9 +23,9 @@ import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MovieCells
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.Black
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.Black
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.White
 
 @Composable
 fun ListMoviesSearch(

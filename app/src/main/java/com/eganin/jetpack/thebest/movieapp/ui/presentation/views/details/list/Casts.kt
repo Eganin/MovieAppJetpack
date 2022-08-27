@@ -19,8 +19,8 @@ import coil.compose.AsyncImage
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.network.MoviesApi
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.White
 
 @Composable
 fun Casts(listActors: List<CastItem>) {

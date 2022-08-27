@@ -5,22 +5,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.header.Header
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.info.MovieInfo
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.list.Casts
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.BackgroundColor
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.MovieAppTheme
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.ui.theme.White
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.BackgroundColor
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
 
 @Composable

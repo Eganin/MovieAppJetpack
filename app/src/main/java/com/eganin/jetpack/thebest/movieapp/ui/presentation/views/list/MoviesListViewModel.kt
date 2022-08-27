@@ -41,6 +41,7 @@ class MoviesListViewModel(
     var searchScreenState by mutableStateOf(SearchScreenState())
     var dbScreenState by mutableStateOf(DBScreenState())
 
+    // paging for main list movies
     private val paginator = DefaultPaginator(
         initialKey = mainScreenState.page,
         onLoadUpdated = {
@@ -67,6 +68,7 @@ class MoviesListViewModel(
         }
     )
 
+    // paging for search movies
     private val paginatorSearch = SearchPaginator(
         initialKey = searchScreenState.page,
         onLoadUpdated = {
@@ -87,6 +89,7 @@ class MoviesListViewModel(
         }
     )
 
+    // paging for db movies
     private val dbPaginator = DBPaginatorImpl(
         onLoadUpdated = {
             dbScreenState = dbScreenState.copy(isLoading = it)
@@ -103,8 +106,11 @@ class MoviesListViewModel(
 
     init {
         notificationsManager.init()
+        // загружаем данные из БД
         loadItemsFromDB()
+        // загружаем даннеы из интернета
         loadNextItems()
+        // сохраняем genres
         viewModelScope.launch(exceptionHandler) {
             _genresData.postValue(movieRepository.downloadGenres())
         }
@@ -122,7 +128,7 @@ class MoviesListViewModel(
         }
     }
 
-    fun loadItemsFromDB(){
+    private fun loadItemsFromDB(){
         viewModelScope.launch(exceptionHandler){
             dbPaginator.loadItems()
         }
