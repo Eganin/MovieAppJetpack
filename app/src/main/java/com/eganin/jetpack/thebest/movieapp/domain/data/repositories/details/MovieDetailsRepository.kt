@@ -11,7 +11,7 @@ interface MovieDetailsRepository {
     val defaultDispatcher: CoroutineDispatcher
         get() = Dispatchers.IO
 
-    suspend fun downloadDetailsInfoForMovie(movieId: Int): MovieDetailsResponse
+    suspend fun downloadDetailsInfoForMovie(movieId: Int): MovieDetailsResponse?
 
     suspend fun downloadCredits(movieId: Int): CreditsMovies
 

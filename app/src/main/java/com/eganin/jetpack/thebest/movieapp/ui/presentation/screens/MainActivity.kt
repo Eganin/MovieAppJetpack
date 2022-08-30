@@ -1,37 +1,32 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.screens
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.*
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.work.WorkManager
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.detail.MovieDetails
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.ListMovies
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.search.ListMoviesSearch
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.settings.SettingsScreen
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.detail.MovieDetails
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.list.ListMovies
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.settings.SettingsScreen
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -92,9 +87,18 @@ class MainActivity : ComponentActivity() {
                                 backgroundColor = JetMovieTheme.colors.secondaryBackground,
                             ) {
                                 bottomItems.forEach { screen ->
-                                    BottomNavigationItem(selected = false,
+                                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                                    val isSelected = navBackStackEntry?.destination?.hierarchy
+                                        ?.any { it.route == screen } == true
+                                    BottomNavigationItem(
+                                        selected = false,
                                         onClick = { navController.navigate(screen) },
-                                        icon = { GetIcon(screen = screen) })
+                                        icon = {
+                                            GetIcon(
+                                                screen = screen,
+                                                isSelected = isSelected,
+                                            )
+                                        })
                                 }
                             }
                         }
@@ -140,8 +144,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(TypeMovies.SEARCH.value) {
-                                ListMoviesSearch(
+                                ListMovies(
                                     navController = navController,
+                                    isSearchPage = true,
                                 )
                             }
                             composable("details") {
@@ -209,46 +214,53 @@ private fun OpenDetailsPage(
 }
 
 @Composable
-private fun GetIcon(screen: String) {
+private fun GetIcon(screen: String, isSelected: Boolean) {
     when (screen) {
         TypeMovies.POPULAR.value -> NavigationIcon(
             description = screen,
-            idPainter = R.drawable.ic_format_list_bulleted_square
+            idPainter = R.drawable.ic_format_list_bulleted_square,
+            isSelected = isSelected,
         )
         TypeMovies.TOP_RATED.value -> NavigationIcon(
             description = screen,
-            idPainter = R.drawable.ic_calendar_star_outline
+            idPainter = R.drawable.ic_calendar_star_outline,
+            isSelected = isSelected,
         )
         TypeMovies.NOW_PLAYING.value -> NavigationIcon(
             description = screen,
-            idPainter = R.drawable.ic_animation_play_outline
+            idPainter = R.drawable.ic_animation_play_outline,
+            isSelected = isSelected,
         )
         TypeMovies.UP_COMING.value -> NavigationIcon(
             description = screen,
-            idPainter = R.drawable.ic_timer_outline
+            idPainter = R.drawable.ic_timer_outline,
+            isSelected = isSelected,
         )
         TypeMovies.SEARCH.value -> NavigationIcon(
             description = screen,
-            idPainter = R.drawable.ic_magnify_expand
+            idPainter = R.drawable.ic_magnify_expand,
+            isSelected = isSelected,
         )
         "settings" -> NavigationIcon(
             description = "settings",
             idPainter = R.drawable.ic_baseline_settings_24,
+            isSelected = isSelected,
         )
     }
 }
 
 @Composable
-private fun NavigationIcon(description: String, idPainter: Int) {
+private fun NavigationIcon(description: String, idPainter: Int, isSelected: Boolean) {
     Icon(
         painter = painterResource(id = idPainter),
         contentDescription = description,
-        tint = JetMovieTheme.colors.tintColor,
+        tint = if (isSelected) JetMovieTheme.colors.tintColor else JetMovieTheme.colors.secondaryText,
     )
 }
 
 @Composable
 private fun StartWorker() {
     val workerRepository: WorkerRepository = WorkerRepositoryImpl()
-    WorkManager.getInstance(LocalContext.current.applicationContext).enqueue(workerRepository.request)
+    WorkManager.getInstance(LocalContext.current.applicationContext)
+        .enqueue(workerRepository.request)
 }

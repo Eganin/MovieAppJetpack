@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.settings
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,6 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.settings.MenuItem
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.settings.MenuItemModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
 
 @Composable
