@@ -10,10 +10,13 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Mov
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovieDetailsEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovieDetailsResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.util.*
+import javax.inject.Inject
 
-class MovieDetailsViewModel(
+@HiltViewModel
+class MovieDetailsViewModel @Inject constructor(
     private val repository: MovieDetailsRepository,
 ) : ViewModel() {
 
@@ -121,17 +124,6 @@ class MovieDetailsViewModel(
         val minute = runtimeMovie % 60
 
         return Pair(first = hours, second = minute)
-    }
-
-    class Factory(
-        private val repository: MovieDetailsRepository,
-    ) :
-        ViewModelProvider.NewInstanceFactory() {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MovieDetailsViewModel(
-                repository = repository,
-            ) as T
-        }
     }
 
     companion object {

@@ -10,8 +10,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.MovieDetailsViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.header.Header
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.info.MovieInfo
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.list.Casts
@@ -24,8 +26,7 @@ fun MovieDetails(
     scaffoldState: ScaffoldState,
     navController: NavController,
 ) {
-    val viewModel =
-        (LocalContext.current.applicationContext as MovieApp).myComponent.getMovieDetailsViewModel()
+    val viewModel = hiltViewModel<MovieDetailsViewModel>()
 
     LaunchedEffect(viewModel) {
         viewModel.downloadDetailsData(id = id)

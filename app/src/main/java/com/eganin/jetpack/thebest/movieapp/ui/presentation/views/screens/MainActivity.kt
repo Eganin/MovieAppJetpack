@@ -2,14 +2,13 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -22,13 +21,19 @@ import androidx.navigation.compose.rememberNavController
 import androidx.work.WorkManager
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepository
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.detail.MovieDetails
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.ListMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.search.ListMoviesSearch
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.settings.SettingsScreen
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -60,6 +65,7 @@ class MainActivity : ComponentActivity() {
             val uri = "https://android.movieapp"
             // scaffoldState for SnackBar
             val scaffoldState = rememberScaffoldState()
+
             MainTheme(
                 style = currentStyle.value,
                 darkTheme = isDarkMode.value,
@@ -67,6 +73,14 @@ class MainActivity : ComponentActivity() {
                 corners = currentCornersStyle.value,
                 paddingSize = currentPaddingSize.value
             ) {
+                val systemUiController = rememberSystemUiController()
+                val statusBarColor = JetMovieTheme.colors.cardBackground
+                SideEffect {
+                    // setup status bar
+                    systemUiController.apply {
+                        setSystemBarsColor(color = statusBarColor)
+                    }
+                }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = JetMovieTheme.colors.primaryBackground,
@@ -235,7 +249,6 @@ private fun NavigationIcon(description: String, idPainter: Int) {
 
 @Composable
 private fun StartWorker() {
-    val repository =
-        (LocalContext.current.applicationContext as MovieApp).myComponent.workerRepository
-    WorkManager.getInstance(LocalContext.current.applicationContext).enqueue(repository.request)
+    val workerRepository: WorkerRepository = WorkerRepositoryImpl()
+    WorkManager.getInstance(LocalContext.current.applicationContext).enqueue(workerRepository.request)
 }

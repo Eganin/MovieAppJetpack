@@ -10,25 +10,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.application.TypeObject
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MovieCells
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MoviesListViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TopBarMovieList
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
+import javax.inject.Inject
 
 @Composable
 fun ListMovies(
     typeMovie: TypeMovies,
     navController: NavController,
 ) {
-    val viewModel =
-        (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel(
-            typeMovies = typeMovie
-        )
+    TypeObject.type=typeMovie
+    val viewModel = hiltViewModel<MoviesListViewModel>()
 
     val genresList by viewModel.genresData.observeAsState(emptyList())
 
