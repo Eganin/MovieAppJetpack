@@ -17,7 +17,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.paging.SearchPaginator
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovie
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovieEntity
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.models.ListViewState
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.list.models.ListViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -78,7 +78,7 @@ class MoviesListViewModel @Inject constructor(
     private val paginatorSearch = SearchPaginator(
         initialKey = searchScreenState.page,
         onLoadUpdated = {
-            updateLoading(isLoaded = it)
+            //updateLoading(isLoaded = it)
         },
         onRequest = { nextPage, query ->
             movieRepository.downloadSearchMovies(page = nextPage, query = query).results
@@ -151,7 +151,7 @@ class MoviesListViewModel @Inject constructor(
     fun loadSearchItems(query: String) {
         viewModelScope.launch(exceptionHandler) {
             paginatorSearch.loadNextItems(query = query)
-            loadWrapper(items = searchScreenState.items)
+            //loadWrapper(items = searchScreenState.items)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,12 +9,14 @@ import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.TypeObject
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.*
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.models.ListViewState
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.list.models.ListViewState
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.search.Search
 
 @Composable
 fun ListMovies(
-    typeMovie: TypeMovies,
+    typeMovie: TypeMovies=TypeMovies.POPULAR,
     navController: NavController,
+    isSearchPage: Boolean=false,
 ) {
     TypeObject.type = typeMovie
     val viewModel = hiltViewModel<MoviesListViewModel>()
@@ -23,7 +25,13 @@ fun ListMovies(
     viewState.value?.let {
         when (it) {
             ListViewState.Loading -> ViewLoading()
-            ListViewState.Display -> ListView(typeMovie = typeMovie, navController = navController)
+            ListViewState.Display ->
+                if (!isSearchPage)
+                    ListView(
+                        typeMovie = typeMovie,
+                        navController = navController
+                    ) else
+                    Search(navController = navController)
             ListViewState.Error -> ViewError()
             ListViewState.NoItems -> ViewNoItems(textMessage = stringResource(R.string.no_items_label))
         }

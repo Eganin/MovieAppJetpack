@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.search
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -7,31 +7,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MovieCells
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MoviesListViewModel
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.EditTextSearchBackGround
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
 
 @Composable
-fun ListMoviesSearch(
-    navController: NavController,
-) {
+fun Search(navController: NavController) {
     val viewModel = hiltViewModel<MoviesListViewModel>()
 
     val genresList by viewModel.genresData.observeAsState(emptyList())
@@ -98,15 +91,10 @@ fun ListMoviesSearch(
             Text(
                 text = stringResource(id = R.string.start_typing_in_a_search_bar_to_find_a_movie),
                 style = JetMovieTheme.typography.body,
-                color =JetMovieTheme.colors.primaryText,
+                color = JetMovieTheme.colors.primaryText,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
         }
 
-        if (state.isLoading) {
-            ProgressBar()
-        }
-
     }
-
 }

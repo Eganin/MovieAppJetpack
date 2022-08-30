@@ -1,8 +1,7 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.screens
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,18 +18,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.work.WorkManager
 import com.eganin.jetpack.thebest.movieapp.R
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.detail.MovieDetails
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.ListMovies
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.search.ListMoviesSearch
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.settings.SettingsScreen
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.detail.MovieDetails
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.list.ListMovies
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.settings.SettingsScreen
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -148,8 +144,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(TypeMovies.SEARCH.value) {
-                                ListMoviesSearch(
+                                ListMovies(
                                     navController = navController,
+                                    isSearchPage = true,
                                 )
                             }
                             composable("details") {

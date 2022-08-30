@@ -12,7 +12,7 @@ import androidx.core.app.NotificationManagerCompat.IMPORTANCE_HIGH
 import androidx.core.net.toUri
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.MainActivity
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.MainActivity
 import javax.inject.Inject
 
 interface Notifications {

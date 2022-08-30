@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.models
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.list.models
 
 sealed class ListViewState {
     object Loading : ListViewState()

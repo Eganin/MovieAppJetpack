@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.detail
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.detail
 
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
