@@ -1,4 +1,4 @@
-package com.eganin.jetpack.thebest.movieapp.ui.presentation.screens.settings
+package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
