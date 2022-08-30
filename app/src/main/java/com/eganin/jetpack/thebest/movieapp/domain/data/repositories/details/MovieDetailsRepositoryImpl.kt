@@ -21,7 +21,7 @@ class MovieDetailsRepositoryImpl @Inject constructor(
     private val creditsDao = database.creditsDao
 
     // загружаем детальную информацию о фильме по id
-    override suspend fun downloadDetailsInfoForMovie(movieId: Int): MovieDetailsResponse =
+    override suspend fun downloadDetailsInfoForMovie(movieId: Int): MovieDetailsResponse? =
         withContext(defaultDispatcher) {
             RetrofitModule.api.getMovieDetailsUsingId(movieId = movieId, language = language)
         }

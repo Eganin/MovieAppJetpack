@@ -1,24 +1,18 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.detail
 
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.R
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.Details
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.MovieDetailsViewModel
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.header.Header
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.info.MovieInfo
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.list.Casts
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
-import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.models.DetailsState
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.ViewError
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.ViewLoading
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.ViewNoItems
 
 @Composable
 fun MovieDetails(
@@ -27,56 +21,21 @@ fun MovieDetails(
     navController: NavController,
 ) {
     val viewModel = hiltViewModel<MovieDetailsViewModel>()
+    val state = viewModel.detailsState
 
-    LaunchedEffect(viewModel) {
-        viewModel.downloadDetailsData(id = id)
+    state.value?.let {
+        when (it) {
+            is DetailsState.Loading -> ViewLoading()
+            is DetailsState.Display -> Details(
+                scaffoldState = scaffoldState,
+                navController = navController
+            )
+            is DetailsState.Error -> ViewError()
+            is DetailsState.NoInfo -> ViewNoItems(textMessage = stringResource(R.string.no_info_label))
+        }
     }
 
-    val movieDetailsData by viewModel.detailsData.observeAsState()
-    val listActors by viewModel.castData.observeAsState(emptyList())
-    // LiveData с Intent
-    val dataCalendar by viewModel.dataCalendar.observeAsState()
-    val loading by viewModel.loading
-
-    if (dataCalendar != null) {
-        // Запуск activity calendar
-        dataCalendar!!.flags = FLAG_ACTIVITY_NEW_TASK
-        LocalContext.current.applicationContext.startActivity(dataCalendar)
-    }
-
-    Column(
-        modifier = Modifier
-            .background(JetMovieTheme.colors.primaryBackground)
-            .fillMaxSize()
-    ) {
-        LazyColumn {
-            item {
-                movieDetailsData?.let {
-                    Header(
-                        adult = it.adult,
-                        imagePath = it.backdropPath,
-                        movieInfo = it,
-                        scaffoldState = scaffoldState,
-                        navController = navController,
-                    )
-                }
-            }
-            item {
-                movieDetailsData?.let {
-                    MovieInfo(
-                        title = it.title,
-                        tagLine = it.genres.joinToString(separator = ",") { it.name },
-                        rating = (it.voteAverage / 2).toInt(),
-                        countReviews = it.voteCount ,
-                        description = it.overview ,
-                    )
-                }
-            }
-            item { Casts(listActors = listActors) }
-        }
-
-        if (loading) {
-            ProgressBar()
-        }
+    LaunchedEffect(key1 = true) {
+        viewModel.obtainEvent(event = DetailsState.Loading(id = id))
     }
 }

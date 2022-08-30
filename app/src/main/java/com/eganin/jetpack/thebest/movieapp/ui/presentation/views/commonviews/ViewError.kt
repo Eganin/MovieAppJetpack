@@ -14,7 +14,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieT
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.MainTheme
 
 @Composable
-fun ListViewError() {
+fun ViewError() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -33,6 +33,6 @@ fun ListViewError() {
 @Preview
 private fun ListViewNoItemsPreview() {
     MainTheme(darkTheme = true) {
-        ListViewError()
+        ViewError()
     }
 }

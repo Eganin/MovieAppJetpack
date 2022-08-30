@@ -123,24 +123,22 @@ class MoviesListViewModel @Inject constructor(
     }
 
     override fun obtainEvent(event: ListViewState) {
-        _listViewState.value?.let {
-            _listViewState.postValue(event)
-            if(it is ListViewState.Loading) loadData()
-        }
+        _listViewState.postValue(event)
+        if(event is ListViewState.Loading) loadData()
     }
 
     private fun loadData() {
         // загружаем данные из БД
         loadItemsFromDB()
         // загружаем даннеы из интернета
-        /*
+
         loadNextItems()
         // сохраняем genres
         viewModelScope.launch(exceptionHandler) {
             _genresData.postValue(movieRepository.downloadGenres())
         }
 
-         */
+
     }
 
     fun loadNextItems() {

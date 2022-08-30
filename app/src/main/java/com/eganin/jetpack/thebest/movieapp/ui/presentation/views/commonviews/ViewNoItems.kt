@@ -19,7 +19,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieT
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.MainTheme
 
 @Composable
-fun ListViewNoItems() {
+fun ViewNoItems(textMessage : String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -36,7 +36,7 @@ fun ListViewNoItems() {
                     .size(100.dp),
             )
             Text(
-                text = stringResource(R.string.no_items_label),
+                text = textMessage,
                 color = JetMovieTheme.colors.errorColor,
                 style = JetMovieTheme.typography.heading,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -49,6 +49,6 @@ fun ListViewNoItems() {
 @Preview
 private fun ListViewNoItemsPreview() {
     MainTheme(darkTheme = true) {
-        ListViewNoItems()
+        ViewNoItems(textMessage = stringResource(R.string.no_items_label))
     }
 }

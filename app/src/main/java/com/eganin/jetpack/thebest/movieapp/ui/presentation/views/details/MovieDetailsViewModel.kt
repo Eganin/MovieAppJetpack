@@ -5,11 +5,13 @@ import android.provider.CalendarContract
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
+import com.eganin.jetpack.thebest.movieapp.base.EventHandler
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.CastItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.details.MovieDetailsRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovieDetailsEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovieDetailsResponse
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.models.DetailsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.util.*
@@ -18,10 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val repository: MovieDetailsRepository,
-) : ViewModel() {
+) : ViewModel(), EventHandler<DetailsState> {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "CoroutineExceptionHandler got $exception")
+        _detailsState.postValue(DetailsState.Error)
     } + SupervisorJob()
 
     // хранение данных о фильие
@@ -36,17 +39,23 @@ class MovieDetailsViewModel @Inject constructor(
     private val _dataCalendar = MutableLiveData<Intent>()
     val dataCalendar: LiveData<Intent> = _dataCalendar
 
-    // для отслеживания загрузки и отображения Progress Bar
-    val loading = mutableStateOf(false)
+    private val _detailsState: MutableLiveData<DetailsState> = MutableLiveData(DetailsState.Display)
+    val detailsState: LiveData<DetailsState> = _detailsState
+
+    override fun obtainEvent(event: DetailsState) {
+        _detailsState.postValue(event)
+        if (event is DetailsState.Loading) downloadDetailsData(event.id)
+    }
 
     fun downloadDetailsData(id: Int) {
         viewModelScope.launch(exceptionHandler) {
-            withContext(Dispatchers.IO){
-                loading.value = true
-
+            withContext(Dispatchers.IO) {
                 downloadDataFromDB(id = id)
                 val resultMovieDetails = repository.downloadDetailsInfoForMovie(movieId = id)
                 val resultCasts = repository.downloadCredits(movieId = id).cast
+                if (resultCasts.isEmpty() || resultMovieDetails == null) {
+                    _detailsState.postValue(DetailsState.NoInfo)
+                }
                 /*
                 добавляем в список актеров id-фильма,
                 чтобы сохранить в БД и поэтому id найти нужный список
@@ -54,11 +63,12 @@ class MovieDetailsViewModel @Inject constructor(
                 resultCasts.forEach {
                     it.movieId = id
                 }
-                _detailsData.postValue(resultMovieDetails)
-                _castData.postValue(resultCasts )
-                saveDataDB(response = resultMovieDetails, credits = resultCasts)
-
-                loading.value = false
+                resultMovieDetails?.let { movieDetails ->
+                    _detailsData.postValue(movieDetails)
+                    _castData.postValue(resultCasts)
+                    saveDataDB(response = movieDetails, credits = resultCasts)
+                }
+                _detailsState.postValue(DetailsState.Display)
             }
         }
     }
@@ -129,4 +139,5 @@ class MovieDetailsViewModel @Inject constructor(
     companion object {
         private const val TAG = "MovieDetailViewModel"
     }
+
 }

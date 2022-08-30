@@ -48,4 +48,5 @@
     <string name="flat_settings_label">Flat</string>
     <string name="error_label">There was an error</string>
     <string name="no_items_label">No Items</string>
+    <string name="no_info_label">No info for movie</string>
 </resources>

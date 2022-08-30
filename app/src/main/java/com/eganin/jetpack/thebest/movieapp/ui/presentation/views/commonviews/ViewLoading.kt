@@ -11,7 +11,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.MainTheme
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
 
 @Composable
-fun ListViewLoading() {
+fun ViewLoading() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -25,6 +25,6 @@ fun ListViewLoading() {
 @Preview
 private fun ListViewNoItemsPreview() {
     MainTheme(darkTheme = true) {
-        ListViewLoading()
+        ViewLoading()
     }
 }

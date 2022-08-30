@@ -45,7 +45,7 @@ interface MoviesApi {
         @Path(MOVIE_ID) movieId: Int,
         @Query(API_KEY) apiKey: String = API_KEY_VALUE,
         @Query(LANGUAGE) language: String = LanguageQuery.ENGLISH.field,
-    ): MovieDetailsResponse
+    ): MovieDetailsResponse?
 
     @GET("genre/movie/list")
     suspend fun getGenres(
