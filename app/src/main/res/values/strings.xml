@@ -46,4 +46,6 @@
     <string name="card_style_settings_label">Card style</string>
     <string name="rounded_settings_label">Rounded</string>
     <string name="flat_settings_label">Flat</string>
+    <string name="error_label">There was an error</string>
+    <string name="no_items_label">No Items</string>
 </resources>

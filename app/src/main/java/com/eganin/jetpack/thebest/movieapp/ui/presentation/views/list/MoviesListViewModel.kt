@@ -1,14 +1,12 @@
 package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list
 
 import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
-import com.eganin.jetpack.thebest.movieapp.application.TypeObject
+import com.eganin.jetpack.thebest.movieapp.base.EventHandler
+import com.eganin.jetpack.thebest.movieapp.domain.TypeObject
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.GenresItem
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
@@ -19,6 +17,7 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.paging.SearchPaginator
 import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovie
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovieEntity
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.models.ListViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -27,15 +26,19 @@ import javax.inject.Inject
 class MoviesListViewModel @Inject constructor(
     private val movieRepository: MovieRepository,
     notificationsManager: MovieNotificationsManager,
-    //private val typeMovies: TypeMovies,
-) : ViewModel() {
+) : ViewModel(), EventHandler<ListViewState> {
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, "CoroutineExceptionHandler got $exception")
+        _listViewState.postValue(ListViewState.Error)
     } + SupervisorJob()
 
     //liveData - для сохранения genre list
     private val _genresData = MutableLiveData<List<GenresItem>>(emptyList())
     val genresData: LiveData<List<GenresItem>> = _genresData
+
+    private val _listViewState: MutableLiveData<ListViewState> =
+        MutableLiveData(ListViewState.Loading)
+    val listViewState: LiveData<ListViewState> = _listViewState
 
     // для отслеживания любимых фильмов
     private val isFavouriteMovie = mutableStateOf(false)
@@ -48,7 +51,7 @@ class MoviesListViewModel @Inject constructor(
     private val paginator = DefaultPaginator(
         initialKey = mainScreenState.page,
         onLoadUpdated = {
-            mainScreenState = mainScreenState.copy(isLoading = it)
+            updateLoading(isLoaded = it)
         },
         onRequest = { nextPage ->
             val result = movieRepository.downloadMovies(
@@ -75,7 +78,7 @@ class MoviesListViewModel @Inject constructor(
     private val paginatorSearch = SearchPaginator(
         initialKey = searchScreenState.page,
         onLoadUpdated = {
-            searchScreenState = searchScreenState.copy(isLoading = it)
+            updateLoading(isLoaded = it)
         },
         onRequest = { nextPage, query ->
             movieRepository.downloadSearchMovies(page = nextPage, query = query).results
@@ -95,7 +98,7 @@ class MoviesListViewModel @Inject constructor(
     // paging for db movies
     private val dbPaginator = DBPaginatorImpl(
         onLoadUpdated = {
-            dbScreenState = dbScreenState.copy(isLoading = it)
+            updateLoading(isLoaded = it)
         },
         onRequest = {
             downloadDataFromDB()
@@ -108,34 +111,62 @@ class MoviesListViewModel @Inject constructor(
     )
 
     init {
-        Log.d("EEE","CREATE VIEWMODEL")
-        Log.d("EEE",TypeObject.type.value)
         notificationsManager.init()
+    }
+
+    private fun updateLoading(isLoaded: Boolean) {
+        if (isLoaded) {
+            _listViewState.postValue(ListViewState.Loading)
+        } else {
+            _listViewState.postValue(ListViewState.Display)
+        }
+    }
+
+    override fun obtainEvent(event: ListViewState) {
+        _listViewState.value?.let {
+            _listViewState.postValue(event)
+            if(it is ListViewState.Loading) loadData()
+        }
+    }
+
+    private fun loadData() {
         // загружаем данные из БД
         loadItemsFromDB()
         // загружаем даннеы из интернета
+        /*
         loadNextItems()
         // сохраняем genres
         viewModelScope.launch(exceptionHandler) {
             _genresData.postValue(movieRepository.downloadGenres())
         }
+
+         */
     }
 
     fun loadNextItems() {
         viewModelScope.launch(exceptionHandler) {
             paginator.loadNextItems()
+            loadWrapper(items = mainScreenState.items)
         }
     }
 
     fun loadSearchItems(query: String) {
         viewModelScope.launch(exceptionHandler) {
             paginatorSearch.loadNextItems(query = query)
+            loadWrapper(items = searchScreenState.items)
         }
     }
 
-    private fun loadItemsFromDB(){
-        viewModelScope.launch(exceptionHandler){
+    private fun loadItemsFromDB() {
+        viewModelScope.launch(exceptionHandler) {
             dbPaginator.loadItems()
+            loadWrapper(items = dbScreenState.items)
+        }
+    }
+
+    private fun loadWrapper(items: List<Movie>) {
+        if (items.isEmpty()) {
+            _listViewState.postValue(ListViewState.NoItems)
         }
     }
 
