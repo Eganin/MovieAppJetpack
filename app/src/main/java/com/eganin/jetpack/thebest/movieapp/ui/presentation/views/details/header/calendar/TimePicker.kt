@@ -2,9 +2,9 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.header
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.platform.LocalContext
-import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.details.MovieDetailsViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.JetMovieTheme
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
@@ -22,8 +22,7 @@ fun TimePicker(
     onCLick: (LocalTime) -> Unit
 ) {
 
-    val viewModel =
-        (LocalContext.current.applicationContext as MovieApp).myComponent.getMovieDetailsViewModel()
+    val viewModel = hiltViewModel<MovieDetailsViewModel>()
     var localTime: LocalTime? = null
     val dialogState = rememberMaterialDialogState()
     MaterialDialog(dialogState = dialogState,

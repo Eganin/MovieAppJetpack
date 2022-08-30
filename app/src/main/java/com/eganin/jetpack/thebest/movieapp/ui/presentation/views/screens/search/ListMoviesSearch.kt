@@ -19,10 +19,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MovieCells
+import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.MoviesListViewModel
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressBar
 
@@ -30,8 +32,7 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.utils.ProgressB
 fun ListMoviesSearch(
     navController: NavController,
 ) {
-    val viewModel =
-        (LocalContext.current.applicationContext as MovieApp).myComponent.getMoviesListViewModel()
+    val viewModel = hiltViewModel<MoviesListViewModel>()
 
     val genresList by viewModel.genresData.observeAsState(emptyList())
     val state = viewModel.searchScreenState

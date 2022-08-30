@@ -1,5 +1,6 @@
 package com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list
 
+import android.util.Log
 import com.eganin.jetpack.thebest.movieapp.domain.data.database.MovieDatabase
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.FavouriteEntity
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.entity.MovieEntity
@@ -8,9 +9,14 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Gen
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieResponse
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Named
 
 
-class MovieRepositoryImpl(val language: String, database: MovieDatabase) : MovieRepository {
+class MovieRepositoryImpl @Inject constructor(
+    @Named("language") val language: String,
+    database: MovieDatabase
+) : MovieRepository {
 
     private val movieDao = database.movieDao
     private val favouriteDao = database.favouriteDao

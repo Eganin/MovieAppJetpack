@@ -2,6 +2,7 @@ package com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.work.WorkManager
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepository
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.workmanager.WorkerRepositoryImpl
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.detail.MovieDetails
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.list.ListMovies
@@ -27,7 +30,10 @@ import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.search.
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.settings.SettingsScreen
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -243,7 +249,6 @@ private fun NavigationIcon(description: String, idPainter: Int) {
 
 @Composable
 private fun StartWorker() {
-    val repository =
-        (LocalContext.current.applicationContext as MovieApp).myComponent.workerRepository
-    WorkManager.getInstance(LocalContext.current.applicationContext).enqueue(repository.request)
+    val workerRepository: WorkerRepository = WorkerRepositoryImpl()
+    WorkManager.getInstance(LocalContext.current.applicationContext).enqueue(workerRepository.request)
 }

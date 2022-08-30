@@ -7,8 +7,13 @@ import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Cre
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.MovieDetailsResponse
 import com.eganin.jetpack.thebest.movieapp.domain.data.network.RetrofitModule
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Named
 
-class MovieDetailsRepositoryImpl(val language: String, database: MovieDatabase) :
+class MovieDetailsRepositoryImpl @Inject constructor(
+    @Named("language") val language: String,
+    database: MovieDatabase
+) :
     MovieDetailsRepository {
 
     private val movieDetailsDao = database.movieDetailsDao
@@ -20,6 +25,7 @@ class MovieDetailsRepositoryImpl(val language: String, database: MovieDatabase) 
         withContext(defaultDispatcher) {
             RetrofitModule.api.getMovieDetailsUsingId(movieId = movieId, language = language)
         }
+
     // загружаем список актероа по id
     override suspend fun downloadCredits(movieId: Int): CreditsMovies =
         withContext(defaultDispatcher) {
@@ -31,6 +37,7 @@ class MovieDetailsRepositoryImpl(val language: String, database: MovieDatabase) 
         withContext(defaultDispatcher) {
             movieDetailsDao.getAllInfo(id = id)
         }
+
     // вставляем в БД информацию о фильме
     override suspend fun insertMovieDetails(movie: MovieDetailsEntity) =
         withContext(defaultDispatcher) {
@@ -41,6 +48,7 @@ class MovieDetailsRepositoryImpl(val language: String, database: MovieDatabase) 
     override suspend fun deleteAllInfoMovie() = withContext(defaultDispatcher) {
         movieDetailsDao.deleteAllInfoMovie()
     }
+
     // удаляем доп инфу фильма по id
     override suspend fun deleteInfoMovieById(id: Int) = withContext(defaultDispatcher) {
         movieDetailsDao.deleteInfoMovieById(id = id)

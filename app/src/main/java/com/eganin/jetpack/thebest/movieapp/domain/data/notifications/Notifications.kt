@@ -13,6 +13,7 @@ import androidx.core.net.toUri
 import com.eganin.jetpack.thebest.movieapp.R
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.screens.MainActivity
+import javax.inject.Inject
 
 interface Notifications {
     fun init()
@@ -20,7 +21,7 @@ interface Notifications {
     fun dismissNotification(id: Int)
 }
 
-class MovieNotificationsManager(private val context: Context) : Notifications {
+class MovieNotificationsManager @Inject constructor(private val context: Context) : Notifications {
 
     private val notificationManager = NotificationManagerCompat.from(context)
 

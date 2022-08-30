@@ -6,12 +6,19 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.eganin.jetpack.thebest.movieapp.application.MovieApp
 import com.eganin.jetpack.thebest.movieapp.domain.data.models.network.entity.Movie
+import com.eganin.jetpack.thebest.movieapp.domain.data.notifications.MovieNotificationsManager
+import com.eganin.jetpack.thebest.movieapp.domain.data.repositories.list.MovieRepository
 import com.eganin.jetpack.thebest.movieapp.domain.data.utils.toMovieEntity
 import com.eganin.jetpack.thebest.movieapp.ui.presentation.views.list.TypeMovies
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
-class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
-    Worker(context, params) {
+class MyWorkerMovie @Inject constructor(
+    context: Context,
+    params: WorkerParameters,
+    private val movieRepository: MovieRepository,
+    private val notificationsManager: MovieNotificationsManager,
+) : Worker(context, params) {
 
     private val coroutineScope =
         CoroutineScope(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, exception ->
@@ -19,23 +26,19 @@ class MyWorkerMovie(private val context: Context, params: WorkerParameters) :
         })
 
     override fun doWork(): Result {
-        Log.d("EEE","WORKER")
-        val componentDi = (context.applicationContext as MovieApp).myComponent
-        val repository = componentDi.movieRepository
-
-        val notificationsManager = componentDi.notificationManager
+        Log.d("EEE", "WORKER")
 
         return try {
             coroutineScope.launch {
-                val responseMovies = repository.downloadMovies(
+                val responseMovies = movieRepository.downloadMovies(
                     page = 1,
                     typeMovies = TypeMovies.POPULAR
                 ).results
 
-                val genres = repository.downloadGenres()
+                val genres = movieRepository.downloadGenres()
                 // удаляем старые фильмы из БД
-                repository.deleteAllMovies()
-                repository.insertMovies(movies = responseMovies.map { it.toMovieEntity(genres = genres) })
+                movieRepository.deleteAllMovies()
+                movieRepository.insertMovies(movies = responseMovies.map { it.toMovieEntity(genres = genres) })
                 // показываем уведомление
                 getTorRatedMovie(listMovie = responseMovies)?.let {
                     notificationsManager.showNotification(movie = it)
